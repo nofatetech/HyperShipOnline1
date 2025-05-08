@@ -146,16 +146,6 @@ $app = get_post($app_id);
 
   <div class="hypership-dashboard">
 
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'myapps/' . $app->post_name . '/includes/hook__app_page_dashboard__before.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-
-
 
 
 
@@ -176,22 +166,12 @@ $app = get_post($app_id);
 
 
 
-
-    <!-- Mutiplayer Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        🎮 Multiplayer 🎲</h2>
-
-      <div style="border: 0px solid black;">
-        <strong>Rooms</strong>
-        <div>Total: 11</div>
-        <div>Attendees: 33</div>
-        <div>Revenue: $333</div>
-      </div>
-    </div>
-
-
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-multiplayer.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-ecommerce.php';
@@ -200,15 +180,12 @@ $app = get_post($app_id);
     }
     ?>
 
-
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-datatypes.php';
     if (is_file($tf)) {
       require_once $tf;
     }
     ?>
-
-
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-routes.php';
@@ -217,64 +194,36 @@ $app = get_post($app_id);
     }
     ?>
 
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-security.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-gamification.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-analytics.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-settings.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
 
 
 
 
-    <!-- Security Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        🔒 Security 🛡️</h2>
-      <p>API Rate Limiting: Off <button>Edit</button></p>
-      <p>Last Security Scan: <?php echo esc_html(get_post_meta($app_id, 'last_scan', true) ?: 'Never'); ?></p>
-
-      <p>Security Status: <span
-          class="status <?php echo esc_attr(get_post_meta($app_id, 'security_status', true) === 'issues' ? 'warning' : ''); ?>">
-          <?php echo esc_html(get_post_meta($app_id, 'security_status', true) ?: 'Secure'); ?>
-        </span></p>
-      <p>Last Security Scan: <?php echo esc_html(get_post_meta($app_id, 'last_scan', true) ?: 'Never'); ?></p>
-      <p>Two-Factor Authentication:
-        <?php echo esc_html(get_post_meta($app_id, '2fa_enabled', true) ? 'Enabled' : 'Disabled'); ?>
-      </p>
-    </div>
-
-    <!-- Gamification Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        🏆 Gamification 🎮</h2>
-      <p>Points Awarded: <?php echo esc_html(get_post_meta($app_id, 'points_awarded', true) ?: '0'); ?></p>
-      <p>Badges Unlocked: <?php echo esc_html(get_post_meta($app_id, 'badges_unlocked', true) ?: '0'); ?></p>
-      <p>Active Challenges: <?php echo esc_html(get_post_meta($app_id, 'active_challenges', true) ?: '0'); ?></p>
-    </div>
-
-    <!-- Analytics Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        📈 Analytics 📊</h2>
-      <p>Page Views (Last 30 Days): <?php echo esc_html(get_post_meta($app_id, 'page_views', true) ?: '0'); ?></p>
-      <p>Average Session Duration: <?php echo esc_html(get_post_meta($app_id, 'session_duration', true) ?: '0 min'); ?>
-      </p>
-      <p>Bounce Rate: <?php echo esc_html(get_post_meta($app_id, 'bounce_rate', true) ?: '0%'); ?></p>
-    </div>
-
-    <!-- Settings Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        ⚙️ Settings 🔧</h2>
-      <p>App Status: <span
-          class="status"><?php echo esc_html(get_post_status($app_id) === 'publish' ? 'Active' : 'Inactive'); ?></span>
-      </p>
-      <p>Last Updated: <?php echo esc_html(get_post_modified_time('F j, Y', false, $app_id)); ?></p>
-      <p><a href="<?php echo get_edit_post_link($app_id); ?>">Edit App Settings</a></p>
-
-
-
-
-
-    </div>
   </div>
 </div>
