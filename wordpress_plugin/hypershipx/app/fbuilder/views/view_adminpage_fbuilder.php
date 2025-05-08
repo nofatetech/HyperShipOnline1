@@ -11,7 +11,8 @@
 <!-- Load Blockly core -->
 <!-- <script src="https://unpkg.com/blockly/blockly.min.js"></script> -->
 <!-- Load PHP code generator -->
-<script src="https://unpkg.com/blockly/php_compressed.js"></script>
+<!-- <script src="https://unpkg.com/blockly/php_compressed.js"></script> -->
+<script src="<?php echo HYPERSHIPX_PLUGIN_URL; ?>app/fbuilder/blockly/php_compressed.js"></script>
 
 
 
@@ -30,8 +31,27 @@
 
 <div class="wrap">
   <h1>HyperShip Route Builder</h1>
-  <p>ID: <?php echo $troute->ID; ?></p>
+  <!-- <p>ID: <?php echo $troute->ID; ?></p> -->
+  <div>
+    <p>workspaceState:
+      <br>
+      <code>
+      <?php $workspaceState = get_post_meta($troute->ID, 'workspaceState', true);
+      echo $workspaceState; ?>
+    </code>
+      <br>
 
+  </div>
+
+  <div>
+    <div>code:</div>
+    <div>
+      <code>
+      <?php $code = get_post_meta($troute->ID, 'generatedCode', true);
+      echo $code; ?>
+    </code>
+    </div>
+  </div>
 
   <div id="blocklyDiv" style=""></div>
 
@@ -39,8 +59,10 @@
   <!-- Form to submit the generated code -->
   <div class="controls">
     <button type="button" onclick="generateCode()">Generate Code</button>
-    <form id="codeForm" action="/submit" method="POST">
+    <form id="codeForm" action="" method="POST">
       <input type="text" id="generatedCode" name="code">
+      <input type="text" id="workspaceState" name="workspaceState">
+
       <input type="submit" value="Submit Code">
     </form>
   </div>
@@ -185,19 +207,36 @@
   // Inject the workspace with the toolbox
   const workspace = Blockly.inject('blocklyDiv', {
     toolbox: toolbox,
-    trashcan: true, // Optional: Adds a trashcan for deleting blocks
-    scrollbars: true, // Optional: Enables scrollbars
-    sounds: true, // Optional: Enables sounds for block interactions
-    media: 'https://unpkg.com/blockly/media/' // Path to Blockly media (sounds, icons, etc.)
+    trashcan: true,
+    scrollbars: true,
+    sounds: true,
+    media: 'https://unpkg.com/blockly/media/'
   });
+
+  // Preload PHP code if it exists
+  <?php
+  $workspaceState = get_post_meta($troute->ID, 'workspaceState', true);
+  if (!empty($workspaceState)) {
+    echo "try {\n";
+    echo "  const savedState = " . ($workspaceState) . ";\n";
+    echo "  Blockly.serialization.workspaces.load(savedState, workspace);\n";
+    echo "  console.log('YES', savedState);\n";
+    echo "} catch (e) {\n";
+    echo "  console.error('Error loading saved workspace:', e);\n";
+    echo "}\n";
+  }
+  ?>
 
   // Function to generate code and populate the hidden input
   function generateCode() {
-    // const code = Blockly.JavaScript.workspaceToCode(workspace);
     const code = Blockly.PHP.workspaceToCode(workspace);
     document.getElementById('generatedCode').value = code;
-    // Optional: Display the code for debugging
-    console.log(code);
+
+    // Save workspace state
+    const state = Blockly.serialization.workspaces.save(workspace);
+    document.getElementById('workspaceState').value = JSON.stringify(state);
+
+    console.log(state);
   }
 
 

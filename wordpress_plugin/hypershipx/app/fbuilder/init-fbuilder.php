@@ -31,7 +31,31 @@ add_action('admin_menu', 'hypershipx__action__register_admin_page_fbuilder');
 function hypershipx__controller__adminpage_fbuilder()
 {
 
+  $route_id = isset($_GET['route_id']) ? intval($_GET['route_id']) : 0;
+  if (!$route_id || get_post_type($route_id) !== 'hypership-route') {
+    wp_die('Invalid or missing route_id.');
+  }
+  $route = get_post($route_id);
+
+  function sanitizeCode($code)
+  {
+    $sanitized_code = str_replace('', '', $code);
+    // $sanitized_code = str_replace('<? php', '', $code);
+    // $sanitized_code = str_replace('? >', '', $sanitized_code);
+    return $sanitized_code;
+  }
+
   // POST
+  if (isset($_POST['workspaceState'])) {
+    $sanitized_code = sanitizeCode($_POST['workspaceState']);
+    update_post_meta($route_id, 'workspaceState', $sanitized_code);
+  }
+  if (isset($_POST['code'])) {
+    $sanitized_code = sanitizeCode($_POST['code']);
+    update_post_meta($route_id, 'generatedCode', $sanitized_code);
+  }
+
+
 
 
 
