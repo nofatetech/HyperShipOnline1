@@ -66,33 +66,63 @@ $posts = get_posts([
       <button type="submit" name="create_route" class="button button-primary">Create Route</button>
     </form>
   </div>
+  <div class="hypership-autoroutes-list" style="font-family: 'Consolas', monospace; background: #1e1e1e; padding: 15px; border-radius: 4px; border: 1px solid #333;">
+    <h3 style="font-size: 14px; margin: 0 0 12px; color: #e0e0e0;">API Endpoints</h3>
 
-  <div class="hypership-autoroutes-list" xxxstyle="background-color: #ededed;">
-    <h3>Available Routes:</h3>
-    <div style="font-weight: bold;">
-      All start with:
-      <br>
-      /wp-json/v1/hypershipx/<?php echo $app->post_name; ?>
+    <div style="font-size: 12px; color: #888; margin-bottom: 15px;">
+      Base URL: <code style="color: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
     </div>
-    <br>
-    <h4>Auth</h4>
-    <div>/auth/register</div>
-    <div>/auth/login_email_password</div>
-    <div>/auth/logout</div>
-    <h4>Blog</h4>
-    <div>/blog/post_list</div>
-    <h4>Ecommerce</h4>
-    <div>/ecommerce/ai_recommendations</div>
-    <div>/ecommerce/products</div>
-    <div>/ecommerce/orders</div>
-    <div>/ecommerce/orders/ORDER_ID</div>
-    <div>/ecommerce/orders/ORDER_ID/add_product/PRODUCT_ID</div>
-    <div>/ecommerce/orders/ORDER_ID/checkout</div>
-    <h4>Events</h4>
-    <div>/events/events</div>
-    <div>/events/EVENT_ID/register_attendee</div>
-    <h4>Security</h4>
-    <div>/security/turn_all_off_now</div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Authentication</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/register</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/login_email_password</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/logout</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Blog</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /blog/post_list</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Ecommerce</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/ai_recommendations</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/products</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders/{order_id}</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/add_product/{product_id}</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/checkout</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Events</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /events/events</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /events/{event_id}/register_attendee</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Multiplayer</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /multiplayer/rooms</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/create</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/{room_id}/join</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/{room_id}/leave</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /multiplayer/rooms/{room_id}/players</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Gamification</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/points</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/badges</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/leaderboard</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/create</code>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/{challenge_id}/complete</code>
+    </div>
+
+    <div style="margin-bottom: 15px;">
+      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Security</h4>
+      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /security/turn_all_off_now</code>
+    </div>
   </div>
 
 
