@@ -50,7 +50,7 @@ $app = get_post($app_id);
   <div class="hypership-dashboard">
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . "myapps/" . $app->post_name . "/includes/hook__app_page_dashboard__before.php";
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'myapps/' . $app->post_name . '/includes/hook__app_page_dashboard__before.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -63,8 +63,10 @@ $app = get_post($app_id);
     <div class="hypership-card">
       <h2>Users</h2>
 
+      <div>NOTE: Up to 50 users in Free version.</div>
+
       <?php
-      $tf = HYPERSHIPX_PLUGIN_DIR . "myapps/" . $app->post_name . "/includes/hook__app_page_dashboard__card_users__before.php";
+      $tf = HYPERSHIPX_PLUGIN_DIR . 'myapps/' . $app->post_name . '/includes/hook__app_page_dashboard__card_users__before.php';
       if (is_file($tf)) {
         require_once $tf;
       }
@@ -109,7 +111,8 @@ $app = get_post($app_id);
                 <?php echo esc_html($titem['username']); ?>
               </strong>
             </div>
-            <!-- <div><?php //echo esc_html($titem['email']); ?></div> -->
+            <!-- <div><?php //echo esc_html($titem['email']);
+              ?></div> -->
             <div>
               Points: 33
             </div>
@@ -120,8 +123,10 @@ $app = get_post($app_id);
               \
               <a href="#">Send notice</a>
             </div>
-            <div><?php //echo esc_html($user->user_email); ?></div>
-            <div><?php //echo esc_html($user->display_name); ?></div>
+            <div><?php //echo esc_html($user->user_email);
+              ?></div>
+            <div><?php //echo esc_html($user->display_name);
+              ?></div>
           </div>
           <?php
         }
@@ -130,7 +135,7 @@ $app = get_post($app_id);
 
       </div>
       <?php
-      $tf = HYPERSHIPX_PLUGIN_DIR . "myapps/" . $app->post_name . "/includes/hook__app_page_dashboard__card_users__after.php";
+      $tf = HYPERSHIPX_PLUGIN_DIR . 'myapps/' . $app->post_name . '/includes/hook__app_page_dashboard__card_users__after.php';
       if (is_file($tf)) {
         require_once $tf;
       }
@@ -204,14 +209,56 @@ $app = get_post($app_id);
 
 
 
-    <!-- Monetization & Ecommerce Section -->
+    <?php
+
+
+
+
+
+    $posts = get_posts([
+      'posts_per_page' => -1,
+      'post_type' => 'hypership-route',
+      'meta_key' => 'app_parent',
+      'meta_value' => $app->ID,
+    ]);
+    // var_dump($posts);
+    ?>
+
+
+
+    <!-- Routes & Functions Section -->
     <div class="hypership-card">
-      <h2>Monetization & Ecommerce</h2>
-      <p>Total Revenue: <span
+      <h2>Routes & Functions</h2>
+
+      <?php
+      foreach ($posts as $tpost) {
+
+        ?>
+
+        <div>
+          <div>
+            <h4><?php echo $tpost->post_title; ?></h4>
+          </div>
+          <div>
+            <a href="/wp-admin/post.php?post=110&action=edit">EDIT</a>
+            //
+            <a href="/wp-admin/admin.php?page=hypershipx_adminpage_fbuilder&route_id=<?php echo $tpost->ID; ?>">BUILDER</a>
+          </div>
+        </div>
+
+        <?php
+      }
+      ?>
+
+
+      <!-- <p>Total Revenue: <span
           class="status"><?php echo esc_html(get_post_meta($app_id, 'total_revenue', true) ?: '$0.00'); ?></span></p>
       <p>Total Orders: <?php echo esc_html(get_post_meta($app_id, 'total_orders', true) ?: '0'); ?></p>
-      <p>Average Order Value: <?php echo esc_html(get_post_meta($app_id, 'avg_order_value', true) ?: '$0.00'); ?></p>
+      <p>Average Order Value: <?php echo esc_html(get_post_meta($app_id, 'avg_order_value', true) ?: '$0.00'); ?></p> -->
     </div>
+
+
+
     <!-- Security Section -->
     <div class="hypership-card">
       <h2>Security</h2>
@@ -257,7 +304,7 @@ $app = get_post($app_id);
       <div style="background-color: #ededed;">
         <div>Routes:</div>
         <div style="font-weight: bold;">
-          /wp-json/v1/hypershipx/<?php echo $app->post_name ?>
+          /wp-json/v1/hypershipx/<?php echo $app->post_name; ?>
         </div>
         <br>
         <div>/login_email_password</div>
@@ -281,5 +328,3 @@ $app = get_post($app_id);
     </div>
   </div>
 </div>
-<?php
-
