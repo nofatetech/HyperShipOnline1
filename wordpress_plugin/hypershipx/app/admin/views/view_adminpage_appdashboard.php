@@ -224,7 +224,8 @@ $app = get_post($app_id);
         </span></p>
       <p>Last Security Scan: <?php echo esc_html(get_post_meta($app_id, 'last_scan', true) ?: 'Never'); ?></p>
       <p>Two-Factor Authentication:
-        <?php echo esc_html(get_post_meta($app_id, '2fa_enabled', true) ? 'Enabled' : 'Disabled'); ?></p>
+        <?php echo esc_html(get_post_meta($app_id, '2fa_enabled', true) ? 'Enabled' : 'Disabled'); ?>
+      </p>
     </div>
 
     <!-- Gamification Section -->

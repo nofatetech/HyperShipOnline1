@@ -31,8 +31,8 @@ function hypershipx__action__register_admin_menu()
     'App Details',            // Page title
     'App Details',            // Menu title (not visible)
     'manage_options',         // Capability required
-    'hypership-app-details',  // Menu slug
-    'hypershipx_adminpage_appdashboard' // Callback function for the app details page
+    'hypershipx_adminpage_appdashboard',  // Menu slug
+    'hypershipx__controller__adminpage_appdashboard' // Callback function for the app details page
   );
 }
 
@@ -45,13 +45,13 @@ function hypershipx__action__register_admin_menu()
 // Callback function for the HyperShip dashboard page
 function hypershipx__controller__adminpage_main()
 {
-  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/adminpage_main.php";
+  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/view_adminpage_main.php";
 }
 
 // Callback function for the App Details page
-function hypershipx_adminpage_appdashboard()
+function hypershipx__controller__adminpage_appdashboard()
 {
-  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/adminpage_appdashboard.php";
+  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/view_adminpage_appdashboard.php";
 }
 
 // Add custom column to hypership-app post type admin table
@@ -67,7 +67,7 @@ add_action('manage_hypership-app_posts_custom_column', 'hypership_app_custom_col
 function hypership_app_custom_column($column, $post_id)
 {
   if ($column === 'details') {
-    $url = admin_url('admin.php?page=hypership-app-details&app_id=' . $post_id);
+    $url = admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . $post_id);
     printf('<a href="%s" class="button">%s</a>', esc_url($url), __('App Dashboard', 'hypership'));
   }
 }
