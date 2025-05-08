@@ -54,7 +54,10 @@ function hypershipx__controller__adminpage_fbuilder()
     $sanitized_code = sanitizeCode($_POST['code']);
     update_post_meta($route_id, 'generatedCode', $sanitized_code);
   }
-
+  if (isset($_POST['customCode'])) {
+    $sanitized_custom_code = sanitize_textarea_field($_POST['customCode']);
+    update_post_meta($route_id, 'customCode', $sanitized_custom_code);
+  }
 
 
 

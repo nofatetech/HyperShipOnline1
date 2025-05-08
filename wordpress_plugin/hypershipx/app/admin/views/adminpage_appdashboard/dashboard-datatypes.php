@@ -30,12 +30,12 @@
     if (empty($data_types)) {
       $mock_types = [
         [
-          'title' => 'User Profiles',
+          'title' => 'Piano Lesson',
           'records' => '1,234',
           'updated' => date('Y-m-d H:i:s', strtotime('-2 days'))
         ],
         [
-          'title' => 'Product Catalog',
+          'title' => 'Piano Game Level',
           'records' => '567',
           'updated' => date('Y-m-d H:i:s', strtotime('-1 day'))
         ]

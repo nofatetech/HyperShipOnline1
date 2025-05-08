@@ -32,7 +32,7 @@
 <div class="wrap">
   <h1>HyperShip Route Builder</h1>
   <!-- <p>ID: <?php echo $troute->ID; ?></p> -->
-  <div>
+  <!-- <div>
     <p>workspaceState:
       <br>
       <code>
@@ -41,9 +41,9 @@
     </code>
       <br>
 
-  </div>
+  </div> -->
 
-  <div>
+  <!-- <div>
     <div>code:</div>
     <div>
       <code>
@@ -51,20 +51,111 @@
       echo $code; ?>
     </code>
     </div>
-  </div>
+  </div> -->
 
-  <div id="blocklyDiv" style=""></div>
 
 
   <!-- Form to submit the generated code -->
   <div class="controls">
-    <button type="button" onclick="generateCode()">Generate Code</button>
-    <form id="codeForm" action="" method="POST">
-      <input type="text" id="generatedCode" name="code">
-      <input type="text" id="workspaceState" name="workspaceState">
+    <div class="controls-wrapper">
 
-      <input type="submit" value="Submit Code">
-    </form>
+
+      <div id="blocklyDiv" style=""></div>
+
+
+      <div class="button-group">
+        <button type="button" class="button button-primary" onclick="generateCode()">
+          <span class="dashicons dashicons-code-standards"></span>
+          Generate Code
+        </button>
+      </div>
+
+      <form id="codeForm" action="" method="POST" class="code-form">
+        <div class="form-group">
+          <label for="generatedCode">Generated Code</label>
+          <?php
+          $code = get_post_meta($troute->ID, 'generatedCode', true);
+          ?>
+          <input type="text" id="generatedCode" name="code" value="<?php echo esc_attr($code); ?>" class="regular-text"
+            readonly>
+        </div>
+
+        <div class="form-group">
+          <?php
+          $workspaceState = get_post_meta($troute->ID, 'workspaceState', true);
+          ?>
+          <label for="workspaceState">Workspace State</label>
+          <input type="text" id="workspaceState" name="workspaceState" value="<?php echo esc_attr($workspaceState); ?>"
+            class="regular-text" readonly>
+        </div>
+
+        <div class="form-group">
+          <label for="customCode">Custom Code</label>
+          <textarea id="customCode" name="customCode" rows="10" class="large-text code"
+            placeholder="Enter custom code here..."><?php
+            $customCode = get_post_meta($troute->ID, 'customCode', true);
+            echo esc_textarea($customCode); ?></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="button button-primary">
+            <span class="dashicons dashicons-saved"></span>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <style>
+      .controls-wrapper {
+        margin-top: 20px;
+        padding: 20px;
+        background: #fff;
+        border: 1px solid #ccd0d4;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+      }
+
+      .button-group {
+        margin-bottom: 20px;
+      }
+
+      .code-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .form-group label {
+        font-weight: 600;
+      }
+
+      .form-group input[type="text"] {
+        background: #f0f0f1;
+      }
+
+      .form-group textarea {
+        font-family: monospace;
+        background: #f6f7f7;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .dashicons {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    </style>
   </div>
 
 
@@ -155,7 +246,7 @@
 
 
   Blockly.Blocks['get_current_user'] = {
-    init: function() {
+    init: function () {
       this.appendDummyInput()
         .appendField('Get Current User');
       this.setOutput(true, 'Object');
@@ -166,7 +257,7 @@
   };
 
   Blockly.Blocks['get_current_user_field'] = {
-    init: function() {
+    init: function () {
       this.appendDummyInput()
         .appendField('Get Current User')
         .appendField(new Blockly.FieldDropdown([
@@ -186,7 +277,7 @@
   };
 
   Blockly.Blocks['is_user_logged_in'] = {
-    init: function() {
+    init: function () {
       this.appendDummyInput()
         .appendField('Is User Logged In');
       this.setOutput(true, 'Boolean');
@@ -896,12 +987,12 @@
   }
 
   Blockly.Blocks['wp_route_start'] = {
-    init: function() {
+    init: function () {
       this.appendDummyInput()
-          .appendField('Start WP Route');
+        .appendField('Start WP Route');
       this.appendValueInput('REQUEST')
-          .setCheck('WP_Request')
-          .appendField('with WP_Request');
+        .setCheck('WP_Request')
+        .appendField('with WP_Request');
       this.setPreviousStatement(false, null);
       this.setNextStatement(true, null);
       this.setColour(290);
@@ -910,7 +1001,7 @@
     }
   };
 
-  Blockly.PHP['wp_route_start'] = function(block) {
+  Blockly.PHP['wp_route_start'] = function (block) {
     var request = Blockly.PHP.valueToCode(block, 'REQUEST', Blockly.PHP.ORDER_ATOMIC);
     var code = `// Start of WP Route\nif (${request}) {\n  // Your route logic here\n}\n`;
     return code;
