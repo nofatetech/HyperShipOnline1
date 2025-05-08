@@ -2,20 +2,8 @@
 <div class="hypership-card">
   <h2
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-    🎉 Events 📅</h2>
-
-  <div style="border: 0px solid black;">
-    <strong>Past Events</strong>
-    <div>Total: 11</div>
-    <div>Attendees: 33</div>
-    <div>Revenue: $333</div>
-  </div>
-  <div style="border: 0px solid black;">
-    <strong>Coming Events</strong>
-    <div>Attendees: 33 (15 not sold yet)</div>
-    <div>Total: 33</div>
-  </div>
-
+    🎉 Events 📅
+  </h2>
 
   <div class="events-dashboard">
     <!-- Stats Overview -->
@@ -50,113 +38,128 @@
       </div>
     </div>
 
-    <!-- Events Timeline -->
-    <div
-      style="display: none; background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-      <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #333;">Upcoming Events</h3>
-      <?php
-      $upcoming_events = get_posts([
-        'post_type' => 'hypership-event',
-        'posts_per_page' => 3,
-        'meta_query' => [
-          [
-            'key' => 'event_date',
-            'value' => date('Y-m-d'),
-            'compare' => '>=',
-            'type' => 'DATE'
-          ],
-          [
-            'key' => 'hypership_app',
-            'value' => $app_id,
-            'compare' => '='
-          ]
-        ],
-        'orderby' => 'meta_value',
-        'meta_key' => 'event_date',
-        'order' => 'ASC'
-      ]);
+    <!-- Calendar and Events List -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+      <!-- Calendar -->
+      <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <div id="calendar"></div>
+      </div>
 
-      foreach ($upcoming_events as $event) {
-        $event_date = get_post_meta($event->ID, 'event_date', true);
-        $attendees = get_post_meta($event->ID, 'attendees_count', true);
-        $capacity = get_post_meta($event->ID, 'capacity', true);
-        ?>
-        <div style="display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #eee;">
-          <div style="flex: 1;">
-            <div style="font-weight: 500;"><?php echo esc_html($event->post_title); ?></div>
-            <div style="font-size: 13px; color: #666;">
-              <?php echo date('M j, Y', strtotime($event_date)); ?> •
-              <?php echo esc_html($attendees); ?>/<?php echo esc_html($capacity); ?> attendees
-            </div>
-          </div>
-          <div>
-            <a href="#" style="color: #007cba; text-decoration: none; font-size: 13px;">View Details →</a>
-          </div>
-        </div>
-      <?php } ?>
-    </div>
-
-    <!-- Quick Actions -->
-    <div style="display: flex; gap: 10px; margin-bottom: 25px; display: none; ">
-      <a href="#" class="button button-primary" style="text-decoration: none;">Create New Event</a>
-      <a href="#" class="button" style="text-decoration: none;">View All Events</a>
-      <a href="#" class="button" style="text-decoration: none;">Export Data</a>
+      <!-- Events List -->
+      <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #333;">Events for <span
+            id="selected-date"></span></h3>
+        <div id="events-list"></div>
+      </div>
     </div>
 
     <!-- Event Performance Chart -->
-    <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); ">
+    <div style="background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
       <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #333;">Event Performance</h3>
-      [GRAPH]
       <canvas id="eventPerformanceChart" style="height: 200px;"></canvas>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      return;
-      const ctx = document.getElementById('eventPerformanceChart');
-      if (!ctx) return;
-
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-          datasets: [{
-            label: 'Event Revenue',
-            data: [1200, 1900, 1500, 2800, 2200, 3000],
-            borderColor: '#007cba',
-            backgroundColor: 'rgba(0, 124, 186, 0.1)',
-            tension: 0.4,
-            fill: true
-          }, {
-            label: 'Attendees',
-            data: [45, 52, 48, 55, 60, 58],
-            borderColor: '#28a745',
-            backgroundColor: 'rgba(40, 167, 69, 0.1)',
-            tension: 0.4,
-            fill: true
-          }]
+      // Initialize Calendar
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek'
         },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'top',
+        events: <?php
+        $events = get_posts([
+          'post_type' => 'hypership-event',
+          'posts_per_page' => -1,
+          'meta_query' => [
+            [
+              'key' => 'hypership_app',
+              'value' => $app_id,
+              'compare' => '='
+            ]
+          ]
+        ]);
+
+        $calendar_events = array_map(function ($event) {
+          $event_date = get_post_meta($event->ID, 'event_date', true);
+          return [
+            'title' => $event->post_title,
+            'start' => $event_date,
+            'url' => get_edit_post_link($event->ID)
+          ];
+        }, $events);
+
+        echo json_encode($calendar_events);
+        ?>,
+        dateClick: function (info) {
+          const selectedDate = info.dateStr;
+          document.getElementById('selected-date').textContent = new Date(selectedDate).toLocaleDateString();
+
+          // Fetch events for selected date
+          const eventsList = document.getElementById('events-list');
+          eventsList.innerHTML = '';
+
+          <?php foreach ($events as $event): ?>
+            if ('<?php echo get_post_meta($event->ID, 'event_date', true); ?>' === selectedDate) {
+              const eventDiv = document.createElement('div');
+              eventDiv.style.padding = '10px';
+              eventDiv.style.borderBottom = '1px solid #eee';
+              eventDiv.innerHTML = `
+                <div style="font-weight: 500;"><?php echo esc_js($event->post_title); ?></div>
+                <div style="font-size: 13px; color: #666;">
+                  <?php echo esc_js(get_post_meta($event->ID, 'attendees_count', true)); ?>/<?php echo esc_js(get_post_meta($event->ID, 'capacity', true)); ?> attendees
+                </div>
+              `;
+              eventsList.appendChild(eventDiv);
             }
-          },
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
+          <?php endforeach; ?>
         }
       });
+      calendar.render();
+
+      // Initialize Performance Chart
+      const ctx = document.getElementById('eventPerformanceChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [{
+              label: 'Event Revenue',
+              data: [1200, 1900, 1500, 2800, 2200, 3000],
+              borderColor: '#007cba',
+              backgroundColor: 'rgba(0, 124, 186, 0.1)',
+              tension: 0.4,
+              fill: true
+            }, {
+              label: 'Attendees',
+              data: [45, 52, 48, 55, 60, 58],
+              borderColor: '#28a745',
+              backgroundColor: 'rgba(40, 167, 69, 0.1)',
+              tension: 0.4,
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      }
     });
   </script>
-
-
-
-
-
 </div>

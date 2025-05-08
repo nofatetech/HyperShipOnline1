@@ -165,6 +165,23 @@ $app = get_post($app_id);
     ?>
 
 
+<?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-support.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+
+<?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-marketing.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-multiplayer.php';
