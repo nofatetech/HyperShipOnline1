@@ -194,7 +194,48 @@ $tregistrations = get_posts([
       $pagination_links .= '</span></div>';
     }
 
-    echo $pagination_links;
+    echo '<div class="pagination-container" style="display: flex; justify-content: center; align-items: center; margin: 20px 0; gap: 8px;">';
+    echo '<div class="pagination-info" style="font-size: 0.9em; color: #666; margin-right: 15px;">' . $total_users . ' items</div>';
+
+    if ($total_pages > 1) {
+        // First & Previous
+        echo '<div class="pagination-controls" style="display: flex; gap: 4px;">';
+
+        // First page
+        if ($current_page > 1) {
+            echo '<a href="' . add_query_arg('page_users', 1) . '" class="pagination-button" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #007cba; transition: all 0.2s;">&laquo;</a>';
+        } else {
+            echo '<span class="pagination-button disabled" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; color: #999; cursor: not-allowed;">&laquo;</span>';
+        }
+
+        // Previous page
+        if ($current_page > 1) {
+            echo '<a href="' . add_query_arg('page_users', $current_page - 1) . '" class="pagination-button" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #007cba; transition: all 0.2s;">&lsaquo;</a>';
+        } else {
+            echo '<span class="pagination-button disabled" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; color: #999; cursor: not-allowed;">&lsaquo;</span>';
+        }
+
+        // Current page indicator
+        echo '<span class="pagination-current" style="padding: 6px 12px; background: #007cba; color: white; border-radius: 4px;">' . $current_page . '</span>';
+
+        // Next & Last
+        // Next page
+        if ($current_page < $total_pages) {
+            echo '<a href="' . add_query_arg('page_users', $current_page + 1) . '" class="pagination-button" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #007cba; transition: all 0.2s;">&rsaquo;</a>';
+        } else {
+            echo '<span class="pagination-button disabled" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; color: #999; cursor: not-allowed;">&rsaquo;</span>';
+        }
+
+        // Last page
+        if ($current_page < $total_pages) {
+            echo '<a href="' . add_query_arg('page_users', $total_pages) . '" class="pagination-button" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #007cba; transition: all 0.2s;">&raquo;</a>';
+        } else {
+            echo '<span class="pagination-button disabled" style="padding: 6px 12px; border: 1px solid #ddd; border-radius: 4px; color: #999; cursor: not-allowed;">&raquo;</span>';
+        }
+
+        echo '</div>';
+    }
+    echo '</div>';
 
 
     $tregistrations = get_posts([
