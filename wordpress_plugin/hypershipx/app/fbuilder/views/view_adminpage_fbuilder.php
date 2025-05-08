@@ -93,10 +93,241 @@
   //   document.getElementById('blocklyDiv'), { /* config */ });
 
 
+  // 1. Block Definition
+  // Potential WordPress block ideas:
+  // - Query Posts (by category, tag, author, date)
+  // - Get Post Meta
+  // - Get Option (wp_options)
+  // - Get Term (taxonomy terms)
+  // - Get Menu Items
+  // - Get Widget Areas
+  // - Get Sidebar
+  // - Get Template Part
+  // - Get Navigation Menu
+  // - Get Custom Fields (ACF)
+  // - Get User Meta
+  // - Get Post Terms
+  // - Get Post Author
+  // - Get Post Date
+  // - Get Post Content
+  // - Get Post Excerpt
+  // - Get Post Title
+  // - Get Post URL
+  // - Get Post Thumbnail
+  // - Get Post Comments
+  // - Get Post Categories
+  // - Get Post Tags
+  // - Get Post Custom Fields
+  // - Get Post Meta
+  // - Get Post Terms
+  // - Get Post Author
+  // - Get Post Date
+  // - Get Post Content
+  // - Get Post Excerpt
+  // - Get Post Title
+  // - Get Post URL
+  // - Get Post Thumbnail
+  // - Get Post Comments
+  // - Get Post Categories
+  // - Get Post Tags
+  // - Get Post Custom Fields
+  Blockly.Blocks['query_users'] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Query Users')
+        .appendField(new Blockly.FieldDropdown([
+          ['All', 'all'],
+          ['Subscribers', 'subscriber'],
+          ['Authors', 'author'],
+          ['Editors', 'editor'],
+          ['Administrators', 'administrator']
+        ]), 'ROLE');
+      this.appendValueInput('NUMBER')
+        .setCheck('Number')
+        .appendField('Limit to');
+      this.setOutput(true, 'Array');
+      this.setColour(160);
+      this.setTooltip('This is a test block that takes a number input');
+      this.setHelpUrl('');
+    }
+  };
+
+
+  Blockly.Blocks['ecommerce_ai_recommendations'] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Get AI Product Recommendations');
+      this.setOutput(true, 'Array');
+      this.setColour(280);
+      this.setTooltip('Returns AI-generated product recommendations');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['ecommerce_product_list'] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Get Product List');
+      this.setOutput(true, 'Array');
+      this.setColour(280);
+      this.setTooltip('Returns a list of products');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['ecommerce_orders'] = {
+    init: function () {
+      this.appendDummyInput()
+        .appendField('Get All Orders');
+      this.setOutput(true, 'Array');
+      this.setColour(280);
+      this.setTooltip('Returns all orders');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['ecommerce_order'] = {
+    init: function () {
+      this.appendValueInput('ORDER_ID')
+        .setCheck('Number')
+        .appendField('Get Order');
+      this.setOutput(true, 'Object');
+      this.setColour(280);
+      this.setTooltip('Returns a specific order by ID');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['ecommerce_order_add_product'] = {
+    init: function () {
+      this.appendValueInput('ORDER_ID')
+        .setCheck('Number')
+        .appendField('Add Product to Order');
+      this.appendValueInput('PRODUCT_ID')
+        .setCheck('Number')
+        .appendField('Product ID');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(280);
+      this.setTooltip('Adds a product to an existing order');
+      this.setHelpUrl('');
+    }
+  };
+
+  Blockly.Blocks['ecommerce_order_checkout'] = {
+    init: function () {
+      this.appendValueInput('ORDER_ID')
+        .setCheck('Number')
+        .appendField('Checkout Order');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(280);
+      this.setTooltip('Processes the checkout for an order');
+      this.setHelpUrl('');
+    }
+  };
+
+
+
+  // 2. Block-code generator (for PHP)
+  Blockly.PHP['query_users'] = function (block) {
+    // Get the value of the input
+    var value = Blockly.PHP.valueToCode(block, 'VALUE', Blockly.PHP.ORDER_ATOMIC) || '0';
+    // Return the code
+    return [value, Blockly.PHP.ORDER_ATOMIC];
+  };
 
   const toolbox = {
     kind: 'categoryToolbox',
     contents: [
+
+      {
+        kind: 'category',
+        name: 'Users',
+        colour: 160,
+        contents: [
+          {
+            kind: 'block',
+            type: 'query_users'
+          }
+        ]
+      },
+      {
+        kind: 'category',
+        name: 'Events',
+        colour: 120,
+        contents: [
+          {
+            kind: 'block',
+            type: 'query_users' // TODO: Replace with actual event blocks
+          }
+        ]
+      },
+      {
+        kind: 'category',
+        name: 'Multiplayer',
+        colour: 200,
+        contents: [
+          {
+            kind: 'block',
+            type: 'query_users' // TODO: Replace with actual multiplayer blocks
+          }
+        ]
+      },
+      {
+        kind: 'category',
+        name: 'Ecommerce',
+        colour: 280,
+        contents: [
+          {
+            kind: 'block',
+            type: 'ecommerce_ai_recommendations'
+          },
+          {
+            kind: 'block',
+            type: 'ecommerce_product_list'
+          },
+          {
+            kind: 'block',
+            type: 'ecommerce_orders'
+          },
+          {
+            kind: 'block',
+            type: 'ecommerce_order'
+          },
+          {
+            kind: 'block',
+            type: 'ecommerce_order_add_product'
+          },
+          {
+            kind: 'block',
+            type: 'ecommerce_order_checkout'
+          }
+        ]
+      },
+      {
+        kind: 'category',
+        name: 'Gamification',
+        colour: 320,
+        contents: [
+          {
+            kind: 'block',
+            type: 'query_users' // TODO: Replace with actual gamification blocks
+          }
+        ]
+      },
+      {
+        kind: 'category',
+        name: 'Security',
+        colour: 40,
+        contents: [
+          {
+            kind: 'block',
+            type: 'query_users' // TODO: Replace with actual security blocks
+          }
+        ]
+      },
+
       {
         kind: 'category',
         name: 'Logic',
