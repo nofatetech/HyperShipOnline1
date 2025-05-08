@@ -138,7 +138,8 @@ $tregistrations = get_posts([
   <div style="border: 0px solid black; margin-bottom: 11px;">
 
 
-    <h4>User Registrations</h4>
+    <!-- <h4>User Registrations</h4> -->
+    <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 16px; color: #333;">User Registrations</h3>
 
 
     <?php

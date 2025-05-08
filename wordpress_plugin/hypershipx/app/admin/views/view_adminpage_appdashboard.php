@@ -6,8 +6,20 @@ if (!$app_id || get_post_type($app_id) !== 'hypership-app') {
 }
 $app = get_post($app_id);
 ?>
-<div class="wrap">
-  <h1>App Dashboard: <?php echo esc_html($app->post_title); ?></h1>
+<div class="wrap" style="xbackground: #f8f9fa;">
+  <!-- <h1>App Dashboard: <?php echo esc_html($app->post_title); ?></h1> -->
+  <!--
+    Font suggestions:
+    - 'Poppins' - Modern, clean, professional yet friendly
+    - 'Montserrat' - Strong, contemporary, versatile
+    - 'Roboto' - Google's workhorse, balanced and readable
+    - 'Inter' - Modern, highly legible, great for UI
+    - 'Source Sans Pro' - Adobe's clean, professional choice
+  -->
+  <h1 style="font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: 0.5px; color: #1d2327; margin-bottom: 20px; xxborder-bottom: 2px solid #007cba; padding-bottom: 10px;">
+    <?php echo esc_html($app->post_title); ?>
+  </h1>
+
   <p><a href="<?php echo admin_url('edit.php?post_type=hypership-app'); ?>" class="button">Back to Apps</a></p>
 
   <style>
@@ -180,40 +192,21 @@ $app = get_post($app_id);
     </div>
 
 
-    <!-- Monetization & Ecommerce Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        💰 Monetization & Ecommerce 🛒</h2>
-      <p>Total Revenue: <span
-          class="status"><?php echo esc_html(get_post_meta($app_id, 'total_revenue', true) ?: '$0.00'); ?></span></p>
-      <p>Total Orders: <?php echo esc_html(get_post_meta($app_id, 'total_orders', true) ?: '0'); ?></p>
-      <p>Average Order Value: <?php echo esc_html(get_post_meta($app_id, 'avg_order_value', true) ?: '$0.00'); ?></p>
-    </div>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-ecommerce.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
 
 
-
-
-    <!-- Data Types Section -->
-    <div class="hypership-card">
-      <h2
-        style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-        📊 Data Types 📈</h2>
-
-      <div style="border: 0px solid black;">
-        <strong>Piano Lesson</strong>
-        <div>Total: 11</div>
-      </div>
-      <div style="border: 0px solid black;">
-        <strong>Piano Lesson Recording</strong>
-        <div>Total: 33</div>
-      </div>
-      <!-- <p>Piano Lesson: <span class="status"> dd</span></p> -->
-      <!-- <p>Piano Lesson: <span class="status"><?php echo esc_html(get_post_meta($app_id, 'total_revenue', true) ?: '$0.00'); ?></span></p> -->
-      <!-- <p>Total Orders: <?php echo esc_html(get_post_meta($app_id, 'total_orders', true) ?: '0'); ?></p> -->
-      <!-- <p>Average Order Value: <?php echo esc_html(get_post_meta($app_id, 'avg_order_value', true) ?: '$0.00'); ?></p> -->
-    </div>
-
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-datatypes.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
 
 
 
