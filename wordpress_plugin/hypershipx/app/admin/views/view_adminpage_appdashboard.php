@@ -16,7 +16,8 @@ $app = get_post($app_id);
     - 'Inter' - Modern, highly legible, great for UI
     - 'Source Sans Pro' - Adobe's clean, professional choice
   -->
-  <h1 style="font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: 0.5px; color: #1d2327; margin-bottom: 20px; xxborder-bottom: 2px solid #007cba; padding-bottom: 10px;">
+  <h1
+    style="font-family: 'Poppins', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: 0.5px; color: #1d2327; margin-bottom: 20px; xxborder-bottom: 2px solid #007cba; padding-bottom: 10px;">
     <?php echo esc_html($app->post_title); ?>
   </h1>
 
@@ -31,7 +32,7 @@ $app = get_post($app_id);
     }
 
     .hypership-card {
-      background: #fff;
+      /* background: #fff; */
       border: 1px solid #c3c4c7;
       border-radius: 4px;
       padding: 20px;
@@ -165,7 +166,7 @@ $app = get_post($app_id);
     ?>
 
 
-<?php
+    <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-support.php';
     if (is_file($tf)) {
       require_once $tf;
@@ -174,7 +175,7 @@ $app = get_post($app_id);
 
 
 
-<?php
+    <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-marketing.php';
     if (is_file($tf)) {
       require_once $tf;
@@ -220,6 +221,14 @@ $app = get_post($app_id);
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-gamification.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-templates.php';
     if (is_file($tf)) {
       require_once $tf;
     }

@@ -113,3 +113,42 @@ function hypershipx__controller__adminpage_fbuilder()
 
 
 
+
+
+
+// Hook to enqueue scripts and styles
+add_action('admin_enqueue_scripts', 'hypershipx_enqueue_codemirror_assets');
+
+function hypershipx_enqueue_codemirror_assets($hook)
+{
+  // Only load scripts/styles on our custom admin page
+  if ($hook !== 'toplevel_page_hypershipx_adminpage_fbuilder') {
+    return;
+  }
+
+  // Enqueue CodeMirror CSS
+  wp_enqueue_style(
+    'codemirror-style',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css'
+  );
+
+  // Enqueue CodeMirror JavaScript
+  wp_enqueue_script(
+    'codemirror-script',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js',
+    array(),
+    null,
+    true
+  );
+
+  // Enqueue CodeMirror mode for PHP
+  wp_enqueue_script(
+    'codemirror-mode-php',
+    'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js',
+    array('codemirror-script'),
+    null,
+    true
+  );
+}
+
+

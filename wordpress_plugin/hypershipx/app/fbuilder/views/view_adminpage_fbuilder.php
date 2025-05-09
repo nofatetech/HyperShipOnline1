@@ -31,6 +31,50 @@
 
 <div class="wrap">
   <h1>HyperShip Route Builder</h1>
+  <div class="route-info">
+    <div class="form-group">
+      <label for="routeTitle">Route Title</label>
+      <input type="text" id="routeTitle" name="routeTitle" value="<?php echo esc_attr($troute->post_title); ?>" class="regular-text" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="routeSlug">Route Slug</label>
+      <input type="text" id="routeSlug" name="routeSlug" value="<?php echo esc_attr($troute->post_name); ?>" class="regular-text" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="routeDescription">Description</label>
+      <textarea id="routeDescription" name="routeDescription" class="large-text" rows="3" readonly><?php echo esc_textarea($troute->post_excerpt); ?></textarea>
+    </div>
+  </div>
+
+  <style>
+    .route-info {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid #ccd0d4;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
+    }
+
+    .route-info .form-group {
+      margin-bottom: 15px;
+    }
+
+    .route-info label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .route-info input[type="text"],
+    .route-info textarea {
+      width: 100%;
+      background: #f0f0f1;
+    }
+  </style>
+
+
   <!-- <p>ID: <?php echo $troute->ID; ?></p> -->
   <!-- <div>
     <p>workspaceState:
@@ -91,10 +135,280 @@
 
         <div class="form-group">
           <label for="customCode">Custom Code</label>
-          <textarea id="customCode" name="customCode" rows="10" class="large-text code"
-            placeholder="Enter custom code here..."><?php
-            $customCode = get_post_meta($troute->ID, 'customCode', true);
-            echo esc_textarea($customCode); ?></textarea>
+          <div class="custom-code-tabs">
+            <div class="tab-buttons">
+              <button type="button" class="tab-button active" data-tab="get">GET</button>
+              <button type="button" class="tab-button" data-tab="post">POST</button>
+            </div>
+
+            <div class="tab-content">
+              <div class="tab-pane active" id="get-tab">
+                <textarea id="customCodeGet" name="customCodeGet" rows="17" class="large-text code"
+                  placeholder="Enter GET route code here..."><?php
+                  $customCodeGet = get_post_meta($troute->ID, 'customCodeGet', true);
+                  echo esc_textarea($customCodeGet);
+                  ?></textarea>
+              </div>
+
+              <div class="tab-pane" id="post-tab">
+                <textarea id="customCodePost" name="customCodePost" rows="33" class="large-text code"
+                  placeholder="Enter POST route code here..."><?php
+                  $customCodePost = get_post_meta($troute->ID, 'customCodePost', true);
+                  echo esc_textarea($customCodePost);
+                  ?></textarea>
+              </div>
+            </div>
+          </div>
+
+          <style>
+            .custom-code-tabs {
+              margin-bottom: 20px;
+            }
+
+            .tab-buttons {
+              margin-bottom: 10px;
+            }
+
+            .tab-button {
+              padding: 8px 16px;
+              margin-right: 5px;
+              border: 1px solid #ccc;
+              background: #f5f5f5;
+              cursor: pointer;
+            }
+
+            .tab-button.active {
+              background: #007cba;
+              color: white;
+              border-color: #007cba;
+            }
+
+            .tab-pane {
+              display: none;
+            }
+
+            .tab-pane.active {
+              display: block;
+            }
+          </style>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              const tabButtons = document.querySelectorAll('.tab-button');
+              const tabPanes = document.querySelectorAll('.tab-pane');
+
+              tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                  // Remove active class from all buttons and panes
+                  tabButtons.forEach(btn => btn.classList.remove('active'));
+                  tabPanes.forEach(pane => pane.classList.remove('active'));
+
+                  // Add active class to clicked button and corresponding pane
+                  button.classList.add('active');
+                  document.getElementById(button.dataset.tab + '-tab').classList.add('active');
+                });
+              });
+            });
+          </script>
+
+
+
+
+<div id="code-example">
+
+<pre>
+function($request) {
+// ONLY WRITE THE CODE FROM HERE..
+<strong>
+$username = $request->get_param('username');
+$password = $request->get_param('password');
+
+$user = wp_authenticate($username, $password);
+if (is_wp_error($user)) {
+return new WP_Error('auth_failed', 'Invalid credentials', array('status' => 401));
+}
+
+return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
+</strong>
+// .. UP TO HERE.
+}
+</pre>
+</div>
+
+
+
+          <div>
+            <div class="route-examples">
+              <h3>Example Routes</h3>
+              <select id="routeExample" onchange="updateCodeExample()" class="regular-text">
+                <option value="">Select an example...</option>
+                <option value="basic">Basic Route</option>
+                <option value="auth">Authentication Route</option>
+                <option value="crud">CRUD Operations</option>
+                <option value="validation">Form Validation</option>
+              </select>
+            </div>
+
+            <div class="ai-assistant">
+              <h3>AI Route Assistant</h3>
+              <div class="assistant-input">
+                <textarea id="routePrompt" placeholder="Describe the route you want to create..." rows="4"
+                  class="large-text"></textarea>
+                <button onclick="getAIAssistance()" class="button button-secondary">
+                  <span class="dashicons dashicons-admin-comments"></span>
+                  Get AI Help
+                </button>
+              </div>
+              <div id="aiResponse" class="assistant-response" style="display: none;">
+                <div class="response-content"></div>
+                <button onclick="applyAISuggestion()" class="button button-primary">
+                  <span class="dashicons dashicons-yes"></span>
+                  Apply Suggestion
+                </button>
+              </div>
+            </div>
+
+            <style>
+              .route-examples {
+                margin-bottom: 20px;
+              }
+
+              .ai-assistant {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 4px;
+                margin-bottom: 20px;
+              }
+
+              .assistant-input {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+              }
+
+              .assistant-input textarea {
+                flex: 1;
+              }
+
+              .assistant-response {
+                background: #fff;
+                padding: 15px;
+                border-radius: 4px;
+                border: 1px solid #ddd;
+                margin-top: 10px;
+              }
+
+              .response-content {
+                font-family: monospace;
+                white-space: pre-wrap;
+                margin-bottom: 10px;
+              }
+            </style>
+
+            <script>
+              const routeExamples = {
+                basic: `
+// Basic route example
+return new WP_REST_Response(['message' => 'Hello World!'], 200);
+`,
+
+                auth: `
+// Authentication route example
+$username = $request->get_param('username');
+$password = $request->get_param('password');
+
+$user = wp_authenticate($username, $password);
+if (is_wp_error($user)) {
+  return new WP_Error('auth_failed', 'Invalid credentials', array('status' => 401));
+}
+return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
+
+`,
+
+                crud: `
+// CRUD operations example
+$items = get_posts(['post_type' => 'item', 'posts_per_page' => -1]);
+return new WP_REST_Response($items, 200);
+
+`,
+
+                validation: `// Form validation example
+add_action('rest_api_init', function() {
+  register_rest_route('myplugin/v1', '/validate', array(
+    'methods' => 'POST',
+    'callback' => function($request) {
+      $email = $request->get_param('email');
+      $name = $request->get_param('name');
+
+      $errors = [];
+      if (!is_email($email)) {
+        $errors['email'] = 'Invalid email format';
+      }
+      if (empty($name)) {
+        $errors['name'] = 'Name is required';
+      }
+
+      if (!empty($errors)) {
+        return new WP_Error('validation_failed', 'Validation failed', array(
+          'status' => 400,
+          'errors' => $errors
+        ));
+      }
+
+      return new WP_REST_Response(['message' => 'Validation successful'], 200);
+    }
+  ));
+});`
+              };
+
+              function updateCodeExample() {
+                const select = document.getElementById('routeExample');
+                const example = routeExamples[select.value];
+                if (example) {
+                  console.log(example);
+                  // Determine which tab is active and set the example code accordingly
+                  const activeTab = document.querySelector('.tab-pane.active');
+                  if (activeTab) {
+                    const textareaId = activeTab.id === 'get-tab' ? 'customCodeGet' : 'customCodePost';
+                    // document.getElementById(textareaId).value = example;
+                    document.getElementById('code-example').innerHTML = "<pre>" + example + "</pre>";
+                  }
+                }
+              }
+
+              function getAIAssistance() {
+                const prompt = document.getElementById('routePrompt').value;
+                if (!prompt) return;
+
+                // Show loading state
+                const responseDiv = document.getElementById('aiResponse');
+                responseDiv.style.display = 'block';
+                responseDiv.querySelector('.response-content').textContent = 'Generating response...';
+
+                // Simulate AI response (replace with actual API call)
+                setTimeout(() => {
+                  responseDiv.querySelector('.response-content').textContent =
+                    `// AI generated route based on your description:\n${prompt}\n\n` +
+                    `add_action('rest_api_init', function() {\n` +
+                    `  register_rest_route('myplugin/v1', '/custom', array(\n` +
+                    `    'methods' => 'POST',\n` +
+                    `    'callback' => function($request) {\n` +
+                    `      // Your route logic here\n` +
+                    `      return new WP_REST_Response(['message' => 'Success'], 200);\n` +
+                    `    }\n` +
+                    `  ));\n` +
+                    `});`;
+                }, 1000);
+              }
+
+              function applyAISuggestion() {
+                const suggestion = document.getElementById('aiResponse').querySelector('.response-content').textContent;
+                document.getElementById('customCode').value = suggestion;
+              }
+            </script>
+          </div>
+
+
         </div>
 
         <div class="form-group">
@@ -1007,4 +1321,21 @@
     return code;
   };
 
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var customCodeTextarea = document.getElementById('customCode');
+    if (customCodeTextarea) {
+      var editor = CodeMirror.fromTextArea(customCodeTextarea, {
+        lineNumbers: true,
+        mode: 'application/x-httpd-php',
+        matchBrackets: true,
+        indentUnit: 2,
+        indentWithTabs: true,
+        theme: 'default'
+      });
+    }
+  });
 </script>
