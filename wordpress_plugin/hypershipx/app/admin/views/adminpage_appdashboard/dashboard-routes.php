@@ -8,9 +8,9 @@ $posts = get_posts([
   'posts_per_page' => -1,
   'post_type' => 'hypership-route',
   'meta_key' => 'app_parent',
-  'meta_value' => $app->ID,
+  // 'meta_value' => $app->ID,
 ]);
-// var_dump($posts);
+var_dump($app);
 ?>
 
 

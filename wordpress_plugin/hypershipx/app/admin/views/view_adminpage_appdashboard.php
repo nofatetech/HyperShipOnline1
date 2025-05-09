@@ -163,6 +163,15 @@ $app = get_post($app_id);
     if (is_file($tf)) {
       require_once $tf;
     }
+    // die();
+    ?>
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-community.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
     ?>
 
 
@@ -177,6 +186,14 @@ $app = get_post($app_id);
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-marketing.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-deploy.php';
     if (is_file($tf)) {
       require_once $tf;
     }
