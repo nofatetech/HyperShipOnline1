@@ -5,6 +5,16 @@
     🎉 Events 📅
   </h2>
 
+  <style>
+    .events-dashboard {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+    .events-dashboard:hover {
+      /* filter: blur(0); */
+    }
+  </style>
+
   <div class="events-dashboard">
     <!-- Stats Overview -->
     <div class="stats-grid"

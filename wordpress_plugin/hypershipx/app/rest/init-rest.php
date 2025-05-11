@@ -14,8 +14,9 @@ add_action('rest_api_init', 'hypershipx__action__register_rest_routes');
 function hypershipx__action__register_rest_routes()
 {
 
+  // Custom Routes
 
-  // // get hypership app posts
+  // get hypership app route posts
   // $args = array(
   //   'numberposts' => 100,
   //   'post_type'   => 'hypership-app'
@@ -24,7 +25,82 @@ function hypershipx__action__register_rest_routes()
   // // var_dump($tapps);
   // foreach ($tapps as $tapp) {
   // }
+  $args = array(
+    'post_type' => 'hypership-route',
+    'posts_per_page' => -1,
+    // 'meta_query' => array(
+    //   array(
+    //     'key' => 'app_parent',
+    //     'value' => 1,
+    //     'compare' => '=',
+    //     'type' => 'NUMERIC'
+    //   )
+    // )
+  );
+  $tcustom_routes = get_posts($args);
+  foreach ($tcustom_routes as $route) {
+    $app_parent = get_post_meta($route->ID, 'app_parent', true);
+    if (!$app_parent) continue;
 
+    $app = get_post($app_parent);
+    if (!$app) continue;
+
+    $customCodeGet = get_post_meta($route->ID, 'customCodeGet', true);
+    $customCodePost = get_post_meta($route->ID, 'customCodePost', true);
+
+    // echo '<pre>';
+    // var_dump($customCodeGet);
+    // var_dump($customCodePost);
+    // echo '</pre>';
+    // die();
+
+    if (!empty($customCodeGet)) {
+      register_rest_route('hypershipx/v1', '/' . $app->post_name . '/' . $route->post_name, [
+        'methods' => 'GET',
+        'callback' => function($request) use ($route, $customCodeGet) {
+          try {
+            $temp_function = function($request) use ($customCodeGet) {
+                return eval($customCodeGet);
+            };
+            $result = $temp_function($request);
+            return $result;
+          } catch (Exception $e) {
+            return new WP_Error('custom_code_error', $e->getMessage(), ['status' => 500]);
+          }
+        },
+        'permission_callback' => '__return_true',
+        'args' => []
+      ]);
+    }
+
+    if (!empty($customCodePost)) {
+      register_rest_route('hypershipx/v1', '/' . $app->post_name . '/' . $route->post_name, [
+        'methods' => 'POST',
+        'callback' => function($request) use ($route, $customCodePost) {
+          try {
+            $temp_function = function($request) use ($customCodePost) {
+                return eval($customCodePost);
+            };
+            $result = $temp_function($request);
+            return $result;
+          } catch (Exception $e) {
+            return new WP_Error('custom_code_error', $e->getMessage(), ['status' => 500]);
+          }
+        },
+        'permission_callback' => '__return_true',
+        'args' => []
+      ]);
+    }
+  }
+  // echo '<pre>';
+  // var_dump($routes);
+  // echo '</pre>';
+  // die();
+
+
+
+
+  // Pre-Made Routes
 
   register_rest_route('hypershipx/v1', '/(?P<appslug>[a-zA-Z0-9-]+)/auth/register', [
     // register_rest_route('hypershipx/v1', '/auth/register', [

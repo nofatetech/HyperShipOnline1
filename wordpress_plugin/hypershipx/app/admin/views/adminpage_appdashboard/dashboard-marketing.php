@@ -4,6 +4,14 @@
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
     Marketing
   </h2>
+  <style>
+    .allblured {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+  </style>
+  <div class="allblured">
+
 
   <!-- Marketing Overview Section -->
   <div class="marketing-overview" style="margin-bottom: 25px;">
@@ -102,7 +110,11 @@
         });
       });
     });
-  </script>
+    </script>
+
+
+  </div>
+  <!-- /allblured -->
 
 
 </div>

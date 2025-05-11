@@ -5,6 +5,14 @@
     🎫 Support Dashboard
   </h2>
 
+  <style>
+    .allblured {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+  </style>
+  <div class="allblured">
+
   <!-- News & Alerts Section -->
   <div class="support-news-section" style="margin-bottom: 25px;">
     <h3 style="font-size: 18px; margin-bottom: 15px;">📢 Latest News & Alerts</h3>
@@ -183,4 +191,11 @@
       </a>
     </div>
   </div>
+
+
+
+  </div>
+  <!-- /allblured -->
+
+
 </div>

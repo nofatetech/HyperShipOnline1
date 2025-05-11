@@ -3,6 +3,18 @@
   <h2
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
     🔒 Security 🛡️</h2>
+
+
+    <style>
+    .allblured {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+  </style>
+  <div class="allblured">
+
+
+
   <p>API Rate Limiting: Off <button>Edit</button></p>
   <p>Last Security Scan: <?php echo esc_html(get_post_meta($app_id, 'last_scan', true) ?: 'Never'); ?></p>
 
@@ -215,6 +227,10 @@
     });
   </script>
 
+
+
+</div>
+<!-- /allblured -->
 
 
 </div>

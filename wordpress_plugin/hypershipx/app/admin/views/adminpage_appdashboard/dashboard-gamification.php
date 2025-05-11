@@ -2,6 +2,18 @@
 <div class="hypership-card gamification-dashboard">
   <div class="dashboard-header">
     <h2 class="dashboard-title">🏆 Gamification Dashboard</h2>
+
+
+    <style>
+    .allblured {
+      filter: blur(5px);
+      transition: filter 0.3s ease;
+    }
+  </style>
+  <div class="allblured">
+
+
+
     <div class="dashboard-stats">
       <div class="stat-card">
         <div class="stat-icon">👥</div>
@@ -54,7 +66,7 @@
   <style>
     .gamification-dashboard {
       padding: 20px;
-      background: #ffffff;
+      xxxbackground: #ffffff;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
@@ -115,4 +127,8 @@
       letter-spacing: 1px;
     }
   </style>
+</div>
+<!-- /allblured -->
+
+
 </div>

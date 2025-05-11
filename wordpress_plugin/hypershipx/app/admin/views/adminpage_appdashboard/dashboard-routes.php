@@ -4,11 +4,11 @@
 
 
 
-$posts = get_posts([
+$troutes = get_posts([
   'posts_per_page' => -1,
   'post_type' => 'hypership-route',
   'meta_key' => 'app_parent',
-  // 'meta_value' => $app->ID,
+  'meta_value' => $app->ID,
 ]);
 // var_dump($app);
 ?>
@@ -23,31 +23,38 @@ $posts = get_posts([
 
 
 
-    <div style="font-size: 12px; color: #888; margin-bottom: 15px;">
-      Base URL: <code style="color: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
+  <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
+    <div>
+
+      Base URL:
     </div>
+    <div>
+      <code style="xxxcolor: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
+
+    </div>
+  </div>
 
 
 
   <?php
-  foreach ($posts as $tpost) {
+  foreach ($troutes as $troute) {
 
     ?>
 
     <div class="hypership-card-route">
       <div>
-        <h4><?php echo $tpost->post_title; ?></h4>
+        <h4><?php echo $troute->post_title; ?></h4>
         <div>
-          /<?php echo esc_html($tpost->post_name); ?>
+          /<?php echo esc_html($troute->post_name); ?>
 
         </div>
       </div>
       <!-- <div>
       </div> -->
       <div>
-        <a href="/wp-admin/post.php?post=110&action=edit">EDIT</a>
+        <a href="/wp-admin/post.php?post=<?php echo $troute->ID; ?>&action=edit">EDIT</a>
         //
-        <a href="/wp-admin/admin.php?page=hypershipx_adminpage_fbuilder&route_id=<?php echo $tpost->ID; ?>">BUILDER</a>
+        <a href="/wp-admin/admin.php?page=hypershipx_adminpage_fbuilder&route_id=<?php echo $troute->ID; ?>">BUILDER</a>
       </div>
     </div>
 
@@ -57,84 +64,91 @@ $posts = get_posts([
 
   <div class="new-route-form"
     style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
-    <h3>Create New Route</h3>
+    <h3>Create New Endpoint</h3>
     <form method="post" action="">
       <?php wp_nonce_field('create_route_nonce', 'route_nonce'); ?>
+      <input type="hidden" name="dashboard_routes_ok" value="1">
       <input type="hidden" name="app_parent" value="<?php echo esc_attr($app->ID); ?>">
 
       <div class="form-field">
-        <label for="route_title">Route Title:</label>
+        <label for="route_title">Title:</label>
         <input type="text" id="route_title" name="route_title" required>
       </div>
 
       <div class="form-field">
-        <label for="route_path">Route Path:</label>
+        <label for="route_path">Path:</label>
         <input type="text" id="route_path" name="route_path" required>
       </div>
 
-      <button type="submit" name="create_route" class="button button-primary">Create Route</button>
+      <button type="submit" name="create_route" class="button button-primary">Create Endpoint!</button>
     </form>
   </div>
-  <div class="hypership-autoroutes-list"
-    style="font-family: 'Consolas', monospace; background: #1e1e1e; padding: 15px; border-radius: 4px; border: 1px solid #333;">
-    <h3 style="font-size: 14px; margin: 0 0 12px; color: #e0e0e0;">API Endpoints</h3>
 
 
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Authentication</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/register</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/login_email_password</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /auth/logout</code>
-    </div>
 
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Blog</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /blog/post_list</code>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Ecommerce</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/ai_recommendations</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/products</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders/{order_id}</code>
-      <code
-        style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/add_product/{product_id}</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/checkout</code>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Events</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /events/events</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /events/{event_id}/register_attendee</code>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Multiplayer</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /multiplayer/rooms</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/create</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/{room_id}/join</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /multiplayer/rooms/{room_id}/leave</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /multiplayer/rooms/{room_id}/players</code>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Gamification</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/points</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/badges</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/leaderboard</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/create</code>
-      <code
-        style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/{challenge_id}/complete</code>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Security</h4>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /security/turn_all_off_now</code>
+  <?php
+  $routes = [
+    'Authentication' => [
+      '/users/register',
+      '/users/login_email_password',
+      '/users/logout',
+      '/users/profile',
+    ],
+    'Blog' => [
+      '/blog/posts'
+    ],
+    'Ecommerce' => [
+      '/ecommerce/ai_recommendations',
+      '/ecommerce/products',
+      '/ecommerce/orders',
+      '/ecommerce/orders',
+      '/ecommerce/orders/add_product',
+      '/ecommerce/orders/checkout'
+    ],
+    'Events' => [
+      '/events/events',
+      '/events/register_attendee'
+    ],
+    'Multiplayer' => [
+      '/multiplayer/rooms',
+      '/multiplayer/rooms/create',
+      '/multiplayer/rooms/join',
+      '/multiplayer/rooms/leave',
+      '/multiplayer/rooms/players'
+    ],
+    'Gamification' => [
+      '/gamification/points',
+      '/gamification/badges',
+      '/gamification/leaderboard',
+      '/gamification/challenges/create',
+      '/gamification/challenges/complete'
+    ],
+    'Analytics' => [
+      '/analytics/xxx',
+      '/analytics/xxx',
+      '/analytics/xxx',
+      '/analytics/xxx/create',
+    ],
+    'Security' => [
+      '/security/turn_all_off_now'
+    ]
+  ];
+  ?>
+  <div class="hypership-card-route" style="margin-top: 33px;">
+    <div>
+      <h3>Pre-Made API Endpoints</h3>
+      <?php foreach ($routes as $category => $paths) { ?>
+        <h4 class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'xxblurred'; ?>">
+          <?php echo $category; ?>
+        </h4>
+        <?php foreach ($paths as $path) { ?>
+          <div class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'blurred'; ?>">
+            <?php echo $path; ?>
+          </div>
+        <?php } ?>
+      <?php } ?>
     </div>
   </div>
-
-
 
 </div>
 
@@ -145,5 +159,11 @@ $posts = get_posts([
     padding: 10px;
     border-radius: 5px;
     margin-top: 10px;
+  }
+
+  .blurred {
+    filter: blur(5px);
+    color: #888;
+    font-style: italic;
   }
 </style>

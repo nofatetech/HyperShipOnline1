@@ -59,6 +59,14 @@ function hypershipx__controller__adminpage_fbuilder()
     update_post_meta($route_id, 'customCode', $sanitized_custom_code);
   }
 
+  if (isset($_POST['customCodeGet'])) {
+    $sanitized_custom_code_get = sanitize_textarea_field($_POST['customCodeGet']);
+    update_post_meta($route_id, 'customCodeGet', $sanitized_custom_code_get);
+  }
+  if (isset($_POST['customCodePost'])) {
+    $sanitized_custom_code_post = sanitize_textarea_field($_POST['customCodePost']);
+    update_post_meta($route_id, 'customCodePost', $sanitized_custom_code_post);
+  }
 
 
 
