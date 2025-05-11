@@ -10,7 +10,7 @@ $posts = get_posts([
   'meta_key' => 'app_parent',
   // 'meta_value' => $app->ID,
 ]);
-var_dump($app);
+// var_dump($app);
 ?>
 
 
@@ -19,7 +19,15 @@ var_dump($app);
 <div class="hypership-card">
   <h2
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-    🛤️ Routes & Functions 🔧</h2>
+    🛤️ API Endpoints & Code 🔧</h2>
+
+
+
+    <div style="font-size: 12px; color: #888; margin-bottom: 15px;">
+      Base URL: <code style="color: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
+    </div>
+
+
 
   <?php
   foreach ($posts as $tpost) {
@@ -47,7 +55,8 @@ var_dump($app);
   }
   ?>
 
-  <div class="new-route-form" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
+  <div class="new-route-form"
+    style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
     <h3>Create New Route</h3>
     <form method="post" action="">
       <?php wp_nonce_field('create_route_nonce', 'route_nonce'); ?>
@@ -66,12 +75,10 @@ var_dump($app);
       <button type="submit" name="create_route" class="button button-primary">Create Route</button>
     </form>
   </div>
-  <div class="hypership-autoroutes-list" style="font-family: 'Consolas', monospace; background: #1e1e1e; padding: 15px; border-radius: 4px; border: 1px solid #333;">
+  <div class="hypership-autoroutes-list"
+    style="font-family: 'Consolas', monospace; background: #1e1e1e; padding: 15px; border-radius: 4px; border: 1px solid #333;">
     <h3 style="font-size: 14px; margin: 0 0 12px; color: #e0e0e0;">API Endpoints</h3>
 
-    <div style="font-size: 12px; color: #888; margin-bottom: 15px;">
-      Base URL: <code style="color: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
-    </div>
 
     <div style="margin-bottom: 15px;">
       <h4 style="font-size: 13px; color: #e0e0e0; margin: 0 0 8px;">Authentication</h4>
@@ -91,7 +98,8 @@ var_dump($app);
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/products</code>
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders</code>
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /ecommerce/orders/{order_id}</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/add_product/{product_id}</code>
+      <code
+        style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/add_product/{product_id}</code>
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /ecommerce/orders/{order_id}/checkout</code>
     </div>
 
@@ -116,7 +124,8 @@ var_dump($app);
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/badges</code>
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">GET /gamification/leaderboard</code>
       <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/create</code>
-      <code style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/{challenge_id}/complete</code>
+      <code
+        style="display: block; margin: 4px 0; color: #9cdcfe;">POST /gamification/challenges/{challenge_id}/complete</code>
     </div>
 
     <div style="margin-bottom: 15px;">

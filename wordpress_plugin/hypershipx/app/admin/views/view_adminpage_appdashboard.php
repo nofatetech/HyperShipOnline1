@@ -1,10 +1,5 @@
 <?php
 
-$app_id = isset($_GET['app_id']) ? intval($_GET['app_id']) : 0;
-if (!$app_id || get_post_type($app_id) !== 'hypership-app') {
-  wp_die('Invalid or missing app ID.');
-}
-$app = get_post($app_id);
 ?>
 <div class="wrap" style="xbackground: #f8f9fa;">
   <!-- <h1>App Dashboard: <?php echo esc_html($app->post_title); ?></h1> -->
@@ -159,6 +154,30 @@ $app = get_post($app_id);
 
 
     <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-datatypes.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-routes.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-templates.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+
+
+    <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-events.php';
     if (is_file($tf)) {
       require_once $tf;
@@ -216,20 +235,6 @@ $app = get_post($app_id);
     ?>
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-datatypes.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-routes.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-    <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-security.php';
     if (is_file($tf)) {
       require_once $tf;
@@ -243,13 +248,6 @@ $app = get_post($app_id);
     }
     ?>
 
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-templates.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-analytics.php';

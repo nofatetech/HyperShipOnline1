@@ -78,9 +78,9 @@ $tregistrations = get_posts([
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
     👥 Users 👤 👨‍💻</h2>
 
-  <div style="text-align: right; margin: 10px 0;">
+  <!-- <div style="text-align: right; margin: 10px 0;">
     <a href="#" style="color: #007cba; text-decoration: none; font-size: 13px; opacity: 0.8; transition: opacity 0.2s ease;">✨ Free plan: 50 users limit - Upgrade for unlimited</a>
-  </div>
+  </div> -->
 
   <?php
   $tf = HYPERSHIPX_PLUGIN_DIR . 'myapps/' . $app->post_name . '/includes/hook__app_page_dashboard__card_users__before.php';
