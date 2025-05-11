@@ -38,7 +38,7 @@ $posts = get_posts([
       <div>
         <h4><?php echo $tpost->post_title; ?></h4>
         <div>
-          <?php echo esc_html($tpost->post_name); ?>
+          /<?php echo esc_html($tpost->post_name); ?>
 
         </div>
       </div>

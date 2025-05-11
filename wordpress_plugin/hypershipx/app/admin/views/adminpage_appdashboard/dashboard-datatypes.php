@@ -44,6 +44,9 @@
             ));
             echo $latest_post ? date('M j, Y', strtotime($latest_post[0]->post_modified)) : 'Never';
           ?></div>
+          <div>
+            <!-- API Endpoint: /wp-json/hypershipx/v1/<?php echo $type->name; ?> -->
+          </div>
           <div>Fields: <?php
             $fields = [];
             // Method 1: Get ACF fields for the post type
@@ -125,19 +128,24 @@
 </div>
 
 <script>
-function toggleDataTypeForm() {
-  const form = document.getElementById('datatypeForm');
-  const icon = document.querySelector('.dashicons-arrow-down-alt2');
-  if (form.style.display === 'none') {
-    form.style.display = 'block';
-    icon.classList.remove('dashicons-arrow-down-alt2');
-    icon.classList.add('dashicons-arrow-up-alt2');
-  } else {
-    form.style.display = 'none';
-    icon.classList.remove('dashicons-arrow-up-alt2');
-    icon.classList.add('dashicons-arrow-down-alt2');
+jQuery(document).ready(function($) {
+  function toggleDataTypeForm() {
+    var $form = $('#datatypeForm');
+    var $icon = $('.dashicons-arrow-down-alt2');
+
+    if ($form.is(':hidden')) {
+      $form.show();
+      $icon.removeClass('dashicons-arrow-down-alt2').addClass('dashicons-arrow-up-alt2');
+    } else {
+      $form.hide();
+      $icon.removeClass('dashicons-arrow-up-alt2').addClass('dashicons-arrow-down-alt2');
+    }
+    return false;
   }
-}
+
+  // Make function globally available
+  window.toggleDataTypeForm = toggleDataTypeForm;
+});
 </script>
 
 
