@@ -169,7 +169,7 @@
     ?>
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-routes.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-customcode.php';
     if (is_file($tf)) {
       require_once $tf;
     }

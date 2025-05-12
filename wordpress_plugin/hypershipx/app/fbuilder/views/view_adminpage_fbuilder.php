@@ -1,3 +1,134 @@
+<?php
+$recipes_for_endpoints = [
+  'Authentication' => [
+    '/users_register' => [
+      'Title' => 'User Registration',
+      'SampleCode' => <<<Y1Y1Y1Y1
+\$username = \$request->get_param("username");
+\$password = \$request->get_param("password");
+
+\$user = wp_authenticate(\$username, \$password);
+if (is_wp_error(\$user)) {
+  return new WP_Error("auth_failed", "Invalid credentials", array("status" => 401));
+}
+return new WP_REST_Response(["token" => wp_create_nonce("wp_rest")], 200);
+Y1Y1Y1Y1,
+    ],
+    '/users_login_email_password' => [
+      'Title' => 'User Login',
+      'SampleCode' => 'POST /users_login_email_password { email: "user@example.com", password: "****" }'
+    ],
+    '/users_logout' => [
+      'Title' => 'User Logout',
+      'SampleCode' => 'POST /users_logout { token: "user_token" }'
+    ],
+    '/users_profile' => [
+      'Title' => 'Get User Profile',
+      'SampleCode' => 'GET /users_profile { token: "user_token" }'
+    ],
+  ],
+  'Blog' => [
+    '/blog/posts' => [
+      'Title' => 'Get Blog Posts',
+      'SampleCode' => 'GET /blog/posts { page: 1, per_page: 10 }'
+    ]
+  ],
+  'Ecommerce' => [
+    '/ecommerce_ai_recommendations' => [
+      'Title' => 'Get AI Recommendations',
+      'SampleCode' => 'GET /ecommerce_ai_recommendations { user_id: "123" }'
+    ],
+    '/ecommerce_products' => [
+      'Title' => 'Get Products',
+      'SampleCode' => 'GET /ecommerce_products { category: "electronics" }'
+    ],
+    '/ecommerce_orders' => [
+      'Title' => 'Get Orders',
+      'SampleCode' => 'GET /ecommerce_orders { user_id: "123" }'
+    ],
+    '/ecommerce_orders_add_product' => [
+      'Title' => 'Add Product to Order',
+      'SampleCode' => 'POST /ecommerce_orders_add_product { order_id: "456", product_id: "789" }'
+    ],
+    '/ecommerce_orders_checkout' => [
+      'Title' => 'Checkout Order',
+      'SampleCode' => 'POST /ecommerce_orders_checkout { order_id: "456", payment_method: "credit_card" }'
+    ]
+  ],
+  'Events' => [
+    '/events/events' => [
+      'Title' => 'Get Events',
+      'SampleCode' => 'GET /events/events { date: "2024-03-20" }'
+    ],
+    '/events/register_attendee' => [
+      'Title' => 'Register Attendee',
+      'SampleCode' => 'POST /events/register_attendee { event_id: "123", user_id: "456" }'
+    ]
+  ],
+  'Multiplayer' => [
+    '/multiplayer/rooms' => [
+      'Title' => 'Get Rooms',
+      'SampleCode' => 'GET /multiplayer/rooms { status: "active" }'
+    ],
+    '/multiplayer/rooms/create' => [
+      'Title' => 'Create Room',
+      'SampleCode' => 'POST /multiplayer/rooms/create { name: "Game Room", max_players: 4 }'
+    ],
+    '/multiplayer/rooms/join' => [
+      'Title' => 'Join Room',
+      'SampleCode' => 'POST /multiplayer/rooms/join { room_id: "123", user_id: "456" }'
+    ],
+    '/multiplayer/rooms/leave' => [
+      'Title' => 'Leave Room',
+      'SampleCode' => 'POST /multiplayer/rooms/leave { room_id: "123", user_id: "456" }'
+    ],
+    '/multiplayer/rooms/players' => [
+      'Title' => 'Get Room Players',
+      'SampleCode' => 'GET /multiplayer/rooms/players { room_id: "123" }'
+    ]
+  ],
+  'Gamification' => [
+    '/gamification/points' => [
+      'Title' => 'Get User Points',
+      'SampleCode' => 'GET /gamification/points { user_id: "123" }'
+    ],
+    '/gamification/badges' => [
+      'Title' => 'Get User Badges',
+      'SampleCode' => 'GET /gamification/badges { user_id: "123" }'
+    ],
+    '/gamification/leaderboard' => [
+      'Title' => 'Get Leaderboard',
+      'SampleCode' => 'GET /gamification/leaderboard { time_frame: "weekly" }'
+    ],
+    '/gamification/challenges/create' => [
+      'Title' => 'Create Challenge',
+      'SampleCode' => 'POST /gamification/challenges/create { title: "Weekly Quest", points: 100 }'
+    ],
+    '/gamification/challenges/complete' => [
+      'Title' => 'Complete Challenge',
+      'SampleCode' => 'POST /gamification/challenges/complete { challenge_id: "123", user_id: "456" }'
+    ]
+  ],
+  'Analytics' => [
+    '/analytics/xxx/create' => [
+      'Title' => 'Create Analytics Event',
+      'SampleCode' => 'POST /analytics/xxx/create { event_type: "page_view", data: {} }'
+    ]
+  ],
+  'Security' => [
+    '/security/turn_all_off_now' => [
+      'Title' => 'Emergency Shutdown',
+      'SampleCode' => 'POST /security/turn_all_off_now { admin_token: "secure_token" }'
+    ]
+  ]
+];
+?>
+
+
+
+
+
+
 <!-- Load Blockly core -->
 <script src="<?php echo HYPERSHIPX_PLUGIN_URL; ?>app/fbuilder/blockly/blockly_compressed.js"></script>
 <!-- Load the default blocks -->
@@ -31,20 +162,33 @@
 
 <div class="wrap">
   <h1>HyperShip Route Builder</h1>
+
+
+  <div class="back-link" style="margin-bottom: 20px;">
+    <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>" class="button">
+      <span class="dashicons dashicons-arrow-left-alt"></span>
+      Back to App Dashboard
+    </a>
+  </div>
+
+
   <div class="route-info">
     <div class="form-group">
       <label for="routeTitle">Route Title</label>
-      <input type="text" id="routeTitle" name="routeTitle" value="<?php echo esc_attr($troute->post_title); ?>" class="regular-text" readonly>
+      <input type="text" id="routeTitle" name="routeTitle" value="<?php echo esc_attr($troute->post_title); ?>"
+        class="regular-text" readonly>
     </div>
 
     <div class="form-group">
       <label for="routeSlug">Route Slug</label>
-      <input type="text" id="routeSlug" name="routeSlug" value="<?php echo esc_attr($troute->post_name); ?>" class="regular-text" readonly>
+      <input type="text" id="routeSlug" name="routeSlug" value="<?php echo esc_attr($troute->post_name); ?>"
+        class="regular-text" readonly>
     </div>
 
     <div class="form-group">
       <label for="routeDescription">Description</label>
-      <textarea id="routeDescription" name="routeDescription" class="large-text" rows="3" readonly><?php echo esc_textarea($troute->post_excerpt); ?></textarea>
+      <textarea id="routeDescription" name="routeDescription" class="large-text" rows="3"
+        readonly><?php echo esc_textarea($troute->post_excerpt); ?></textarea>
     </div>
   </div>
 
@@ -214,9 +358,29 @@
 
 
 
-<div id="code-example">
 
-<pre>
+
+
+          <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
+
+
+            <div class="route-examples">
+              <h3>Recipes for Endpoints</h3>
+              <select id="routeExample" onchange="updateCodeExample()" class="regular-text">
+                <option value="">Select an example...</option>
+                <?php foreach ($recipes_for_endpoints as $category => $endpoints): ?>
+                  <optgroup label="<?php echo esc_html($category); ?>">
+                    <?php foreach ($endpoints as $endpoint => $details): ?>
+                      <option value="<?php echo esc_attr($endpoint); ?>"><?php echo esc_html($details['Title']); ?></option>
+                    <?php endforeach; ?>
+                  </optgroup>
+                <?php endforeach; ?>
+              </select>
+            </div>
+
+            <div id="code-example">
+
+              <pre>
 function($request) {
 // ONLY WRITE THE CODE FROM HERE..
 <strong>
@@ -233,21 +397,8 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
 // .. UP TO HERE.
 }
 </pre>
-</div>
-
-
-
-          <div>
-            <div class="route-examples">
-              <h3>Example Routes</h3>
-              <select id="routeExample" onchange="updateCodeExample()" class="regular-text">
-                <option value="">Select an example...</option>
-                <option value="basic">Basic Route</option>
-                <option value="auth">Authentication Route</option>
-                <option value="crud">CRUD Operations</option>
-                <option value="validation">Form Validation</option>
-              </select>
             </div>
+
 
             <div class="ai-assistant">
               <h3>AI Route Assistant</h3>
@@ -306,73 +457,28 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
             </style>
 
             <script>
-              const routeExamples = {
-                basic: `
-// Basic route example
-return new WP_REST_Response(['message' => 'Hello World!'], 200);
-`,
-
-                auth: `
-// Authentication route example
-$username = $request->get_param('username');
-$password = $request->get_param('password');
-
-$user = wp_authenticate($username, $password);
-if (is_wp_error($user)) {
-  return new WP_Error('auth_failed', 'Invalid credentials', array('status' => 401));
-}
-return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
-
-`,
-
-                crud: `
-// CRUD operations example
-$items = get_posts(['post_type' => 'item', 'posts_per_page' => -1]);
-return new WP_REST_Response($items, 200);
-
-`,
-
-                validation: `// Form validation example
-add_action('rest_api_init', function() {
-  register_rest_route('myplugin/v1', '/validate', array(
-    'methods' => 'POST',
-    'callback' => function($request) {
-      $email = $request->get_param('email');
-      $name = $request->get_param('name');
-
-      $errors = [];
-      if (!is_email($email)) {
-        $errors['email'] = 'Invalid email format';
-      }
-      if (empty($name)) {
-        $errors['name'] = 'Name is required';
-      }
-
-      if (!empty($errors)) {
-        return new WP_Error('validation_failed', 'Validation failed', array(
-          'status' => 400,
-          'errors' => $errors
-        ));
-      }
-
-      return new WP_REST_Response(['message' => 'Validation successful'], 200);
-    }
-  ));
-});`
-              };
+              const routeExamples = <?php echo json_encode(array_map(function ($endpoints) {
+                return array_map(function ($details) {
+                  return $details['SampleCode'];
+                }, $endpoints);
+              }, $recipes_for_endpoints)); ?>;
 
               function updateCodeExample() {
                 const select = document.getElementById('routeExample');
-                const example = routeExamples[select.value];
-                if (example) {
-                  console.log(example);
-                  // Determine which tab is active and set the example code accordingly
-                  const activeTab = document.querySelector('.tab-pane.active');
-                  if (activeTab) {
-                    const textareaId = activeTab.id === 'get-tab' ? 'customCodeGet' : 'customCodePost';
-                    // document.getElementById(textareaId).value = example;
-                    document.getElementById('code-example').innerHTML = "<pre>" + example + "</pre>";
+                const selectedValue = select.value;
+                if (!selectedValue) return;
+
+                // Find the example in the nested structure
+                let example = null;
+                for (const category in routeExamples) {
+                  if (routeExamples[category][selectedValue]) {
+                    example = routeExamples[category][selectedValue];
+                    break;
                   }
+                }
+
+                if (example) {
+                  document.getElementById('code-example').innerHTML = "<pre>" + example + "</pre>";
                 }
               }
 
@@ -407,7 +513,6 @@ add_action('rest_api_init', function() {
               }
             </script>
           </div>
-
 
         </div>
 
@@ -1339,3 +1444,38 @@ add_action('rest_api_init', function() {
     }
   });
 </script>
+
+<style>
+  #code-example {
+    background-color: #2e2e2e; /* Slightly lighter dark background */
+    color: #00cc00; /* Less bright green text */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    overflow: auto;
+    max-height: 250px; /* Limit height and allow scrolling */
+  }
+
+  #code-example pre {
+    margin: 0;
+    white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+  }
+
+  #code-example strong {
+    color: #ff6600; /* Less bright orange for highlighted text */
+  }
+
+  #customCodeGet, #customCodePost {
+    background-color: #1a1a1a; /* Darker background for more contrast */
+    color: #00ff00; /* Bright green text */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    padding: 10px;
+    border: 1px solid #00ff00; /* Bright green border */
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Green glow effect */
+    width: 100%;
+    height: 200px; /* Adjust height as needed */
+    resize: vertical; /* Allow vertical resizing */
+  }
+</style>
