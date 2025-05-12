@@ -27,6 +27,8 @@ require_once HYPERSHIPX_PLUGIN_DIR . 'app/core/init-core.php';
 
 require_once HYPERSHIPX_PLUGIN_DIR . 'app/admin/init-admin.php';
 
+require_once HYPERSHIPX_PLUGIN_DIR . 'app/frapps/init-frapps.php';
+
 require_once HYPERSHIPX_PLUGIN_DIR . 'app/rest/init-rest.php';
 
 require_once HYPERSHIPX_PLUGIN_DIR . 'app/fbuilder/init-fbuilder.php';
