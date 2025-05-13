@@ -1,6 +1,6 @@
 # HyperShipOnline1
 
-Version alpha.
+Alpha Version.
 
 Installation:
 - Install Worpress with Woocommerce, ACF Advanced Custom Fields.
