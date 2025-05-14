@@ -153,6 +153,15 @@
     ?>
 
 
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-frapps.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-ecommerce.php';
     if (is_file($tf)) {

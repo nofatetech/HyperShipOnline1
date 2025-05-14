@@ -1,0 +1,49 @@
+<div id="world3d"></div>
+
+<script>
+  const world3d = document.getElementById('world3d');
+  // const loader = new THREE.GLTFLoader();
+  // loader.load('models/scene.gltf', function (gltf) {
+  //   world3d.appendChild(gltf.scene);
+  // });
+
+
+// Create scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+
+// Set renderer size and add to DOM
+renderer.setSize(window.innerWidth, window.innerHeight);
+world3d.appendChild(renderer.domElement);
+
+// Create cube
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// Position camera
+camera.position.z = 5;
+
+// Animation loop
+function animate() {
+  requestAnimationFrame(animate);
+
+  // Rotate cube
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+
+  renderer.render(scene, camera);
+}
+
+// Start animation
+animate();
+
+// Handle window resize
+$(window).on('resize', function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>

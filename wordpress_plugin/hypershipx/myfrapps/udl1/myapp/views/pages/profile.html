@@ -1,0 +1,264 @@
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            <img src="https://i.pravatar.cc/150?img=32" alt="User Avatar" class="avatar-image">
+        </div>
+        <div class="profile-info">
+            <h1 class="profile-name">Sarah Chen</h1>
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value">Level 7</span>
+                    <span class="stat-label">UDL Level</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">2,450</span>
+                    <span class="stat-label">Total Points</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">#128</span>
+                    <span class="stat-label">Global Rank</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <div class="achievement-section">
+            <h2>Achievements</h2>
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h3>Visual Learner Pro</h3>
+                        <p>Completed 10 visual-based learning modules</p>
+                        <span class="achievement-date">Earned 2 days ago</span>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h3>Consistent Learner</h3>
+                        <p>Logged in for 7 consecutive days</p>
+                        <span class="achievement-date">Earned 1 week ago</span>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div class="achievement-info">
+                        <h3>Quick Thinker</h3>
+                        <p>Completed 5 quizzes with 90%+ accuracy</p>
+                        <span class="achievement-date">Earned 2 weeks ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <h2>Learning History</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Today</div>
+                    <div class="timeline-content">
+                        <h3>Completed Visual Learning Module</h3>
+                        <p>Mastered the principles of visual learning strategies</p>
+                        <div class="timeline-stats">
+                            <span class="points-earned">+150 points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Yesterday</div>
+                    <div class="timeline-content">
+                        <h3>Group Study Session</h3>
+                        <p>Participated in collaborative learning workshop</p>
+                        <div class="timeline-stats">
+                            <span class="points-earned">+75 points</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">3 days ago</div>
+                    <div class="timeline-content">
+                        <h3>Learning Style Assessment</h3>
+                        <p>Completed comprehensive learning style evaluation</p>
+                        <div class="timeline-stats">
+                            <span class="points-earned">+200 points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    background: #333;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #007bff;
+}
+
+.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-name {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.achievement-section,
+.history-section {
+    margin-top: 3rem;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.achievement-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+.achievement-card:hover {
+    transform: translateY(-2px);
+}
+
+.achievement-icon {
+    font-size: 2rem;
+    color: #ffc107;
+}
+
+.achievement-info h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.achievement-info p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.achievement-date {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.timeline {
+    margin-top: 1.5rem;
+}
+
+.timeline-item {
+    display: flex;
+    gap: 2rem;
+    padding: 1.5rem 0;
+    border-left: 2px solid #007bff;
+    margin-left: 1rem;
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 1.5rem;
+    width: 14px;
+    height: 14px;
+    background: #007bff;
+    border-radius: 50%;
+}
+
+.timeline-date {
+    min-width: 120px;
+    color: #666;
+}
+
+.timeline-content {
+    flex: 1;
+}
+
+.timeline-content h3 {
+    margin: 0 0 0.5rem 0;
+    color: #333;
+}
+
+.timeline-content p {
+    margin: 0;
+    color: #666;
+}
+
+.timeline-stats {
+    margin-top: 0.5rem;
+}
+
+.points-earned {
+    color: #28a745;
+    font-weight: bold;
+}
+</style>

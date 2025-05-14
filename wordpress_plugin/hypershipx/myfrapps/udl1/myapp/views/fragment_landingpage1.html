@@ -1,0 +1,100 @@
+<div class="hero-section">
+  <h1 class="glowing-text">Welcome to the Future</h1>
+  <p class="subtitle">Where Innovation Meets Imagination</p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="icon">🚀</div>
+      <h3>Lightning Fast</h3>
+      <p>Experience blazing performance</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <h3>Secure by Design</h3>
+      <p>Your data is always protected</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">💡</div>
+      <h3>Smart Features</h3>
+      <p>Intelligent automation at your fingertips</p>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <button class="pulse-button">Get Started</button>
+  </div>
+</div>
+
+<style>
+  .hero-section {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    margin: 2rem 0;
+  }
+
+  .glowing-text {
+    font-size: 3.5rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    color: #8f9bba;
+    font-size: 1.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.05);
+    padding: 2rem;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .pulse-button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.4);
+    }
+    70% {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+    }
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+  }
+</style>

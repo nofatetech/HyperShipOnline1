@@ -1,21 +1,715 @@
 <div hx-get="myapp/views/fragment_header.html" hx-trigger="load"></div>
 
 
+<script>
+function renderItems(items, container) {
+  // Clear existing content
+  $(container).empty();
+
+  // Loop through items and create elements
+  items.forEach(item => {
+    const itemElement = $(`
+      <div class="item">
+        <h3>${item.title}</h3>
+        <p>${item.description}</p>
+      </div>
+    `);
+
+    // Append to container
+    $(container).append(itemElement);
+  });
+}
+
+// Example usage:
+const items = [
+  { title: "Item 1", description: "Description 1" },
+  { title: "Item 2", description: "Description 2" }
+];
+renderItems(items, "#items-container");
+</script>
+
+
+<div id="items-container"></div>
+
+<div id="udl-profile-container" class="max-w-4xl mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+  <h1 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">Create Your UDL Learning Profile</h1>
+
+  <form action="#" method="post" class="space-y-8">
+    <!-- Engagement Section -->
+    <div class="section bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Engagement (Why You Learn)</h2>
+      <div class="space-y-4">
+        <div class="question">
+          <label for="engage1" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I feel motivated when I have choice in my learning tasks:</label>
+          <select id="engage1" name="engage1" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+            <option value="">Select (1-5)</option>
+            <option value="1">1 - Strongly Disagree</option>
+            <option value="2">2 - Disagree</option>
+            <option value="3">3 - Neutral</option>
+            <option value="4">4 - Agree</option>
+            <option value="5">5 - Strongly Agree</option>
+          </select>
+          <textarea name="engage1_comment" placeholder="Optional comments..." class="mt-2 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"></textarea>
+        </div>
+        <!-- Repeat similar structure for engage2 and engage3 -->
+      </div>
+    </div>
+
+    <!-- Representation Section -->
+    <div class="section bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Representation (What You Learn)</h2>
+      <div class="space-y-4">
+        <div class="question">
+          <label for="represent1" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I learn best from visual aids (e.g., diagrams, videos):</label>
+          <select id="represent1" name="represent1" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+            <option value="">Select (1-5)</option>
+            <option value="1">1 - Strongly Disagree</option>
+            <option value="2">2 - Disagree</option>
+            <option value="3">3 - Neutral</option>
+            <option value="4">4 - Agree</option>
+            <option value="5">5 - Strongly Agree</option>
+          </select>
+          <textarea name="represent1_comment" placeholder="Optional comments..." class="mt-2 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"></textarea>
+        </div>
+        <!-- Repeat similar structure for represent2 and represent3 -->
+      </div>
+    </div>
+
+    <!-- Action & Expression Section -->
+    <div class="section bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Action & Expression (How You Show What You Know)</h2>
+      <div class="space-y-4">
+        <div class="question">
+          <label for="express1" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">I feel confident presenting my ideas orally (e.g., presentations):</label>
+          <select id="express1" name="express1" required class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+            <option value="">Select (1-5)</option>
+            <option value="1">1 - Strongly Disagree</option>
+            <option value="2">2 - Disagree</option>
+            <option value="3">3 - Neutral</option>
+            <option value="4">4 - Agree</option>
+            <option value="5">5 - Strongly Agree</option>
+          </select>
+          <textarea name="express1_comment" placeholder="Optional comments..." class="mt-2 w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300"></textarea>
+        </div>
+        <!-- Repeat similar structure for express2 and express3 -->
+      </div>
+    </div>
+
+    <button type="submit" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition-colors duration-200">Submit Profile</button>
+  </form>
+</div>
+
+
+
+
+
+
 
 
 <div>
-  <!-- have a button POST a click via AJAX -->
-  <button onclick="xapp.xcustom.mytest1()">
-    Click Me
-  </button>
+
+
+
+
+<div class="udl-profile">
+  <div class="profile-header">
+    <h2>UDL Learning Profile 🎯</h2>
+    <div class="learning-style">
+      <span class="style-icon">🧠</span>
+      <span class="style-label">Learning Style</span>
+    </div>
+  </div>
+
+  <div class="main-elements">
+    <h3>Main Learning Elements 🌟</h3>
+
+    <div class="element-card">
+      <h4>Engagement 🎮</h4>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="75" class="slider" id="engagement">
+        <div class="slider-labels">
+          <span>Low</span>
+          <span>High</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="element-card">
+      <h4>Representation 📚</h4>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="85" class="slider" id="representation">
+        <div class="slider-labels">
+          <span>Low</span>
+          <span>High</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="element-card">
+      <h4>Action & Expression 🎨</h4>
+      <div class="slider-container">
+        <input type="range" min="0" max="100" value="65" class="slider" id="action">
+        <div class="slider-labels">
+          <span>Low</span>
+          <span>High</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="secondary-elements">
+    <h3>Secondary Elements ⚡</h3>
+
+    <div class="element-grid">
+      <div class="element-item">
+        <span class="element-icon">👂</span>
+        <span class="element-name">Auditory</span>
+      </div>
+      <div class="element-item">
+        <span class="element-icon">👁️</span>
+        <span class="element-name">Visual</span>
+      </div>
+      <div class="element-item">
+        <span class="element-icon">✋</span>
+        <span class="element-name">Kinesthetic</span>
+      </div>
+      <div class="element-item">
+        <span class="element-icon">📝</span>
+        <span class="element-name">Reading/Writing</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.udl-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.learning-style {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.element-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.slider-container {
+  margin-top: 1rem;
+}
+
+.slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: #ddd;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #4CAF50;
+  cursor: pointer;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.element-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.element-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.element-icon {
+  font-size: 1.5rem;
+}
+
+.element-name {
+  font-size: 0.9rem;
+  text-align: center;
+}
+</style>
+
+
+
+
+
+<div class="player-profile">
+  <div class="profile-header">
+    <div class="player-image">
+      <div class="image-placeholder"></div>
+    </div>
+    <div class="player-info">
+      <h2 class="player-name">John Smith</h2>
+      <div class="player-position">Quarterback #12</div>
+      <div class="team-name">New York Giants</div>
+    </div>
+  </div>
+
+  <div class="stats-container">
+    <div class="stat-card">
+      <div class="stat-value">4,521</div>
+      <div class="stat-label">Passing Yards</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">32</div>
+      <div class="stat-label">Touchdowns</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">68.5%</div>
+      <div class="stat-label">Completion %</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">12</div>
+      <div class="stat-label">Interceptions</div>
+    </div>
+  </div>
+</div>
+
+<style>
+.player-profile {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.profile-header {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.player-image {
+  width: 150px;
+  height: 150px;
+}
+
+.image-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #4CAF50, #2196F3);
+  border-radius: 50%;
+  opacity: 0.8;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.player-name {
+  font-size: 2.5rem;
+  margin: 0;
+  color: #fff;
+}
+
+.player-position {
+  font-size: 1.2rem;
+  color: #4CAF50;
+  margin: 0.5rem 0;
+}
+
+.team-name {
+  font-size: 1.1rem;
+  color: #ccc;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  color: #ccc;
+  font-size: 0.9rem;
+}
+</style>
+
+<script>
+// Animate profile header
+gsap.from(".player-image", {
+  duration: 1,
+  scale: 0,
+  rotation: 360,
+  ease: "back.out(1.7)"
+});
+
+gsap.from(".player-name", {
+  duration: 1,
+  y: -50,
+  opacity: 0,
+  delay: 0.3,
+  ease: "power3.out"
+});
+
+gsap.from([".player-position", ".team-name"], {
+  duration: 0.8,
+  x: -50,
+  opacity: 0,
+  stagger: 0.2,
+  delay: 0.5,
+  ease: "power2.out"
+});
+
+// Animate stat cards
+gsap.to(".stat-card", {
+  duration: 0.8,
+  y: 0,
+  opacity: 1,
+  stagger: 0.1,
+  delay: 0.8,
+  ease: "power2.out"
+});
+
+// Add hover effect to stat cards
+gsap.utils.toArray(".stat-card").forEach(card => {
+  card.addEventListener("mouseenter", () => {
+    gsap.to(card, {
+      duration: 0.3,
+      scale: 1.05,
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+      ease: "power2.out"
+    });
+  });
+
+  card.addEventListener("mouseleave", () => {
+    gsap.to(card, {
+      duration: 0.3,
+      scale: 1,
+      backgroundColor: "rgba(255, 255, 255, 0.05)",
+      ease: "power2.out"
+    });
+  });
+});
+</script>
 
 </div>
 
 
-<article data-theme="dark">
-  ...
-</article>
 
+
+<div>
+<div class="calendar-container">
+  <div class="calendar-header">
+    <h2>My Activities</h2>
+    <div class="calendar-nav">
+      <button class="nav-btn prev">←</button>
+      <span class="current-month">March 2024</span>
+      <button class="nav-btn next">→</button>
+    </div>
+  </div>
+
+  <div class="calendar-grid">
+    <!-- Days will be generated here -->
+  </div>
+</div>
+
+<style>
+  .calendar-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  .calendar-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .calendar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 15px 0;
+  }
+
+  .nav-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .nav-btn:hover {
+    transform: scale(1.2);
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+  }
+
+  .calendar-day {
+    aspect-ratio: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .activity-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin: 2px;
+    display: inline-block;
+  }
+</style>
+
+<script>
+  // Generate fake activities data
+  const activities = [
+    { date: '2024-03-15', type: 'meeting', color: '#ff6b6b' },
+    { date: '2024-03-15', type: 'task', color: '#4ecdc4' },
+    { date: '2024-03-18', type: 'event', color: '#ffd93d' },
+    { date: '2024-03-20', type: 'meeting', color: '#ff6b6b' },
+    { date: '2024-03-22', type: 'task', color: '#4ecdc4' },
+    { date: '2024-03-25', type: 'event', color: '#ffd93d' },
+  ];
+
+  // Generate calendar days
+  const calendarGrid = document.querySelector('.calendar-grid');
+  const daysInMonth = 31;
+
+  for (let i = 1; i <= daysInMonth; i++) {
+    const day = document.createElement('div');
+    day.className = 'calendar-day';
+    day.textContent = i;
+
+    // Add activities for this day
+    const dayActivities = activities.filter(a => a.date.endsWith(`-${i.toString().padStart(2, '0')}`));
+    dayActivities.forEach(activity => {
+      const dot = document.createElement('span');
+      dot.className = 'activity-dot';
+      dot.style.backgroundColor = activity.color;
+      day.appendChild(dot);
+    });
+
+    calendarGrid.appendChild(day);
+  }
+
+  // Animate calendar days
+  gsap.from('.calendar-day', {
+    duration: 0.5,
+    scale: 0,
+    opacity: 0,
+    stagger: 0.02,
+    ease: 'back.out(1.7)',
+    onComplete: () => {
+      // Animate activity dots
+      gsap.from('.activity-dot', {
+        duration: 0.3,
+        scale: 0,
+        opacity: 0,
+        stagger: 0.1,
+        ease: 'elastic.out(1, 0.3)'
+      });
+    }
+  });
+
+  // Add hover effects
+  document.querySelectorAll('.calendar-day').forEach(day => {
+    day.addEventListener('mouseenter', () => {
+      gsap.to(day, {
+        duration: 0.3,
+        scale: 1.05,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        ease: 'power2.out'
+      });
+    });
+
+    day.addEventListener('mouseleave', () => {
+      gsap.to(day, {
+        duration: 0.3,
+        scale: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.05)',
+        ease: 'power2.out'
+      });
+    });
+  });
+</script>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="button-container">
+  <button class="cool-button" onclick="xapp.xcustom.mytest1()">
+    Click Me
+  </button>
+</div>
+
+<style>
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .cool-button {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .cool-button:hover {
+    transform: scale(1.05);
+  }
+</style>
+
+<script>
+  // Initial animation when button appears
+  gsap.from(".cool-button", {
+    duration: 1,
+    y: 50,
+    opacity: 0,
+    ease: "elastic.out(1, 0.3)"
+  });
+
+  // Add hover animation
+  $('.cool-button').on('mouseenter', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1.1,
+      boxShadow: "0 0 20px rgba(255, 107, 107, 0.5)",
+      ease: "power2.out"
+    });
+  });
+
+  $('.cool-button').on('mouseleave', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1,
+      boxShadow: "none",
+      ease: "power2.out"
+    });
+  });
+
+  // Add click animation
+  $('.cool-button').on('click', function() {
+    gsap.to(this, {
+      duration: 0.1,
+      scale: 0.95,
+      ease: "power2.in",
+      onComplete: () => {
+        gsap.to(this, {
+          duration: 0.1,
+          scale: 1,
+          ease: "power2.out"
+        });
+      }
+    });
+  });
+</script>
+</div>
+
+
+<!-- <article data-theme="dark">
+</article> -->
+
+
+<!-- <div class="books-container">
+  <div hx-get="/books"
+       hx-trigger="load"
+       hx-target="this"
+       hx-swap="innerHTML">
+    Loading books...
+  </div>
+</div> -->
+
+<style>
+  .books-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+</style>
+
+
+
+<!-- <hr> -->
+
+<!-- <div hx-get="myapp/views/fragment_3dworld.html" hx-trigger="load"></div> -->
+<!-- <hr> -->
 
 
 
@@ -47,6 +741,99 @@
     <button type="submit" onclick="handleLogin()">Login</button>
   </form>
 </div>
+
+<script>
+  // Initial animation when form loads
+  gsap.from(".login-container", {
+    duration: 1.5,
+    scale: 0.5,
+    opacity: 0,
+    rotation: 360,
+    ease: "elastic.out(1, 0.3)"
+  });
+
+  // Animate form groups sequentially
+  gsap.from(".form-group", {
+    duration: 0.8,
+    y: 50,
+    opacity: 0,
+    stagger: 0.2,
+    ease: "back.out(1.7)"
+  });
+
+  // Add hover effects to inputs
+  $('.form-group input').on('mouseenter', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1.02,
+      boxShadow: "0 0 15px rgba(0, 123, 255, 0.5)",
+      ease: "power2.out"
+    });
+  });
+
+  $('.form-group input').on('mouseleave', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1,
+      boxShadow: "none",
+      ease: "power2.out"
+    });
+  });
+
+  // Add focus effects to inputs
+  $('.form-group input').on('focus', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1.05,
+      boxShadow: "0 0 20px rgba(0, 123, 255, 0.7)",
+      ease: "power2.out"
+    });
+  });
+
+  $('.form-group input').on('blur', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1,
+      boxShadow: "none",
+      ease: "power2.out"
+    });
+  });
+
+  // Add button animations
+  $('button[type="submit"]').on('mouseenter', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1.1,
+      boxShadow: "0 0 25px rgba(0, 123, 255, 0.6)",
+      ease: "power2.out"
+    });
+  });
+
+  $('button[type="submit"]').on('mouseleave', function() {
+    gsap.to(this, {
+      duration: 0.3,
+      scale: 1,
+      boxShadow: "none",
+      ease: "power2.out"
+    });
+  });
+
+  // Add click animation to button
+  $('button[type="submit"]').on('click', function() {
+    gsap.to(this, {
+      duration: 0.1,
+      scale: 0.95,
+      ease: "power2.in",
+      onComplete: () => {
+        gsap.to(this, {
+          duration: 0.1,
+          scale: 1,
+          ease: "power2.out"
+        });
+      }
+    });
+  });
+</script>
 
 <style>
   .login-container {
@@ -124,3 +911,16 @@
 <script>
   // alert("page main loaded");
 </script>
+
+<div class="nav-links">
+  <a href="/" hx-get="/" hx-target="#main-content" hx-push-url="true" class="nav-link">Home</a>
+  <a href="/login" hx-get="/login" hx-target="#main-content" hx-push-url="true" class="nav-link">Login</a>
+  <a href="/profile" hx-get="/profile" hx-target="#main-content" hx-push-url="true" class="nav-link">Profile</a>
+  <a href="/lessons" hx-get="/lessons" hx-target="#main-content" hx-push-url="true" class="nav-link">Lessons</a>
+  <a href="/settings" hx-get="/settings" hx-target="#main-content" hx-push-url="true" class="nav-link">Settings</a>
+</div>
+
+<!-- Add a main content container -->
+<div id="main-content">
+  <!-- Content will be loaded here -->
+</div>

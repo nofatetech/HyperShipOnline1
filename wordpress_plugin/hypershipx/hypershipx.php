@@ -11,6 +11,8 @@
  * Requires PHP: 8+
  * WC requires at least: 7.0
  * WC tested up to: 9.3
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) {

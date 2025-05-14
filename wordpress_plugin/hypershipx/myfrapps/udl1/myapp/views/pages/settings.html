@@ -1,0 +1,213 @@
+<div class="settings-container">
+    <div class="mosaic-background" id="mosaic"></div>
+
+    <div class="settings-content">
+        <h1>Settings</h1>
+
+        <div class="settings-grid">
+            <div class="setting-card">
+                <h3>Visual Preferences</h3>
+                <div class="setting-item">
+                    <label>Theme</label>
+                    <select>
+                        <option>Light</option>
+                        <option>Dark</option>
+                        <option>System</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Animation Speed</label>
+                    <input type="range" min="0" max="100" value="50">
+                </div>
+            </div>
+
+            <div class="setting-card">
+                <h3>Learning Preferences</h3>
+                <div class="setting-item">
+                    <label>Learning Style</label>
+                    <select>
+                        <option>Visual</option>
+                        <option>Auditory</option>
+                        <option>Kinesthetic</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label>Difficulty Level</label>
+                    <select>
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-container {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.mosaic-background {
+    /* position: fixed; */
+    /* top: 0; */
+    /* left: 0; */
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.settings-content {
+    position: relative;
+    /* z-index: 1; */
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: white;
+}
+
+.settings-grid {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.setting-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.setting-item {
+    margin: 1rem 0;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.setting-item select,
+.setting-item input {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+    margin-bottom: 1rem;
+    color: #fff;
+}
+</style>
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script> -->
+<script>
+class MosaicTile {
+    constructor(x, y, size) {
+      // return;
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.element = document.createElement('div');
+        this.element.style.position = 'absolute';
+        this.element.style.width = size + 'px';
+        this.element.style.height = size + 'px';
+        this.element.style.left = x + 'px';
+        this.element.style.top = y + 'px';
+        this.element.style.backgroundColor = this.getRandomColor();
+        this.element.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        this.element.style.opacity = '0.3';
+        this.element.style.transition = 'all 0.3s ease';
+    }
+
+    getRandomColor() {
+        const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD'];
+        return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    animate() {
+        gsap.to(this.element, {
+            scale: Math.random() * 0.5 + 0.5,
+            rotation: Math.random() * 360,
+            duration: Math.random() * 2 + 1,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+    }
+}
+
+class LivingMosaic {
+    constructor(container) {
+        this.container = container;
+        this.tiles = [];
+        this.init();
+    }
+
+    init() {
+        console.log('init');
+        // return;
+        const tileSize = 50;
+        const cols = Math.ceil(window.innerWidth / tileSize);
+        const rows = Math.ceil(window.innerHeight / tileSize);
+
+        for (let i = 0; i < cols; i++) {
+            for (let j = 0; j < rows; j++) {
+                const tile = new MosaicTile(i * tileSize, j * tileSize, tileSize);
+                this.container.appendChild(tile.element);
+                this.tiles.push(tile);
+                tile.animate();
+            }
+        }
+
+        // Add mouse interaction
+        this.container.addEventListener('mousemove', (e) => {
+            const rect = this.container.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            this.tiles.forEach(tile => {
+                const dx = tile.x - x;
+                const dy = tile.y - y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 200) {
+                    gsap.to(tile.element, {
+                        scale: 1.2,
+                        opacity: 0.6,
+                        duration: 0.3
+                    });
+                } else {
+                    gsap.to(tile.element, {
+                        scale: 1,
+                        opacity: 0.3,
+                        duration: 0.3
+                    });
+                }
+            });
+        });
+    }
+}
+
+// Initialize the mosaic when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    const mosaicContainer = document.getElementById('mosaic');
+    new LivingMosaic(mosaicContainer);
+    console.log('DOMContentLoaded');
+});
+</script>
