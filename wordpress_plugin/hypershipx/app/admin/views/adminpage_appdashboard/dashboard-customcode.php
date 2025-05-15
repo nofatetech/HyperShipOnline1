@@ -162,7 +162,7 @@ Y1Y1Y1Y1,
       Base URL:
     </div>
     <div>
-      <code style="xxxcolor: #9cdcfe;">/wp-json/v1/hypershipx/<?php echo $app->post_name; ?></code>
+      <code style="xxxcolor: #9cdcfe;">/wp-json/hypershipx/v1/<?php echo $app->post_name; ?></code>
 
     </div>
   </div>
@@ -185,8 +185,6 @@ Y1Y1Y1Y1,
       <!-- <div>
       </div> -->
       <div>
-        <a href="/wp-admin/post.php?post=<?php echo $troute->ID; ?>&action=edit">EDIT</a>
-        //
         <a href="/wp-admin/admin.php?page=hypershipx_adminpage_fbuilder&route_id=<?php echo $troute->ID; ?>">BUILDER</a>
       </div>
     </div>
