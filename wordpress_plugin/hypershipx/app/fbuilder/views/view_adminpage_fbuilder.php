@@ -1,4 +1,94 @@
 <?php
+
+$route_id = isset($_GET['route_id']) ? intval($_GET['route_id']) : 0;
+if (!$route_id || get_post_type($route_id) !== 'hypership-route') {
+  wp_die('Invalid or missing route_id.');
+}
+$route = get_post($route_id);
+
+function sanitizeCode($code)
+{
+  $sanitized_code = str_replace('', '', $code);
+  // $sanitized_code = str_replace('<? php', '', $code);
+  // $sanitized_code = str_replace('? >', '', $sanitized_code);
+  return $sanitized_code;
+}
+
+// POST
+if (isset($_POST['workspaceState'])) {
+  $sanitized_code = sanitizeCode($_POST['workspaceState']);
+  update_post_meta($route_id, 'workspaceState', $sanitized_code);
+}
+
+if (isset($_POST['post_name'])) {
+  $sanitized_name = sanitize_text_field($_POST['post_name']);
+  wp_update_post([
+    'ID' => $route_id,
+    'post_name' => $sanitized_name
+  ]);
+}
+
+if (isset($_POST['post_title'])) {
+  $sanitized_title = sanitize_text_field($_POST['post_title']);
+  wp_update_post([
+    'ID' => $route_id,
+    'post_title' => $sanitized_title
+  ]);
+}
+
+if (isset($_POST['post_excerpt'])) {
+  $sanitized_excerpt = sanitize_textarea_field($_POST['post_excerpt']);
+  wp_update_post([
+    'ID' => $route_id,
+    'post_excerpt' => $sanitized_excerpt
+  ]);
+}
+
+
+if (isset($_POST['code'])) {
+  $sanitized_code = sanitizeCode($_POST['code']);
+  update_post_meta($route_id, 'generatedCode', $sanitized_code);
+}
+if (isset($_POST['customCode'])) {
+  $sanitized_custom_code = sanitize_textarea_field($_POST['customCode']);
+  update_post_meta($route_id, 'customCode', $sanitized_custom_code);
+}
+
+if (isset($_POST['customCodeGet'])) {
+  $sanitized_custom_code_get = sanitize_textarea_field($_POST['customCodeGet']);
+  update_post_meta($route_id, 'customCodeGet', $sanitized_custom_code_get);
+}
+if (isset($_POST['customCodePost'])) {
+  $sanitized_custom_code_post = sanitize_textarea_field($_POST['customCodePost']);
+  update_post_meta($route_id, 'customCodePost', $sanitized_custom_code_post);
+}
+
+
+
+
+$route_id = isset($_GET['route_id']) ? intval($_GET['route_id']) : 0;
+if (!$route_id || get_post_type($route_id) !== 'hypership-route') {
+  wp_die('Invalid or missing route_id.');
+}
+$troute = get_post($route_id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $recipes_for_endpoints = [
   'Authentication' => [
     '/users_register' => [
@@ -161,36 +251,122 @@ Y1Y1Y1Y1,
 
 
 <div class="wrap">
-  <h1>HyperShip Route Builder</h1>
+
+  <!-- <?php var_dump($troute); ?> -->
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e9ecef;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+      <div style="flex: 1;">
+        <h2 style="margin: 0; font-size: 24px; color: #1d2327;">
+          <?php echo esc_html($troute->post_title); ?>
+        </h2>
+        <div style="color: #646970; margin-top: 5px;">
+          <code style="background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid #dcdcde;">
+            /<?php echo esc_html($troute->post_name); ?>
+          </code>
+        </div>
+      </div>
+      <div style="text-align: right;">
+        <div style="color: #646970; font-size: 14px;">Part of App</div>
+        <div style="font-weight: 500;">
+          <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>"
+            class="xxxbutton">
+            <?php
+            $parent_app_id = get_post_meta($troute->ID, 'app_parent', true);
+            $parent_app = get_post($parent_app_id);
+            echo esc_html($parent_app->post_title);
+            ?>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-  <div class="back-link" style="margin-bottom: 20px;">
-    <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>" class="button">
+
+  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e9ecef;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <!-- User -->
+      <div
+        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
+        <div style="font-size: 24px; margin-bottom: 5px;">👤</div>
+        <div style="font-weight: 500;">User</div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size: 24px;">➡️</div>
+
+      <!-- App -->
+      <div
+        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
+        <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
+        <div style="font-weight: 500;">
+          <a
+            href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . $parent_app_id); ?>">
+            <?php echo esc_html($parent_app->post_title); ?>
+          </a>
+        </div>
+      </div>
+
+      <!-- Arrow -->
+      <div style="font-size: 24px;">➡️</div>
+
+      <!-- Route/Controller -->
+      <div
+        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
+        <div style="font-size: 24px; margin-bottom: 5px;">⚡</div>
+        <div style="font-weight: 500;"><?php echo esc_html($troute->post_title); ?></div>
+        <div style="font-size: 12px; color: #646970; margin-top: 5px;">
+          /<?php echo esc_html($troute->post_name); ?>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- <div class="back-link" style="margin-bottom: 20px;">
+    <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>"
+      class="button">
       <span class="dashicons dashicons-arrow-left-alt"></span>
       Back to App Dashboard
     </a>
-  </div>
+  </div> -->
+
+  <!-- <h1>HyperShip Route Builder</h1> -->
 
 
-  <div class="route-info">
-    <div class="form-group">
-      <label for="routeTitle">Route Title</label>
-      <input type="text" id="routeTitle" name="routeTitle" value="<?php echo esc_attr($troute->post_title); ?>"
-        class="regular-text" readonly>
+
+  <form id="basicInfoForm" action="" method="POST" class="code-form">
+    <div class="route-info">
+      <h3>Basic Info</h3>
+      <div class="form-group">
+        <label for="routeTitle">Title</label>
+        <input type="text" id="routeTitle" name="post_title" value="<?php echo esc_attr($troute->post_title); ?>"
+          class="regular-text" xxxreadonly>
+      </div>
+
+      <div class="form-group">
+        <label for="routeSlug">Path</label>
+        <input type="text" id="routeSlug" name="post_name" value="<?php echo esc_attr($troute->post_name); ?>"
+          class="regular-text" xxxreadonly>
+      </div>
+
+      <div class="form-group">
+        <label for="routeDescription">Summary</label>
+        <textarea id="routeDescription" name="post_excerpt" class="large-text" rows="3"
+          xxxreadonly><?php echo esc_textarea($troute->post_excerpt); ?></textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="button button-primary">
+          <span class="dashicons dashicons-saved"></span>
+          Save Changes
+        </button>
+      </div>
     </div>
+  </form>
 
-    <div class="form-group">
-      <label for="routeSlug">Route Slug</label>
-      <input type="text" id="routeSlug" name="routeSlug" value="<?php echo esc_attr($troute->post_name); ?>"
-        class="regular-text" readonly>
-    </div>
 
-    <div class="form-group">
-      <label for="routeDescription">Description</label>
-      <textarea id="routeDescription" name="routeDescription" class="large-text" rows="3"
-        readonly><?php echo esc_textarea($troute->post_excerpt); ?></textarea>
-    </div>
-  </div>
 
   <style>
     .route-info {
@@ -245,7 +421,15 @@ Y1Y1Y1Y1,
 
   <!-- Form to submit the generated code -->
   <div class="controls">
+
+
+
+
     <div class="controls-wrapper">
+      <h3>Visual Code Builder (Under Construction)</h3>
+      <br>
+      <br>
+      <br>
 
 
       <div id="blocklyDiv" style=""></div>
@@ -278,7 +462,24 @@ Y1Y1Y1Y1,
         </div>
 
         <div class="form-group">
-          <label for="customCode">Custom Code</label>
+          <button type="submit" class="button button-primary">
+            <span class="dashicons dashicons-saved"></span>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+
+
+
+    <form id="customCodeForm" action="" method="POST" class="custom-code-form">
+
+      <div class="controls-wrapper" style="background: #333;">
+        <h3 style="color: #fff;">Custom Code</h3>
+        <br>
+
+        <div class="form-group">
+          <!-- <label for="customCode">Custom Code</label> -->
           <div class="custom-code-tabs">
             <div class="tab-buttons">
               <button type="button" class="tab-button active" data-tab="get">GET</button>
@@ -288,7 +489,7 @@ Y1Y1Y1Y1,
             <div class="tab-content">
               <div class="tab-pane active" id="get-tab">
                 <textarea id="customCodeGet" name="customCodeGet" rows="17" class="large-text code"
-                  placeholder="Enter GET route code here..."><?php
+                  placeholder="Enter GET route code here..." style="background: #444; color: #fff;"><?php
                   $customCodeGet = get_post_meta($troute->ID, 'customCodeGet', true);
                   echo esc_textarea($customCodeGet);
                   ?></textarea>
@@ -296,13 +497,21 @@ Y1Y1Y1Y1,
 
               <div class="tab-pane" id="post-tab">
                 <textarea id="customCodePost" name="customCodePost" rows="33" class="large-text code"
-                  placeholder="Enter POST route code here..."><?php
+                  placeholder="Enter POST route code here..." style="background: #444; color: #fff;"><?php
                   $customCodePost = get_post_meta($troute->ID, 'customCodePost', true);
                   echo esc_textarea($customCodePost);
                   ?></textarea>
               </div>
             </div>
           </div>
+
+          <div class="form-group">
+            <button type="submit" class="button button-primary">
+              <span class="dashicons dashicons-saved"></span>
+              Save Changes
+            </button>
+          </div>
+
 
           <style>
             .custom-code-tabs {
@@ -316,8 +525,9 @@ Y1Y1Y1Y1,
             .tab-button {
               padding: 8px 16px;
               margin-right: 5px;
-              border: 1px solid #ccc;
-              background: #f5f5f5;
+              border: 1px solid #555;
+              background: #444;
+              color: #fff;
               cursor: pointer;
             }
 
@@ -359,14 +569,13 @@ Y1Y1Y1Y1,
 
 
 
-
-
-          <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px;">
-
+          <div
+            style="border: 1px solid #555; padding: 10px; border-radius: 5px; margin-top: 33px; background: #444;">
 
             <div class="route-examples">
-              <h3>Recipes for Endpoints</h3>
-              <select id="routeExample" onchange="updateCodeExample()" class="regular-text">
+              <h3 style="color: #fff;">Recipes for Endpoints</h3>
+              <select id="routeExample" onchange="updateCodeExample()" class="regular-text"
+                style="background: #555; color: #fff;">
                 <option value="">Select an example...</option>
                 <?php foreach ($recipes_for_endpoints as $category => $endpoints): ?>
                   <optgroup label="<?php echo esc_html($category); ?>">
@@ -378,9 +587,8 @@ Y1Y1Y1Y1,
               </select>
             </div>
 
-            <div id="code-example">
-
-              <pre>
+            <div id="code-example" style="background:rgb(79, 79, 79); padding: 10px; border-radius: 4px; color: white;">
+              <pre style="margin: 0;">
 function($request) {
 // ONLY WRITE THE CODE FROM HERE..
 <strong>
@@ -399,20 +607,19 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
 </pre>
             </div>
 
-
-            <div class="ai-assistant">
-              <h3>AI Route Assistant</h3>
+            <div class="ai-assistant" style="background: #555;">
+              <h3 style="color: #fff;">AI Route Assistant</h3>
               <div class="assistant-input">
                 <textarea id="routePrompt" placeholder="Describe the route you want to create..." rows="4"
-                  class="large-text"></textarea>
-                <button onclick="getAIAssistance()" class="button button-secondary">
+                  class="large-text" style="background: #444; color: #fff;"></textarea>
+                <button onclick="getAIAssistance()" class="button button-secondary" style="background: #666;">
                   <span class="dashicons dashicons-admin-comments"></span>
                   Get AI Help
                 </button>
               </div>
-              <div id="aiResponse" class="assistant-response" style="display: none;">
-                <div class="response-content"></div>
-                <button onclick="applyAISuggestion()" class="button button-primary">
+              <div id="aiResponse" class="assistant-response" style="display: none; background: #444;">
+                <div class="response-content" style="color: #fff;"></div>
+                <button onclick="applyAISuggestion()" class="button button-primary" style="background: #666;">
                   <span class="dashicons dashicons-yes"></span>
                   Apply Suggestion
                 </button>
@@ -425,7 +632,6 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
               }
 
               .ai-assistant {
-                background: #f8f9fa;
                 padding: 15px;
                 border-radius: 4px;
                 margin-bottom: 20px;
@@ -442,10 +648,9 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
               }
 
               .assistant-response {
-                background: #fff;
                 padding: 15px;
                 border-radius: 4px;
-                border: 1px solid #ddd;
+                border: 1px solid #555;
                 margin-top: 10px;
               }
 
@@ -515,15 +720,9 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
           </div>
 
         </div>
+      </div>
+    </form>
 
-        <div class="form-group">
-          <button type="submit" class="button button-primary">
-            <span class="dashicons dashicons-saved"></span>
-            Save Changes
-          </button>
-        </div>
-      </form>
-    </div>
 
     <style>
       .controls-wrapper {
@@ -1447,35 +1646,49 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
 
 <style>
   #code-example {
-    background-color: #2e2e2e; /* Slightly lighter dark background */
-    color: #00cc00; /* Less bright green text */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    background-color: #2e2e2e;
+    /* Slightly lighter dark background */
+    color: #00cc00;
+    /* Less bright green text */
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospace font */
     padding: 15px;
     border-radius: 5px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     overflow: auto;
-    max-height: 250px; /* Limit height and allow scrolling */
+    max-height: 250px;
+    /* Limit height and allow scrolling */
   }
 
   #code-example pre {
     margin: 0;
-    white-space: pre-wrap; /* Preserve whitespace and wrap lines */
+    white-space: pre-wrap;
+    /* Preserve whitespace and wrap lines */
   }
 
   #code-example strong {
-    color: #ff6600; /* Less bright orange for highlighted text */
+    color: #ff6600;
+    /* Less bright orange for highlighted text */
   }
 
-  #customCodeGet, #customCodePost {
-    background-color: #1a1a1a; /* Darker background for more contrast */
-    color: #00ff00; /* Bright green text */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+  #customCodeGet,
+  #customCodePost {
+    background-color: #1a1a1a;
+    /* Darker background for more contrast */
+    color: #00ff00;
+    /* Bright green text */
+    font-family: 'Courier New', Courier, monospace;
+    /* Monospace font */
     padding: 10px;
-    border: 1px solid #00ff00; /* Bright green border */
+    border: 1px solid #00ff00;
+    /* Bright green border */
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Green glow effect */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    /* Green glow effect */
     width: 100%;
-    height: 200px; /* Adjust height as needed */
-    resize: vertical; /* Allow vertical resizing */
+    height: 200px;
+    /* Adjust height as needed */
+    resize: vertical;
+    /* Allow vertical resizing */
   }
 </style>

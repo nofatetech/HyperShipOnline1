@@ -154,23 +154,7 @@ Y1Y1Y1Y1,
 
 
 
-  <h3>My Classes</h3>
-  <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
-    🚧 Under construction 🚧
-  </div>
-
-  <hr />
-
-
-  <h3>My Controllers</h3>
-  <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
-    🚧 Under construction 🚧
-  </div>
-
-
-  <hr />
-
-  <h3>API Endpoints</h3>
+  <h3>My API Endpoints</h3>
 
   <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
     <div>
@@ -213,7 +197,7 @@ Y1Y1Y1Y1,
 
   <div class="new-route-form"
     style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
-    <h3>Create New Endpoint</h3>
+    <h3>Create New API Endpoint</h3>
     <form method="post" action="">
       <?php wp_nonce_field('create_route_nonce', 'route_nonce'); ?>
       <input type="hidden" name="dashboard_routes_ok" value="1">
@@ -288,6 +272,26 @@ Y1Y1Y1Y1,
 
 
   </div>
+
+
+
+  <hr />
+
+
+  <h3>My Controllers</h3>
+  <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
+    🚧 Under construction 🚧
+  </div>
+
+  <hr />
+
+  <h3>My Classes</h3>
+  <div style="font-size: 12px; xxxcolor: #888; margin-bottom: 15px;">
+    🚧 Under construction 🚧
+  </div>
+
+
+
 
 
 </div>

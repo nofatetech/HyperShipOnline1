@@ -10,7 +10,11 @@
       transition: filter 0.3s ease;
     }
   </style>
-  <div class="allblured">
+  <div class="xxxallblured">
+
+    <div style="font-size: 14px; color: #888; margin-bottom: 15px;">
+      🚧 Under construction 🚧<br>
+    </div>
 
     <p>App Status: <span
         class="status"><?php echo esc_html(get_post_status($app_id) === 'publish' ? 'Active' : 'Inactive'); ?></span>
