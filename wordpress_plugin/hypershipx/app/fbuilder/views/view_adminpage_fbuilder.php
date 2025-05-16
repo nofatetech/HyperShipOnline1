@@ -567,47 +567,7 @@ Y1Y1Y1Y1,
 
 
 
-
-
-          <div
-            style="border: 1px solid #555; padding: 10px; border-radius: 5px; margin-top: 33px; background: #444;">
-
-            <div class="route-examples">
-              <h3 style="color: #fff;">Recipes for Endpoints</h3>
-              <select id="routeExample" onchange="updateCodeExample()" class="regular-text"
-                style="background: #555; color: #fff;">
-                <option value="">Select an example...</option>
-                <?php foreach ($recipes_for_endpoints as $category => $endpoints): ?>
-                  <optgroup label="<?php echo esc_html($category); ?>">
-                    <?php foreach ($endpoints as $endpoint => $details): ?>
-                      <option value="<?php echo esc_attr($endpoint); ?>"><?php echo esc_html($details['Title']); ?></option>
-                    <?php endforeach; ?>
-                  </optgroup>
-                <?php endforeach; ?>
-              </select>
-            </div>
-
-            <div id="code-example" style="background:rgb(79, 79, 79); padding: 10px; border-radius: 4px; color: white;">
-              <pre style="margin: 0;">
-function($request) {
-// ONLY WRITE THE CODE FROM HERE..
-<strong>
-$username = $request->get_param('username');
-$password = $request->get_param('password');
-
-$user = wp_authenticate($username, $password);
-if (is_wp_error($user)) {
-return new WP_Error('auth_failed', 'Invalid credentials', array('status' => 401));
-}
-
-return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
-</strong>
-// .. UP TO HERE.
-}
-</pre>
-            </div>
-
-            <div class="ai-assistant" style="background: #555;">
+<div class="ai-assistant" style="background: #555;">
               <h3 style="color: #fff;">AI Route Assistant</h3>
               <div class="assistant-input">
                 <textarea id="routePrompt" placeholder="Describe the route you want to create..." rows="4"
@@ -660,6 +620,46 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
                 margin-bottom: 10px;
               }
             </style>
+
+
+
+          <div
+            style="border: 1px solid #555; padding: 10px; border-radius: 5px; margin-top: 33px; background: #444;">
+
+            <div class="route-examples">
+              <h3 style="color: #fff;">Recipes for Endpoints</h3>
+              <select id="routeExample" onchange="updateCodeExample()" class="regular-text"
+                style="background: #555; color: #fff;">
+                <option value="">Select an example...</option>
+                <?php foreach ($recipes_for_endpoints as $category => $endpoints): ?>
+                  <optgroup label="<?php echo esc_html($category); ?>">
+                    <?php foreach ($endpoints as $endpoint => $details): ?>
+                      <option value="<?php echo esc_attr($endpoint); ?>"><?php echo esc_html($details['Title']); ?></option>
+                    <?php endforeach; ?>
+                  </optgroup>
+                <?php endforeach; ?>
+              </select>
+            </div>
+
+            <div id="code-example" style="background:rgb(79, 79, 79); padding: 10px; border-radius: 4px; color: white;">
+              <pre style="margin: 0;">
+function($request) {
+// ONLY WRITE THE CODE FROM HERE..
+<strong>
+$username = $request->get_param('username');
+$password = $request->get_param('password');
+
+$user = wp_authenticate($username, $password);
+if (is_wp_error($user)) {
+return new WP_Error('auth_failed', 'Invalid credentials', array('status' => 401));
+}
+
+return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
+</strong>
+// .. UP TO HERE.
+}
+</pre>
+            </div>
 
             <script>
               const routeExamples = <?php echo json_encode(array_map(function ($endpoints) {
@@ -785,6 +785,514 @@ return new WP_REST_Response(['token' => wp_create_nonce('wp_rest')], 200);
       <div id="message-container"></div>
     </div> -->
 
+
+
+
+    <div id="" style="display: none;">
+      ```markdown
+      # WordPress API Endpoints
+
+      ## Authentication
+
+      ### Login
+      ```php
+      $params = $request->get_json_params();
+      $username = sanitize_text_field($params['username']);
+      $password = $params['password'];
+
+      $user = wp_authenticate($username, $password);
+      if (is_wp_error($user)) {
+          return new WP_Error('invalid_credentials', 'Invalid username or password', array('status' => 401));
+      }
+
+      $token = wp_generate_password(32, false);
+      update_user_meta($user->ID, 'auth_token', $token);
+
+      return array(
+          'message' => 'Login successful',
+          'token' => $token,
+          'user_id' => $user->ID,
+          'email' => $user->user_email
+      );
+      ```
+
+      ### Logout
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      delete_user_meta($user_id, 'auth_token');
+
+      return array(
+          'message' => 'Logout successful'
+      );
+      ```
+
+      ### Register
+      ```php
+      $params = $request->get_json_params();
+      $username = sanitize_text_field($params['username']);
+      $email = sanitize_email($params['email']);
+      $password = $params['password'];
+
+      if (username_exists($username) || email_exists($email)) {
+          return new WP_Error('user_exists', 'Username or email already exists', array('status' => 400));
+      }
+
+      $user_id = wp_create_user($username, $password, $email);
+      if (is_wp_error($user_id)) {
+          return new WP_Error('registration_failed', $user_id->get_error_message(), array('status' => 400));
+      }
+
+      $token = wp_generate_password(32, false);
+      update_user_meta($user_id, 'auth_token', $token);
+
+      return array(
+          'message' => 'Registration successful',
+          'user_id' => $user_id,
+          'token' => $token
+      );
+      ```
+
+      ## Posts
+
+      ### Create Post
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+      $title = sanitize_text_field($params['title']);
+      $content = wp_kses_post($params['content']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      $post_id = wp_insert_post(array(
+          'post_title' => $title,
+          'post_content' => $content,
+          'post_status' => 'publish',
+          'post_author' => $user_id,
+          'post_type' => 'post'
+      ));
+
+      if (is_wp_error($post_id)) {
+          return new WP_Error('post_creation_failed', 'Failed to create post', array('status' => 400));
+      }
+
+      return array(
+          'message' => 'Post created successfully',
+          'post_id' => $post_id
+      );
+      ```
+
+      ### Read Post
+      ```php
+      $params = $request->get_json_params();
+      $post_id = absint($params['post_id']);
+
+      $post = get_post($post_id);
+      if (!$post || $post->post_type !== 'post') {
+          return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
+      }
+
+      return array(
+          'message' => 'Post retrieved successfully',
+          'post' => array(
+              'id' => $post->ID,
+              'title' => $post->post_title,
+              'content' => $post->post_content,
+              'author' => $post->post_author,
+              'date' => $post->post_date
+          )
+      );
+      ```
+
+      ### Update Post
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+      $post_id = absint($params['post_id']);
+      $title = sanitize_text_field($params['title']);
+      $content = wp_kses_post($params['content']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      $post = get_post($post_id);
+      if (!$post || $post->post_author != $user_id) {
+          return new WP_Error('unauthorized', 'Unauthorized to edit this post', array('status' => 403));
+      }
+
+      $updated = wp_update_post(array(
+          'ID' => $post_id,
+          'post_title' => $title,
+          'post_content' => $content
+      ));
+
+      if (is_wp_error($updated)) {
+          return new WP_Error('post_update_failed', 'Failed to update post', array('status' => 400));
+      }
+
+      return array(
+          'message' => 'Post updated successfully',
+          'post_id' => $post_id
+      );
+      ```
+
+      ### Delete Post
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+      $post_id = absint($params['post_id']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      $post = get_post($post_id);
+      if (!$post || $post->post_author != $user_id) {
+          return new WP_Error('unauthorized', 'Unauthorized to delete this post', array('status' => 403));
+      }
+
+      $deleted = wp_delete_post($post_id, true);
+      if (!$deleted) {
+          return new WP_Error('post_deletion_failed', 'Failed to delete post', array('status' => 400));
+      }
+
+      return array(
+          'message' => 'Post deleted successfully'
+      );
+      ```
+
+      ## E-commerce
+
+      ### Create Product
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+      $name = sanitize_text_field($params['name']);
+      $price = floatval($params['price']);
+      $description = wp_kses_post($params['description']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      $product_id = wp_insert_post(array(
+          'post_title' => $name,
+          'post_content' => $description,
+          'post_status' => 'publish',
+          'post_type' => 'product'
+      ));
+
+      if (is_wp_error($product_id)) {
+          return new WP_Error('product_creation_failed', 'Failed to create product', array('status' => 400));
+      }
+
+      update_post_meta($product_id, '_regular_price', $price);
+      update_post_meta($product_id, '_price', $price);
+      update_post_meta($product_id, '_visibility', 'visible');
+
+      return array(
+          'message' => 'Product created successfully',
+          'product_id' => $product_id
+      );
+      ```
+
+      ### Process Payment
+      ```php
+      $params = $request->get_json_params();
+      $user_id = absint($params['user_id']);
+      $token = sanitize_text_field($params['token']);
+      $product_id = absint($params['product_id']);
+      $quantity = absint($params['quantity']);
+
+      $stored_token = get_user_meta($user_id, 'auth_token', true);
+      if ($stored_token !== $token) {
+          return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+      }
+
+      $product = wc_get_product($product_id);
+      if (!$product) {
+          return new WP_Error('product_not_found', 'Product not found', array('status' => 404));
+      }
+
+      $order = wc_create_order();
+      $order->add_product($product, $quantity);
+      $order->set_customer_id($user_id);
+      $order->calculate_totals();
+
+      m<div>
+      /login
+    $params = $request->get_json_params();
+    $username = sanitize_text_field($params['username']);
+    $password = $params['password'];
+
+    $user = wp_authenticate($username, $password);
+    if (is_wp_error($user)) {
+        return new WP_Error('invalid_credentials', 'Invalid username or password', array('status' => 401));
+    }
+
+    $token = wp_generate_password(32, false);
+    update_user_meta($user->ID, 'auth_token', $token);
+
+    return array(
+        'message' => 'Login successful',
+        'token' => $token,
+        'user_id' => $user->ID,
+        'email' => $user->user_email
+    );
+
+/logout
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    delete_user_meta($user_id, 'auth_token');
+
+    return array(
+        'message' => 'Logout successful'
+    );
+
+/register
+    $params = $request->get_json_params();
+    $username = sanitize_text_field($params['username']);
+    $email = sanitize_email($params['email']);
+    $password = $params['password'];
+
+    if (username_exists($username) || email_exists($email)) {
+        return new WP_Error('user_exists', 'Username or email already exists', array('status' => 400));
+    }
+
+    $user_id = wp_create_user($username, $password, $email);
+    if (is_wp_error($user_id)) {
+        return new WP_Error('registration_failed', $user_id->get_error_message(), array('status' => 400));
+    }
+
+    $token = wp_generate_password(32, false);
+    update_user_meta($user_id, 'auth_token', $token);
+
+    return array(
+        'message' => 'Registration successful',
+        'user_id' => $user_id,
+        'token' => $token
+    );
+
+/create-post
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $title = sanitize_text_field($params['title']);
+    $content = wp_kses_post($params['content']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $post_id = wp_insert_post(array(
+        'post_title' => $title,
+        'post_content' => $content,
+        'post_status' => 'publish',
+        'post_author' => $user_id,
+        'post_type' => 'post'
+    ));
+
+    if (is_wp_error($post_id)) {
+        return new WP_Error('post_creation_failed', 'Failed to create post', array('status' => 400));
+    }
+
+    return array(
+        'message' => 'Post created successfully',
+        'post_id' => $post_id
+    );
+
+/read-post
+    $params = $request->get_json_params();
+    $post_id = absint($params['post_id']);
+
+    $post = get_post($post_id);
+    if (!$post || $post->post_type !== 'post') {
+        return new WP_Error('post_not_found', 'Post not found', array('status' => 404));
+    }
+
+    return array(
+        'message' => 'Post retrieved successfully',
+        'post' => array(
+            'id' => $post->ID,
+            'title' => $post->post_title,
+            'content' => $post->post_content,
+            'author' => $post->post_author,
+            'date' => $post->post_date
+        )
+    );
+
+/update-post
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $post_id = absint($params['post_id']);
+    $title = sanitize_text_field($params['title']);
+    $content = wp_kses_post($params['content']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $post = get_post($post_id);
+    if (!$post || $post->post_author != $user_id) {
+        return new WP_Error('unauthorized', 'Unauthorized to edit this post', array('status' => 403));
+    }
+
+    $updated = wp_update_post(array(
+        'ID' => $post_id,
+        'post_title' => $title,
+        'post_content' => $content
+    ));
+
+    if (is_wp_error($updated)) {
+        return new WP_Error('post_update_failed', 'Failed to update post', array('status' => 400));
+    }
+
+    return array(
+        'message' => 'Post updated successfully',
+        'post_id' => $post_id
+    );
+
+/delete-post
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $post_id = absint($params['post_id']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $post = get_post($post_id);
+    if (!$post || $post->post_author != $user_id) {
+        return new WP_Error('unauthorized', 'Unauthorized to delete this post', array('status' => 403));
+    }
+
+    $deleted = wp_delete_post($post_id, true);
+    if (!$deleted) {
+        return new WP_Error('post_deletion_failed', 'Failed to delete post', array('status' => 400));
+    }
+
+    return array(
+        'message' => 'Post deleted successfully'
+    );
+
+/create-product
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $name = sanitize_text_field($params['name']);
+    $price = floatval($params['price']);
+    $description = wp_kses_post($params['description']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $product_id = wp_insert_post(array(
+        'post_title' => $name,
+        'post_content' => $description,
+        'post_status' => 'publish',
+        'post_type' => 'product'
+    ));
+
+    if (is_wp_error($product_id)) {
+        return new WP_Error('product_creation_failed', 'Failed to create product', array('status' => 400));
+    }
+
+    update_post_meta($product_id, '_regular_price', $price);
+    update_post_meta($product_id, '_price', $price);
+    update_post_meta($product_id, '_visibility', 'visible');
+
+    return array(
+        'message' => 'Product created successfully',
+        'product_id' => $product_id
+    );
+
+/process-payment
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $product_id = absint($params['product_id']);
+    $quantity = absint($params['quantity']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $product = wc_get_product($product_id);
+    if (!$product) {
+        return new WP_Error('product_not_found', 'Product not found', array('status' => 404));
+    }
+
+    $order = wc_create_order();
+    $order->add_product($product, $quantity);
+    $order->set_customer_id($user_id);
+    $order->calculate_totals();
+
+    $order->update_status('pending', 'Order created via API');
+
+    return array(
+        'message' => 'Order created successfully',
+        'order_id' => $order->get_id(),
+        'total' => $order->get_total()
+    );
+
+/send-transactional-email
+    $params = $request->get_json_params();
+    $user_id = absint($params['user_id']);
+    $token = sanitize_text_field($params['token']);
+    $to = sanitize_email($params['to']);
+    $subject = sanitize_text_field($params['subject']);
+    $message = wp_kses_post($params['message']);
+
+    $stored_token = get_user_meta($user_id, 'auth_token', true);
+    if ($stored_token !== $token) {
+        return new WP_Error('invalid_token', 'Invalid token', array('status' => 401));
+    }
+
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+    $sent = wp_mail($to, $subject, $message, $headers);
+
+    if (!$sent) {
+        return new WP_Error('email_failed', 'Failed to send email', array('status' => 400));
+    }
+
+    return array(
+        'message' => 'Email sent successfully'
+    );
+      </div>
+    </div>
 
 </div>
 
