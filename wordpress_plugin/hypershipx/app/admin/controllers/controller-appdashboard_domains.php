@@ -36,13 +36,113 @@ $mydomains = get_posts(array(
                 ));
 
                 foreach ($routes as $route): ?>
-                  <div class="route-item">
-                    <div class="route-title"><?php echo esc_html($route->post_title); ?></div>
-                    <div class="route-slug"><?php echo esc_html($route->post_name); ?></div>
+
+                  <div class="hypership-card-route">
+                    <div>
+                      <h4><?php echo $route->post_title; ?></h4>
+                      <div>
+                        /<?php echo esc_html($route->post_name); ?>
+
+                      </div>
+                    </div>
+                    <!-- <div>
+      </div> -->
+                    <div>
+                      <a
+                        href="/wp-admin/admin.php?page=hypershipx_adminpage_fbuilder&route_id=<?php echo $route->ID; ?>">BUILDER</a>
+                    </div>
                   </div>
-                  <hr>
+
+
+
                 <?php endforeach; ?>
 
+                <div>
+
+
+                  <div class="new-route-form"
+                    style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
+                    <h3 xxxonclick="toggleForm(this)" xxxstyle="cursor: pointer;">Create New API Endpoint <span class="toggle-icon">▼</span></h3>
+                    <form class="new-route-form-<?php echo $domain->ID; ?>" method="post" action="">
+                      <?php wp_nonce_field('create_route_nonce', 'route_nonce'); ?>
+                      <input type="hidden" name="dashboard_routes_ok" value="1">
+                      <input type="hidden" name="app_parent" value="<?php echo esc_attr($app->ID); ?>">
+
+                      <div class="form-field">
+                        <label for="route_title">Title:</label>
+                        <input type="text" id="route_title" name="route_title" required>
+                      </div>
+
+                      <div class="form-field">
+                        <label for="route_path">Path:</label>
+                        <input type="text" id="route_path" name="route_path" required>
+                      </div>
+                      <div class="form-field">
+                        <label for="route_recipe">Recipe:</label>
+                        <div>
+
+                          <select id="route_recipe" name="route_recipe" required onchange="handleRecipeSelect(this)">
+                            <option value="">Select a recipe...</option>
+                            <?php foreach ($recipes_for_endpoints as $category => $paths) { ?>
+                              <optgroup label="<?php echo esc_attr($category); ?>">
+                                <?php foreach ($paths as $path => $details) { ?>
+                                  <option value="<?php echo esc_attr(json_encode($details)); ?>"
+                                    data-path="<?php echo esc_attr($path); ?>">
+                                    <?php echo esc_html($details["Title"]); ?>
+                                  </option>
+                                <?php } ?>
+                              </optgroup>
+                            <?php } ?>
+                          </select>
+
+                          <script>
+                            function handleRecipeSelect(select) {
+                              const selectedOption = select.options[select.selectedIndex];
+                              if (selectedOption.value) {
+                                const details = JSON.parse(selectedOption.value);
+                                document.getElementById('route_title').value = details.Title;
+                                document.getElementById('route_path').value = selectedOption.dataset.path;
+                              }
+                            }
+                          </script>
+                        </div>
+                      </div>
+
+                      <div style="margin-top: 11px;">
+                        <button type="submit" name="create_route" class="button button-primary">Create Endpoint!</button>
+                      </div>
+                    </formc>
+
+
+
+
+                    <div class="hypership-card-route" style="margin-top: 33px; display: none;">
+                      <div>
+                        <h3>Pre-Made Recipes for Endpoints</h3>
+                        <?php if (0)
+                          foreach ($recipes_for_endpoints as $category => $paths) { ?>
+                            <h4
+                              class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'xxblurred'; ?>">
+                              <?php echo $category; ?>
+                            </h4>
+                            <?php foreach ($paths as $path) { ?>
+                              <div
+                                class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'blurred'; ?>">
+                                <?php echo $path["Title"]; ?>
+                              </div>
+                            <?php } ?>
+                          <?php } ?>
+                      </div>
+                    </div>
+
+
+
+
+
+                  </div>
+
+
+                </div>
 
               </div>
             </div>
