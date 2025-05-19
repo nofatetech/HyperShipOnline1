@@ -140,7 +140,26 @@
     }
   </style>
 
+
+
+
+  <div style="width: 100%; border: 1px solid #000; padding: 10px;">
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/controllers/controller-appdashboard_domains.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+  </div>
+
+
   <div class="hypership-dashboard">
+
+
 
 
 
