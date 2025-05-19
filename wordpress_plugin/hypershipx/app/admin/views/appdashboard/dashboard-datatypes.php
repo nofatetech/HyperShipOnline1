@@ -2,7 +2,7 @@
 <div class="hypership-card">
   <h2
     style="font-family: 'Elite', monospace; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #007cba; padding-bottom: 10px;">
-    📊 Data Types 📈
+    📊 Models 📈
   </h2>
 
   <!-- Quick Actions -->

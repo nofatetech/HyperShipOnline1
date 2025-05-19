@@ -146,7 +146,7 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-users.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-users.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -154,7 +154,7 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-datatypes.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-datatypes.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -162,7 +162,7 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-customcode.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-customcode.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -170,39 +170,14 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-templates.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-templates.php';
     if (is_file($tf)) {
       require_once $tf;
     }
     ?>
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-settings.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-frapps.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-ecommerce.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-analytics.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-settings.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -210,9 +185,34 @@
 
 
 
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-frapps.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-events.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-ecommerce.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-analytics.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-events.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -221,7 +221,7 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-community.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-community.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -229,24 +229,7 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-support.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-marketing.php';
-    if (is_file($tf)) {
-      require_once $tf;
-    }
-    ?>
-
-
-    <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-deploy.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-support.php';
     if (is_file($tf)) {
       require_once $tf;
     }
@@ -255,21 +238,38 @@
 
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-multiplayer.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-marketing.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-deploy.php';
+    if (is_file($tf)) {
+      require_once $tf;
+    }
+    ?>
+
+
+
+    <?php
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-multiplayer.php';
     if (is_file($tf)) {
       require_once $tf;
     }
     ?>
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-security.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-security.php';
     if (is_file($tf)) {
       require_once $tf;
     }
     ?>
 
     <?php
-    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/adminpage_appdashboard/dashboard-gamification.php';
+    $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/appdashboard/dashboard-gamification.php';
     if (is_file($tf)) {
       require_once $tf;
     }

@@ -40,7 +40,7 @@ function hypershipx__action__register_admin_menu()
 
 
 
-require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/controllers/controllers-admin.php";
+require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/controllers/controller-appdashboard_main.php";
 
 
 // Add custom column to hypership-app post type admin table

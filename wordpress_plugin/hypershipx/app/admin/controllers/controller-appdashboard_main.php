@@ -89,7 +89,7 @@ function hypershipx__controller__adminpage_appdashboard()
   // echo '</pre>';
   // die();
 
-  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/view_adminpage_appdashboard.php";
+  require_once HYPERSHIPX_PLUGIN_DIR . "app/admin/views/view-appdashboard-main.php";
 }
 
 
