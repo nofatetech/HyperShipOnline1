@@ -71,15 +71,15 @@ function hypershipx_register_post_types() {
     register_post_type('hypership-app', array(
         'labels' => array(
             'name' => 'Apps',
-            'singular_name' => 'App',
-            'add_new' => 'Add New App',
-            'add_new_item' => 'Add New App',
-            'edit_item' => 'Edit App',
-            'new_item' => 'New App',
-            'view_item' => 'View App',
-            'search_items' => 'Search Apps',
-            'not_found' => 'No apps found',
-            'not_found_in_trash' => 'No apps found in Trash'
+            'singular_name' => 'HyperShip App',
+            'add_new' => 'Add New HyperShip App',
+            'add_new_item' => 'Add New HyperShip App',
+            'edit_item' => 'Edit HyperShip App',
+            'new_item' => 'New HyperShip App',
+            'view_item' => 'View HyperShip App',
+            'search_items' => 'Search HyperShip Apps',
+            'not_found' => 'No HyperShip Apps found',
+            'not_found_in_trash' => 'No HyperShip Apps found in Trash'
         ),
         'public' => true,
         'show_in_menu' => false,
@@ -92,16 +92,16 @@ function hypershipx_register_post_types() {
     // Register hypership-route post type
     register_post_type('hypership-route', array(
         'labels' => array(
-            'name' => 'Routes',
-            'singular_name' => 'Route',
-            'add_new' => 'Add New Route',
-            'add_new_item' => 'Add New Route',
-            'edit_item' => 'Edit Route',
-            'new_item' => 'New Route',
-            'view_item' => 'View Route',
-            'search_items' => 'Search Routes',
-            'not_found' => 'No routes found',
-            'not_found_in_trash' => 'No routes found in Trash'
+            'name' => 'HyperShip Routes',
+            'singular_name' => 'HyperShip Route',
+            'add_new' => 'Add New HyperShip Route',
+            'add_new_item' => 'Add New HyperShip Route',
+            'edit_item' => 'Edit HyperShip Route',
+            'new_item' => 'New HyperShip Route',
+            'view_item' => 'View HyperShip Route',
+            'search_items' => 'Search HyperShip Routes',
+            'not_found' => 'No HyperShip Routes found',
+            'not_found_in_trash' => 'No HyperShip Routes found in Trash'
         ),
         'public' => true,
         'show_in_menu' => false,
@@ -112,18 +112,18 @@ function hypershipx_register_post_types() {
     ));
 
     // Register hypership-app-domain post type
-    register_post_type('hypership-app-domain', array(
+    register_post_type('hypership-domain', array(
         'labels' => array(
-            'name' => 'App Domains',
-            'singular_name' => 'App Domain',
-            'add_new' => 'Add New Domain',
-            'add_new_item' => 'Add New Domain',
-            'edit_item' => 'Edit Domain',
-            'new_item' => 'New Domain',
-            'view_item' => 'View Domain',
+            'name' => 'HyperShip App Domains',
+            'singular_name' => 'HyperShip App Domain',
+            'add_new' => 'Add New HyperShip App Domain',
+            'add_new_item' => 'Add New HyperShip App Domain',
+            'edit_item' => 'Edit HyperShip App Domain',
+            'new_item' => 'New HyperShip App Domain',
+            'view_item' => 'View HyperShip App Domain',
             'search_items' => 'Search Domains',
-            'not_found' => 'No domains found',
-            'not_found_in_trash' => 'No domains found in Trash'
+            'not_found' => 'No HyperShip App Domains found',
+            'not_found_in_trash' => 'No HyperShip App Domains found in Trash'
         ),
         'public' => true,
         'show_in_menu' => false,
@@ -134,46 +134,47 @@ function hypershipx_register_post_types() {
     ));
 
     // Register hypership-app-frapp post type
-    register_post_type('hypership-app-frapp', array(
+    // register_post_type('hypership-app-frapp', array(
+    register_post_type('hypership-frapp', array(
         'labels' => array(
-            'name' => 'App Frapps',
-            'singular_name' => 'App Frapp',
-            'add_new' => 'Add New Frapp',
-            'add_new_item' => 'Add New Frapp',
-            'edit_item' => 'Edit Frapp',
-            'new_item' => 'New Frapp',
-            'view_item' => 'View Frapp',
-            'search_items' => 'Search Frapps',
-            'not_found' => 'No frapps found',
-            'not_found_in_trash' => 'No frapps found in Trash'
+            'name' => 'HypShip Frontend App',
+            'singular_name' => 'HypShip Frontend App',
+            'add_new' => 'Add New HypShip Frontend App',
+            'add_new_item' => 'Add New HypShip Frontend App',
+            'edit_item' => 'Edit HypShip Frontend App',
+            'new_item' => 'New HypShip Frontend App',
+            'view_item' => 'View HypShip Frontend App',
+            'search_items' => 'Search HypShip Frontend Apps',
+            'not_found' => 'No HypShip Frontend Apps found',
+            'not_found_in_trash' => 'No HypShip Frontend Apps found in Trash'
         ),
         'public' => true,
         'show_in_menu' => false,
         'supports' => array('title', 'editor'),
         'has_archive' => true,
-        'rewrite' => array('slug' => 'frapps'),
+        'rewrite' => array('slug' => 'hypership-frapps'),
         'show_in_rest' => true
     ));
 
     // Register hyp-app-registration post type
     register_post_type('hyp-app-registration', array(
         'labels' => array(
-            'name' => 'App Registrations',
-            'singular_name' => 'App Registration',
-            'add_new' => 'Add New Registration',
-            'add_new_item' => 'Add New Registration',
-            'edit_item' => 'Edit Registration',
-            'new_item' => 'New Registration',
-            'view_item' => 'View Registration',
-            'search_items' => 'Search Registrations',
-            'not_found' => 'No registrations found',
-            'not_found_in_trash' => 'No registrations found in Trash'
+            'name' => 'HypShip App Registrations',
+            'singular_name' => 'HypShip App Registration',
+            'add_new' => 'Add New HypShip App Registration',
+            'add_new_item' => 'Add New HypShip App Registration',
+            'edit_item' => 'Edit HypShip App Registration',
+            'new_item' => 'New HypShip App Registration',
+            'view_item' => 'View HypShip App Registration',
+            'search_items' => 'Search HypShip App Registrations',
+            'not_found' => 'No HypShip App Registrations found',
+            'not_found_in_trash' => 'No HypShip App Registrations found in Trash'
         ),
         'public' => true,
         'show_in_menu' => false,
         'supports' => array('title', 'editor'),
         'has_archive' => true,
-        'rewrite' => array('slug' => 'registrations'),
+        'rewrite' => array('slug' => 'hyp-app-registrations'),
         'show_in_rest' => true
     ));
 }
@@ -196,7 +197,7 @@ function hypershipx_register_custom_fields() {
     ));
 
     // Register fields for hypership-app-domain
-    register_post_meta('hypership-app-domain', 'app_parent', array(
+    register_post_meta('hypership-domain', 'app_parent', array(
         'type' => 'integer',
         'single' => true,
         'show_in_rest' => true,
@@ -204,7 +205,7 @@ function hypershipx_register_custom_fields() {
     ));
 
     // Register fields for hypership-app-frapp
-    register_post_meta('hypership-app-frapp', 'app_parent', array(
+    register_post_meta('hypership-frapp', 'app_parent', array(
         'type' => 'integer',
         'single' => true,
         'show_in_rest' => true,
