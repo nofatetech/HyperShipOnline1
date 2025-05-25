@@ -1,3 +1,85 @@
+<?php
+
+
+if (isset($_POST['post_title']) && isset($_POST['post_name'])) {
+    $title = sanitize_text_field($_POST['post_title']);
+    $slug = sanitize_title($_POST['post_name']);
+
+    // Get the post ID from the URL or form
+    $post_id = $app_id; // isset($_POST['post_id']) ? intval($_POST['post_id']) : 0;
+
+    // var_dump($post_id);die();
+
+    if ($post_id > 0) {
+        // Update the post
+        $post_data = array(
+            'ID' => $post_id,
+            'post_title' => $title,
+            'post_name' => $slug
+        );
+
+        $result = wp_update_post($post_data);
+
+        if ($result) {
+        } else {
+        }
+    } else {
+    }
+}
+
+
+if (isset($_POST['save_file']) && isset($_POST['file_editor_nonce'])) {
+    if (wp_verify_nonce($_POST['file_editor_nonce'], 'file_editor_action')) {
+        publishwebapp($app_id);
+        // die('xx');
+    }
+}
+
+function publishwebapp($app_id) {
+
+    // Get post title and slug
+    $post = get_post($app_id);
+    $slug = $post->post_name;
+
+    // Create folder path
+    $folder_path = ABSPATH . $slug;
+
+    // Create folder if it doesn't exist
+    if (!file_exists($folder_path)) {
+        wp_mkdir_p($folder_path);
+    }
+
+    // Create index.html with empty content
+    $index_path = $folder_path . '/index.html';
+    $editor_content = isset($_POST['editor_content']) ? stripslashes($_POST['editor_content']) : '';
+    file_put_contents($index_path, $editor_content);
+    return;
+}
+
+function get_app_index_content($app_id) {
+    // Get post slug
+    $post = get_post($app_id);
+    $slug = $post->post_name;
+
+    // Get folder path
+    $folder_path = ABSPATH . $slug;
+    $index_path = $folder_path . '/index.html';
+
+    // Check if file exists and return content
+    if (file_exists($index_path)) {
+        return file_get_contents($index_path);
+    }
+
+    return '';
+}
+
+
+
+
+?>
+
+
+
 <!-- <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css"> -->
 <!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
 <!-- <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> -->
@@ -111,6 +193,59 @@
   <div class="nav">
     <a href="#">Home</a>
   </div>
+
+
+
+  <div class="post-editor">
+    <form method="post" action="">
+      <?php wp_nonce_field('update_post_title_slug', 'post_title_slug_nonce'); ?>
+
+      <div class="form-group">
+        <label for="post_title">Post Title:</label>
+        <input type="text" id="post_title" name="post_title" value="<?php echo esc_attr(get_the_title($app_id)); ?>" class="regular-text">
+      </div>
+
+      <div class="form-group">
+        <label for="post_name">Post Slug:</label>
+        <input type="text" id="post_name" name="post_name" value="<?php echo esc_attr(get_post_field('post_name', $app_id)); ?>" class="regular-text">
+      </div>
+
+      <div class="form-group">
+        <input type="submit" name="update_post_title_slug" value="Update Title & Slug" class="button button-primary">
+      </div>
+    </form>
+  </div>
+
+  <style>
+    .post-editor {
+      background: #fff;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .form-group input[type="text"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+
+
+
+
+
+
   <div class="file-area">
     <div class="buttons">
       <button>Preview</button>
@@ -139,8 +274,6 @@
 
 
   <div>
-
-
     <div class="file-editor">
       <style>
         .file-editor {
@@ -195,19 +328,21 @@
           background-color: #003300;
         }
       </style>
-      <select id="file-select">
-        <option value="index.html">index.html</option>
-        <option value="script.js">script.js</option>
-        <option value="style.css">style.css</option>
-        <option value="not_found.html">not_found.html</option>
-      </select>
-      <textarea id="editor-content" placeholder="Start editing your file here..."></textarea>
-      <div class="editor-buttons">
-        <button class="cancel-btn">Cancel</button>
-        <button class="save-btn">Save</button>
-      </div>
+      <form method="post" action="">
+        <?php wp_nonce_field('file_editor_action', 'file_editor_nonce'); ?>
+        <select name="file_select" id="file-select">
+          <option value="index.html">index.html</option>
+          <option value="script.js">script.js</option>
+          <option value="style.css">style.css</option>
+          <option value="not_found.html">not_found.html</option>
+        </select>
+        <textarea name="editor_content" id="editor-content" placeholder="Start editing your file here..."><?php echo get_app_index_content($app_id); //echo esc_textarea(get_option('file_editor_content')); ?></textarea>
+        <div class="editor-buttons">
+          <button type="button" class="cancel-btn">Cancel</button>
+          <button type="submit" name="save_file" class="save-btn">Save</button>
+        </div>
+      </form>
     </div>
-
 
   </div>
 
