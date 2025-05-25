@@ -11,6 +11,71 @@ $mydomains = get_posts(array(
 
 ?>
 
+<div style="display: none;">
+  <div class="mosaic-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 20px;">
+    <?php
+    $colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5', '#9B59B6', '#3498DB'];
+
+    // Get all posts
+    $posts = get_posts(array(
+      'posts_per_page' => -1,
+      'post_type' => 'any'
+    ));
+
+    foreach ($posts as $post) {
+      $color = $colors[array_rand($colors)];
+      $rotation = rand(-15, 15);
+      ?>
+      <div class="mosaic-item" style="width: 33%; aspect-ratio: 1;
+                background: <?php echo $color; ?>;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 8px;
+                overflow: hidden;
+                transform: perspective(500px) rotateX(<?php echo $rotation; ?>deg) rotateY(<?php echo $rotation; ?>deg);
+                box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+                transition: transform 0.3s ease;">
+        <div style="color: white;
+                    font-family: monospace;
+                    font-size: 14px;
+                    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                    transform: translateZ(20px);">
+          #<?php echo $post->ID; ?>
+        </div>
+      </div>
+    <?php } ?>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      gsap.from('.mosaic-item', {
+        duration: 1,
+        scale: 0,
+        opacity: 0,
+        stagger: 0.1,
+        ease: 'back.out(1.7)',
+        onComplete: function () {
+          gsap.to('.mosaic-item', {
+            duration: 2,
+            rotation: 'random(-10, 10)',
+            y: 'random(-55, 55)',
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+            stagger: {
+              amount: 1,
+              from: 'random'
+            }
+          });
+        }
+      });
+    });
+  </script>
+</div>
+
+
+
 <div>
   <h2>Domains</h2>
 
@@ -62,7 +127,8 @@ $mydomains = get_posts(array(
 
                   <div class="new-route-form"
                     style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #e9ecef;">
-                    <h3 xxxonclick="toggleForm(this)" xxxstyle="cursor: pointer;">Create New API Endpoint <span class="toggle-icon">▼</span></h3>
+                    <h3 xxxonclick="toggleForm(this)" xxxstyle="cursor: pointer;">Create New API Endpoint <span
+                        class="toggle-icon">▼</span></h3>
                     <form class="new-route-form-<?php echo $domain->ID; ?>" method="post" action="">
                       <?php wp_nonce_field('create_route_nonce', 'route_nonce'); ?>
                       <input type="hidden" name="dashboard_routes_ok" value="1">
@@ -111,29 +177,29 @@ $mydomains = get_posts(array(
                       <div style="margin-top: 11px;">
                         <button type="submit" name="create_route" class="button button-primary">Create Endpoint!</button>
                       </div>
-                    </formc>
+                      </formc>
 
 
 
 
-                    <div class="hypership-card-route" style="margin-top: 33px; display: none;">
-                      <div>
-                        <h3>Pre-Made Recipes for Endpoints</h3>
-                        <?php if (0)
-                          foreach ($recipes_for_endpoints as $category => $paths) { ?>
-                            <h4
-                              class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'xxblurred'; ?>">
-                              <?php echo $category; ?>
-                            </h4>
-                            <?php foreach ($paths as $path) { ?>
-                              <div
-                                class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'blurred'; ?>">
-                                <?php echo $path["Title"]; ?>
-                              </div>
+                      <div class="hypership-card-route" style="margin-top: 33px; display: none;">
+                        <div>
+                          <h3>Pre-Made Recipes for Endpoints</h3>
+                          <?php if (0)
+                            foreach ($recipes_for_endpoints as $category => $paths) { ?>
+                              <h4
+                                class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'xxblurred'; ?>">
+                                <?php echo $category; ?>
+                              </h4>
+                              <?php foreach ($paths as $path) { ?>
+                                <div
+                                  class="<?php echo in_array($category, ['Authentication', 'Blog', 'Ecommerce']) ? '' : 'blurred'; ?>">
+                                  <?php echo $path["Title"]; ?>
+                                </div>
+                              <?php } ?>
                             <?php } ?>
-                          <?php } ?>
+                        </div>
                       </div>
-                    </div>
 
 
 
@@ -168,7 +234,7 @@ $mydomains = get_posts(array(
     <style>
       .domains-list {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
         gap: 20px;
         padding: 20px 0;
       }

@@ -15,6 +15,30 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
+
+/*
+## post types:
+- hypership-app
+- hypership-route
+    - Fields:
+        - app_parent
+        - domain_parent
+- hypership-app-domain
+    - Fields:
+        - app_parent
+- hypership-app-frapp
+    - Fields:
+        - app_parent
+- hyp-app-registration
+    - Fields:
+        - hypership_app
+        - user
+- hypership-event?
+
+*/
+
+
+
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly
 }

@@ -214,7 +214,7 @@ Y1Y1Y1Y1,
         <label for="route_recipe">Recipe:</label>
         <div>
 
-          <select id="route_recipe" name="route_recipe" required onchange="handleRecipeSelect(this)">
+          <select id="route_recipe" name="route_recipe" onchange="handleRecipeSelect(this)">
             <option value="">Select a recipe...</option>
             <?php foreach ($recipes_for_endpoints as $category => $paths) { ?>
               <optgroup label="<?php echo esc_attr($category); ?>">

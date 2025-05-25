@@ -93,7 +93,6 @@ function hypershipx__controller__adminpage_appdashboard()
 }
 
 
-
 function hypershipx_adminpage_frontendapp_builder()
 {
   // Check user capabilities
@@ -104,24 +103,66 @@ function hypershipx_adminpage_frontendapp_builder()
   // Get app ID from URL if set
   $app_id = isset($_GET['app_id']) ? intval($_GET['app_id']) : 0;
   if (!$app_id) {
-    // wp_die(__('Invalid app ID', 'hypershipx'));
+    wp_die(__('Invalid app ID', 'hypershipx'));
   }
+
+  // Define base directories
+  $upload_dir = wp_upload_dir();
+  $base_dir = $upload_dir['basedir'] . '/hypershipx/';
+  $staging_dir = $base_dir . 'staging/app_' . $app_id . '/';
+  $prod_dir = $base_dir . 'prod/app_' . $app_id . '/';
+  $public_dir = $base_dir . 'public/app_' . $app_id . '/';
+  $public_url = $upload_dir['baseurl'] . '/hypershipx/public/app_' . $app_id . '/';
+
 
   // Handle form submissions
   if (isset($_POST['fbuilder_save'])) {
     $app_config = isset($_POST['app_config']) ? sanitize_textarea_field($_POST['app_config']) : '';
     update_post_meta($app_id, 'hypership_fbuilder_config', $app_config);
 
+    // Save to staging directory
+    if (!file_exists($base_dir)) {
+      wp_mkdir_p($base_dir);
+    }
+    if (!file_exists($staging_dir)) {
+      wp_mkdir_p($staging_dir);
+    }
+    file_put_contents($staging_dir . 'index.html', $app_config);
+
     wp_redirect(admin_url('admin.php?page=hypershipx_adminpage_frontendapp_builder&app_id=' . $app_id));
+    exit;
+  }
+
+  if (isset($_POST['fbuilder_publish'])) {
+    // Publish to production and public directory
+    if (!file_exists($prod_dir)) {
+      wp_mkdir_p($prod_dir);
+    }
+    if (!file_exists($public_dir)) {
+      wp_mkdir_p($public_dir);
+    }
+    $source_file = $staging_dir . 'index.html';
+    $dest_prod = $prod_dir . 'index.html';
+    $dest_public = $public_dir . 'index.html';
+    if (file_exists($source_file)) {
+      copy($source_file, $dest_prod);
+      copy($source_file, $dest_public);
+    }
+    wp_redirect(admin_url('admin.php?page=hypershipx_adminpage_frontendapp_builder&app_id=' . $app_id . '&published=1'));
     exit;
   }
 
   // Get saved configuration
   $app_config = get_post_meta($app_id, 'hypership_fbuilder_config', true);
+  if (empty($app_config) && file_exists($staging_dir . 'index.html')) {
+    $app_config = file_get_contents($staging_dir . 'index.html');
+  }
 
-  // Load the view
-  // require_once HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/view_adminpage_fbuilder.php';
-  require_once HYPERSHIPX_PLUGIN_DIR . 'app/admin/views/view_adminpage_frapp_builder.php';
+  // Preview URL (staging for now, can be adjusted to public after publish)
+  $preview_url = $public_url . 'index.html';
+
+  // Load the controller
+  require_once HYPERSHIPX_PLUGIN_DIR . 'app/admin/controllers/controller-appdashboard_frapp_builder.php';
 }
 
 // Register the admin page

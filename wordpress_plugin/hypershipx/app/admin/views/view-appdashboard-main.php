@@ -143,13 +143,13 @@
 
 
 
-  <div style="width: 100%; border: 1px solid #000; padding: 10px;">
+  <div style="width: 100%; xxxborder: 1px solid #000; padding: 10px;">
 
 
     <?php
     $tf = HYPERSHIPX_PLUGIN_DIR . 'app/admin/controllers/controller-appdashboard_domains.php';
     if (is_file($tf)) {
-      require_once $tf;
+      // require_once $tf;
     }
     ?>
 

@@ -1,10 +1,10 @@
-<div class="wrap">
+<!-- <div class="wrap">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
     <p>Welcome to the HyperShip Dashboard. Manage your apps from the <a
             href="<?php echo admin_url('edit.php?post_type=hypership-app'); ?>">Apps</a> page.</p>
-</div>
+</div> -->
 
-<?php if (false) { ?>
+<?php if (1) { ?>
 
 
     <div class="dashboard-container" style="padding: 2rem;">
@@ -28,8 +28,8 @@
         foreach ($apps as $app) {
             ?>
             <div class="col-md-4">
-                <div class="app-card" onclick="window.location.href='<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . $app->ID); ?>'">
-                    <div class="app-icon">
+                <div class="app-card" style="background-color: black;">
+                    <div class="app-icon" onclick="window.location.href='<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . $app->ID); ?>'">
                         <i class="fas fa-rocket"></i>
                     </div>
                     <h3 class="app-title"><?php echo esc_html($app->post_title); ?></h3>
@@ -54,7 +54,7 @@
         height: 100%;
         transition: all 0.3s ease;
         border: 1px solid rgba(255, 255, 255, 0.1);
-        cursor: pointer;
+        /* cursor: pointer; */
     }
 
     .app-card:hover {
@@ -74,6 +74,7 @@
         margin-bottom: 1rem;
         color: white;
         font-size: 1.5rem;
+        cursor: pointer;
     }
 
     .app-title {
@@ -117,6 +118,7 @@
 <script>
     $(document).ready(function () {
         // Load apps using WordPress REST API
+        alert('test');
         $.ajax({
             url: '/wp-json/wp/v2/hypership_app',
             method: 'GET',
