@@ -13,6 +13,9 @@
  * WC tested up to: 9.3
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Woo: 12345:342928dfsfhsf2349842374wdf4234sfd
+ * WooCommerce: true
+ * WooCommerce HPOS: true
  */
 
 
