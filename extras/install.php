@@ -179,13 +179,36 @@ class HyperShipXSecondaryInstaller
         $this->_logMessage("Creating WordPress installation...");
         $this->_run("cd {$this->_baseDir} && wp core install --url=http://{$this->_domain} --title='WordPress Site' --admin_user=admin --admin_password='$adminPassword' --admin_email=admin@{$this->_domain} --skip-email");
 
-        // Store the password in a file for reference
-        $passwordFile = "{$this->_baseDir}/wp-admin-password.txt";
+        // Store the password in a JSON file for reference
+        $dataDir = "{$this->_currentDir}/_hypership_data_{$this->_serverName}";
+        $passwordFile = "$dataDir/credentials.json";
+
+        // Create data directory if it doesn't exist
+        if (!file_exists($dataDir)) {
+            $this->_run("mkdir -p $dataDir");
+        }
+
         // Ensure directory is writable
-        $this->_run("sudo chown -R www-data:www-data {$this->_baseDir}");
-        $this->_run("sudo chmod -R 755 {$this->_baseDir}");
+        $this->_run("sudo chown -R www-data:www-data $dataDir");
+        $this->_run("sudo chmod -R 755 $dataDir");
+
         // Write password file using sudo
-        $this->_run("echo 'WordPress Admin Password: $adminPassword' | sudo tee $passwordFile");
+        $credentials = [
+            'admin' => [
+                'username' => 'admin',
+                'password' => $adminPassword,
+                'email' => "admin@{$this->_domain}",
+                'created_at' => date('Y-m-d H:i:s')
+            ]
+        ];
+
+        // Create a temporary file with the credentials
+        $tmpFile = "/tmp/hypership_credentials.json";
+        file_put_contents($tmpFile, json_encode($credentials, JSON_PRETTY_PRINT));
+
+        // Move the file to the final location with sudo
+        $this->_run("sudo mv $tmpFile $passwordFile");
+        $this->_run("sudo chown www-data:www-data $passwordFile");
         $this->_run("sudo chmod 600 $passwordFile");
 
         $this->_logMessage("✅ WordPress installation completed");
@@ -230,20 +253,78 @@ class HyperShipXSecondaryInstaller
      */
     private function _displaySummary(): void
     {
+        // Read the admin credentials from JSON file
+        $dataDir = "{$this->_currentDir}/_hypership_data_{$this->_serverName}";
+        $passwordFile = "$dataDir/credentials.json";
+        $adminUsername = 'admin';
+        $adminPassword = 'Password file not found';
+        $adminEmail = "admin@{$this->_domain}";
+
+        if (!file_exists($dataDir)) {
+            $this->_yell("Data directory not found: $dataDir");
+        } elseif (!file_exists($passwordFile)) {
+            $this->_yell("Credentials file not found: $passwordFile");
+        } else {
+            $content = file_get_contents($passwordFile);
+            if ($content === false) {
+                $this->_yell("Failed to read credentials file: $passwordFile");
+            } else {
+                $credentials = json_decode($content, true);
+                if (json_last_error() !== JSON_ERROR_NONE) {
+                    $this->_yell("Invalid JSON in credentials file: " . json_last_error_msg());
+                } elseif (isset($credentials['admin'])) {
+                    $adminUsername = $credentials['admin']['username'];
+                    $adminPassword = $credentials['admin']['password'];
+                    $adminEmail = $credentials['admin']['email'];
+                } else {
+                    $this->_yell("Admin credentials not found in JSON file");
+                }
+            }
+        }
+
         echo "\n";
-        echo "    ╭───────────────────────────────────────────────╮\n";
-        echo "    │  🎉  Setup Complete!  🎉                      │\n";
-        echo "    ╰───────────────────────────────────────────────╯\n\n";
+        echo "    ╭───────────────────────────────────────────────────────────────╮\n";
+        echo "    │  🚀  HyperShipX Installation Complete!  🚀                    │\n";
+        echo "    ╰───────────────────────────────────────────────────────────────╯\n\n";
 
-        echo "    🔗  Site URL: http://{$this->_domain}/\n\n";
+        echo "    📡  Quick Links\n";
+        echo "       ─────────────\n";
+        echo "       Frontend: http://{$this->_domain}/\n";
+        echo "       Admin:    http://{$this->_domain}/wp-admin\n";
+        echo "       API:      http://{$this->_domain}/wp-json\n\n";
 
-        echo "    📁  Project Directory\n";
+        echo "    🔐  Admin Credentials\n";
         echo "       ─────────────────\n";
-        echo "       {$this->_baseDir}\n\n";
+        echo "       Username: $adminUsername\n";
+        echo "       Password: $adminPassword\n";
+        echo "       Email:    $adminEmail\n\n";
 
-        echo "    ╭─────────────────────────────╮\n";
-        echo "    │  🚀 Happy Coding! 🚀        │\n";
-        echo "    ╰─────────────────────────────╯\n";
+        echo "    📁  Project Structure\n";
+        echo "       ─────────────────\n";
+        echo "       Root:     {$this->_baseDir}\n";
+        echo "       Plugin:   {$this->_baseDir}/wp-content/plugins/hypershipx\n";
+        echo "       Config:   {$this->_baseDir}/wp-config.php\n";
+        echo "       Data:     $dataDir\n\n";
+
+        echo "    ⚡  Getting Started\n";
+        echo "       ───────────────\n";
+        echo "       1. Log in to wp-admin\n";
+        echo "       2. Activate the HyperShipX plugin\n";
+        echo "       3. Create your first Hyper App\n";
+        echo "       4. Start building your routes\n\n";
+
+        echo "    ╭───────────────────────────────────────────────────────────────╮\n";
+        echo "    │  🎮  Ready to HyperShip?  🎮                                 │\n";
+        echo "    │                                                             │\n";
+        echo "    │  ██╗  ██╗██╗   ██╗██████╗ ███████╗███████╗██╗  ██╗██╗██████╗  │\n";
+        echo "    │  ██║  ██║╚██╗ ██╔╝██╔══██╗██╔════╝██╔════╝██║  ██║██║██╔══██╗ │\n";
+        echo "    │  ███████║ ╚████╔╝ ██████╔╝█████╗  ███████╗███████║██║██████╔╝ │\n";
+        echo "    │  ██╔══██║  ╚██╔╝  ██╔═══╝ ██╔══╝  ╚════██║██╔══██║██║██╔═══╝  │\n";
+        echo "    │  ██║  ██║   ██║   ██║     ███████╗███████║██║  ██║██║██║      │\n";
+        echo "    │  ╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝      │\n";
+        echo "    │                                                             │\n";
+        echo "    │  Remember to save your credentials somewhere safe!           │\n";
+        echo "    ╰───────────────────────────────────────────────────────────────╯\n";
         echo "\n";
     }
 
