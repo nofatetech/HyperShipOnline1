@@ -4,6 +4,27 @@
  * HyperShipX Secondary Installer
  * A wrapper script that uses newsite.php for WordPress/Laravel installation
  *
+ * Xdebug Configuration:
+ * 1. Install Xdebug:
+ *    sudo apt-get install php-xdebug
+ *
+ * 2. Configure php.ini (usually in /etc/php/8.x/cli/php.ini):
+ *    [xdebug]
+ *    xdebug.mode=debug
+ *    xdebug.start_with_request=yes
+ *    xdebug.client_host=127.0.0.1
+ *    xdebug.client_port=9003
+ *    xdebug.idekey=PHPSTORM
+ *
+ * 3. Run with Xdebug:
+ *    php -dxdebug.remote_enable=1 extras/install.php <appname>
+ *
+ * 4. In your IDE (e.g., PHPStorm):
+ *    - Set up a PHP Remote Debug configuration
+ *    - Set the IDE key to PHPSTORM
+ *    - Start listening for PHP Debug Connections
+ *    - Set breakpoints in the code
+ *
  * @category WebApp
  * @package  HyperShipX
  * @author   Developer <developer@example.com>
@@ -174,6 +195,7 @@ class HyperShipXSecondaryInstaller
 
         // Generate a random password
         $adminPassword = bin2hex(random_bytes(8)); // 16 characters of random hex
+        $adminPassword = "172s31s23d1g2s3JDdjjSHyhdNDhdhDJnsgSj9d6!";
 
         // Set up WordPress using wp-cli
         $this->_logMessage("Creating WordPress installation...");
@@ -315,15 +337,15 @@ class HyperShipXSecondaryInstaller
 
         echo "    ╭───────────────────────────────────────────────────────────────╮\n";
         echo "    │  🎮  Ready to HyperShip?  🎮                                 │\n";
-        echo "    │                                                             │\n";
+        echo "    │                                                               │\n";
         echo "    │  ██╗  ██╗██╗   ██╗██████╗ ███████╗███████╗██╗  ██╗██╗██████╗  │\n";
         echo "    │  ██║  ██║╚██╗ ██╔╝██╔══██╗██╔════╝██╔════╝██║  ██║██║██╔══██╗ │\n";
         echo "    │  ███████║ ╚████╔╝ ██████╔╝█████╗  ███████╗███████║██║██████╔╝ │\n";
         echo "    │  ██╔══██║  ╚██╔╝  ██╔═══╝ ██╔══╝  ╚════██║██╔══██║██║██╔═══╝  │\n";
         echo "    │  ██║  ██║   ██║   ██║     ███████╗███████║██║  ██║██║██║      │\n";
         echo "    │  ╚═╝  ╚═╝   ╚═╝   ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝      │\n";
-        echo "    │                                                             │\n";
-        echo "    │  Remember to save your credentials somewhere safe!           │\n";
+        echo "    │                                                               │\n";
+        echo "    │  Remember to save your credentials somewhere safe!            │\n";
         echo "    ╰───────────────────────────────────────────────────────────────╯\n";
         echo "\n";
     }
@@ -377,6 +399,8 @@ class HyperShipXSecondaryInstaller
             $this->_yell("Please ensure newsite.php is in the same directory as install.php");
             exit(1);
         }
+
+        die("here");
 
         // Check if newsite.php is executable
         if (!is_executable($newsitePath)) {
