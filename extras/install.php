@@ -157,6 +157,73 @@ class HyperShipXSecondaryInstaller
     }
 
     /**
+     * Sets up WordPress installation with tables and admin user
+     *
+     * @return void
+     */
+    private function _setupWordPress(): void
+    {
+        $this->_logMessage("Setting up WordPress installation...");
+
+        // Check if wp-cli is installed
+        exec('which wp', $output, $returnCode);
+        if ($returnCode !== 0) {
+            $this->_yell("wp-cli is not installed. Please install it first.");
+            exit(1);
+        }
+
+        // Generate a random password
+        $adminPassword = bin2hex(random_bytes(8)); // 16 characters of random hex
+
+        // Set up WordPress using wp-cli
+        $this->_logMessage("Creating WordPress installation...");
+        $this->_run("cd {$this->_baseDir} && wp core install --url=http://{$this->_domain} --title='WordPress Site' --admin_user=admin --admin_password='$adminPassword' --admin_email=admin@{$this->_domain} --skip-email");
+
+        // Store the password in a file for reference
+        $passwordFile = "{$this->_baseDir}/wp-admin-password.txt";
+        // Ensure directory is writable
+        $this->_run("sudo chown -R www-data:www-data {$this->_baseDir}");
+        $this->_run("sudo chmod -R 755 {$this->_baseDir}");
+        // Write password file using sudo
+        $this->_run("echo 'WordPress Admin Password: $adminPassword' | sudo tee $passwordFile");
+        $this->_run("sudo chmod 600 $passwordFile");
+
+        $this->_logMessage("✅ WordPress installation completed");
+        $this->_logMessage("Admin username: admin");
+        $this->_logMessage("Admin password has been saved to: $passwordFile");
+    }
+
+    /**
+     * Creates sample posts for demonstration
+     *
+     * @return void
+     */
+    public function createSamplePosts(): void
+    {
+        $this->_logMessage("Creating sample posts...");
+
+        // Create the backend app
+        $this->_logMessage("Creating backend app...");
+        $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-app --post_title='My First Hyper App Backend' --post_status=publish");
+
+        // Get the app ID
+        $appId = $this->_run("cd {$this->_baseDir} && wp post list --post_type=hypership-app --format=ids")[0];
+
+        // Create routes for the app
+        $routes = array('serious-stuff', 'fun-stuff');
+        foreach ($routes as $route) {
+            $this->_logMessage("Creating route: $route");
+            $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-route --post_title='$route' --post_status=publish --post_parent=$appId");
+        }
+
+        // Create the frontend app
+        $this->_logMessage("Creating frontend app...");
+        $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-frapp --post_title='My First Hyper App' --post_status=publish");
+
+        $this->_logMessage("✅ Sample posts created successfully");
+    }
+
+    /**
      * Displays the installation summary
      *
      * @return void
@@ -226,7 +293,7 @@ class HyperShipXSecondaryInstaller
         $newsitePath = "{$this->_currentDir}/newsite.php";
         if (!file_exists($newsitePath)) {
             $this->_yell("newsite.php not found at: $newsitePath");
-            $this->_yell("Please ensure newsite.php is in the same directory as install2.php");
+            $this->_yell("Please ensure newsite.php is in the same directory as install.php");
             exit(1);
         }
 
@@ -268,6 +335,12 @@ class HyperShipXSecondaryInstaller
         // Step 3: Set up plugin
         $this->_setupPlugin();
 
+        // Step 4: Set up WordPress installation
+        $this->_setupWordPress();
+
+        // Step 5: Create sample posts
+        $this->createSamplePosts();
+
         // Display summary
         $this->_displaySummary();
     }
@@ -275,9 +348,15 @@ class HyperShipXSecondaryInstaller
 
 // Check command line arguments
 if ($argc < 2) {
-    die("Usage: php install2.php <server_name>\n");
+    die("Usage: php install.php <server_name> [seed]\n");
 }
 
 // Run the installer
 $installer = new HyperShipXSecondaryInstaller($argv[1]);
-$installer->install();
+
+// Check if we should only run the seed command
+if (isset($argv[2]) && $argv[2] === 'seed') {
+    $installer->createSamplePosts();
+} else {
+    $installer->install();
+}

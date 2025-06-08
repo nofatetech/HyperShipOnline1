@@ -279,37 +279,36 @@ function setupProject($appName, $appType, $dbName, $dbUser, $dbPassword, $mysqlR
             exit(1);
         }
 
-        $wpConfigPath = "$baseDir/wp-config.php";
-        run("cp $baseDir/wp-config-sample.php $wpConfigPath");
-
-        // Configure WordPress database settings
-        logMessage("🔧 Configuring WordPress database settings...");
-        $wpConfig = file_get_contents($wpConfigPath);
-
-        // Replace database settings
-        $wpConfig = preg_replace("/define\(\s*'DB_NAME',\s*'[^']*'\s*\);/", "define( 'DB_NAME', '$dbName' );", $wpConfig);
-        $wpConfig = preg_replace("/define\(\s*'DB_USER',\s*'[^']*'\s*\);/", "define( 'DB_USER', '$dbUser' );", $wpConfig);
-        $wpConfig = preg_replace("/define\(\s*'DB_PASSWORD',\s*'[^']*'\s*\);/", "define( 'DB_PASSWORD', '$dbPassword' );", $wpConfig);
-        $wpConfig = preg_replace("/define\(\s*'DB_HOST',\s*'[^']*'\s*\);/", "define( 'DB_HOST', '127.0.0.1' );", $wpConfig);
-
-        // Add debugging
-        $wpConfig = preg_replace("/define\(\s*'WP_DEBUG',\s*false\s*\);/", "define( 'WP_DEBUG', true );", $wpConfig);
-        $wpConfig = preg_replace("/define\(\s*'WP_DEBUG_LOG',\s*false\s*\);/", "define( 'WP_DEBUG_LOG', true );", $wpConfig);
-
-        file_put_contents($wpConfigPath, $wpConfig);
-
-        // Test WordPress database connection again
-        logMessage("🔍 Testing WordPress database connection...");
-        $testWpConnection = "mysql -u $dbUser -p'$dbPassword' -e 'USE `$dbName`; SHOW TABLES;'";
-        exec($testWpConnection, $output, $returnCode);
+        // Check if wp-cli is installed
+        exec('which wp', $output, $returnCode);
         if ($returnCode !== 0) {
-            yell("WordPress database connection test failed. Please check your database settings.");
+            yell("wp-cli is not installed. Please install it first.");
             exit(1);
         }
 
+        // Generate a random password for admin
+        $adminPassword = generateSecurePassword();
+
+        // Configure WordPress using wp-cli
+        logMessage("🔧 Configuring WordPress...");
+        run("cd $baseDir && wp config create --dbname=$dbName --dbuser=$dbUser --dbpass='$dbPassword' --dbhost=127.0.0.1 --skip-check");
+
+        // Set up WordPress installation
+        logMessage("🚀 Setting up WordPress installation...");
+        run("cd $baseDir && wp core install --url=http://$domain --title='WordPress Site' --admin_user=admin --admin_password='$adminPassword' --admin_email=admin@$domain --skip-email");
+
+        // Store the admin password
+        $passwordFile = "$baseDir/wp-admin-password.txt";
+        file_put_contents($passwordFile, "WordPress Admin Password: $adminPassword\n");
+        run("chmod 600 $passwordFile");
+
+        // Enable debugging
+        run("cd $baseDir && wp config set WP_DEBUG true --raw");
+        run("cd $baseDir && wp config set WP_DEBUG_LOG true --raw");
+
         logMessage("🧙 Fixing permissions for WordPress");
-        run("sudo chown -R www-data:www-data $baseDir", false);
-        run("sudo chmod -R 755 $baseDir", false);
+        run("sudo chown -R www-data:www-data $baseDir");
+        run("sudo chmod -R 755 $baseDir");
     } else {
         yell("❌ Unknown app type");
         return;
