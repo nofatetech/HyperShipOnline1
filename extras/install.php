@@ -94,6 +94,34 @@ class HyperShipXSecondaryInstaller
     }
 
     /**
+     * Downloads and sets up the repository
+     *
+     * @return void
+     */
+    private function _setupRepository(): void
+    {
+        $this->_logMessage("📦 Setting up repository...");
+        $repoDir = "{$this->_currentDir}/_hypership_repo_{$this->_serverName}";
+
+        // Cleanup any existing repo directory
+        if (file_exists($repoDir)) {
+            $this->_logMessage("🧹 Cleaning up existing repository directory...");
+            $this->_run("rm -rf $repoDir");
+        }
+
+        // Create fresh repository directory
+        $this->_run("mkdir -p $repoDir");
+
+        // Clone the repository
+        $this->_logMessage("📥 Downloading repository...");
+        $repoUrl = "git@github.com:nofatetech/HyperShipOnline1.git";
+        $this->_run("git clone $repoUrl $repoDir");
+
+        $this->_logMessage("✅ Repository setup completed");
+        $this->_logMessage("Repository location: $repoDir");
+    }
+
+    /**
      * Sets up the plugin
      *
      * @return void
@@ -102,17 +130,30 @@ class HyperShipXSecondaryInstaller
     {
         $this->_logMessage("Setting up plugin...");
         $pluginDir = "{$this->_baseDir}/wp-content/plugins/hypershipx";
+        $repoDir = "{$this->_currentDir}/_hypership_repo_{$this->_serverName}";
+        $pluginSource = "$repoDir/wordpress_plugin/hypershipx";
+
+        // Check if plugin source exists
+        if (!file_exists($pluginSource)) {
+            $this->_yell("Plugin source not found at: $pluginSource");
+            $this->_yell("Please ensure the plugin is in the wordpress_plugin/hypershipx directory");
+            exit(1);
+        }
 
         // Create plugin directory with sudo
         $this->_run("sudo mkdir -p $pluginDir");
         $this->_run("sudo chown -R www-data:www-data $pluginDir");
         $this->_run("sudo chmod -R 755 $pluginDir");
 
-        // Create symlink from current directory to plugin directory
-        $this->_run("sudo ln -sf {$this->_currentDir} $pluginDir");
+        // Create symlink from plugin source to plugin directory
+        $this->_run("sudo ln -sf $pluginSource/* $pluginDir/");
 
         // Ensure proper ownership of the symlink
-        $this->_run("sudo chown -h www-data:www-data $pluginDir");
+        $this->_run("sudo chown -R www-data:www-data $pluginDir");
+
+        $this->_logMessage("✅ Plugin setup completed");
+        $this->_logMessage("Plugin source: $pluginSource");
+        $this->_logMessage("Plugin target: $pluginDir");
     }
 
     /**
@@ -221,7 +262,10 @@ class HyperShipXSecondaryInstaller
             }
         }
 
-        // Step 2: Set up plugin
+        // Step 2: Set up repository
+        $this->_setupRepository();
+
+        // Step 3: Set up plugin
         $this->_setupPlugin();
 
         // Display summary
