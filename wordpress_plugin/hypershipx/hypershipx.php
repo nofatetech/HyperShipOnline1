@@ -85,7 +85,9 @@ function hypershipx_register_post_types() {
             'not_found_in_trash' => 'No HyperShip Apps found in Trash'
         ),
         'public' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
+        'menu_position' => 20,
+        'menu_icon' => 'dashicons-admin-appearance',
         'supports' => array('title', 'editor', 'thumbnail'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'apps'),
@@ -107,7 +109,9 @@ function hypershipx_register_post_types() {
             'not_found_in_trash' => 'No HyperShip Routes found in Trash'
         ),
         'public' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
+        'menu_position' => 21,
+        'menu_icon' => 'dashicons-admin-links',
         'supports' => array('title', 'editor'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'routes'),
@@ -129,7 +133,9 @@ function hypershipx_register_post_types() {
             'not_found_in_trash' => 'No HyperShip App Domains found in Trash'
         ),
         'public' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
+        'menu_position' => 22,
+        'menu_icon' => 'dashicons-admin-site',
         'supports' => array('title', 'editor'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'domains'),
@@ -137,7 +143,6 @@ function hypershipx_register_post_types() {
     ));
 
     // Register hypership-app-frapp post type
-    // register_post_type('hypership-app-frapp', array(
     register_post_type('hypership-frapp', array(
         'labels' => array(
             'name' => 'HypShip Frontend App',
@@ -152,7 +157,9 @@ function hypershipx_register_post_types() {
             'not_found_in_trash' => 'No HypShip Frontend Apps found in Trash'
         ),
         'public' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
+        'menu_position' => 23,
+        'menu_icon' => 'dashicons-admin-generic',
         'supports' => array('title', 'editor'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'hypership-frapps'),
@@ -174,7 +181,9 @@ function hypershipx_register_post_types() {
             'not_found_in_trash' => 'No HypShip App Registrations found in Trash'
         ),
         'public' => true,
-        'show_in_menu' => false,
+        'show_in_menu' => true,
+        'menu_position' => 24,
+        'menu_icon' => 'dashicons-admin-users',
         'supports' => array('title', 'editor'),
         'has_archive' => true,
         'rewrite' => array('slug' => 'hyp-app-registrations'),
