@@ -30,7 +30,10 @@ if (isset($_POST['post_title']) && isset($_POST['post_name'])) {
 
 if (isset($_POST['save_file']) && isset($_POST['file_editor_nonce'])) {
     if (wp_verify_nonce($_POST['file_editor_nonce'], 'file_editor_action')) {
-        publishwebapp($app_id);
+
+      update_post_meta($app_id, 'app_index_content', $_POST['editor_content']);
+
+      publishwebapp($app_id);
         // die('xx');
     }
 }
@@ -51,7 +54,7 @@ function publishwebapp($app_id) {
 
     // Create index.html with empty content
     $index_path = $folder_path . '/index.html';
-    $editor_content = isset($_POST['editor_content']) ? stripslashes($_POST['editor_content']) : '';
+    $editor_content = get_post_meta($app_id, 'app_index_content', true);
     file_put_contents($index_path, $editor_content);
     return;
 }
