@@ -199,7 +199,8 @@ function hypershipx_register_custom_fields() {
         'type' => 'integer',
         'single' => true,
         'show_in_rest' => true,
-        'sanitize_callback' => 'absint'
+        'sanitize_callback' => 'absint',
+        'description' => 'The parent HyperShip App ID this route belongs to'
     ));
     register_post_meta('hypership-route', 'domain_parent', array(
         'type' => 'integer',
@@ -221,15 +222,17 @@ function hypershipx_register_custom_fields() {
         'type' => 'integer',
         'single' => true,
         'show_in_rest' => true,
-        'sanitize_callback' => 'absint'
+        'sanitize_callback' => 'absint',
+        'description' => 'The parent HyperShip App ID this frontend app belongs to'
     ));
 
     // Register fields for hyp-app-registration
-    register_post_meta('hyp-app-registration', 'hypership_app', array(
+    register_post_meta('hyp-app-registration', 'app_parent', array(
         'type' => 'integer',
         'single' => true,
         'show_in_rest' => true,
-        'sanitize_callback' => 'absint'
+        'sanitize_callback' => 'absint',
+        'description' => 'The parent HyperShip App ID this registration belongs to'
     ));
     register_post_meta('hyp-app-registration', 'user', array(
         'type' => 'integer',

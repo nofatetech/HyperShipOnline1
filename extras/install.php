@@ -201,6 +201,29 @@ class HyperShipXSecondaryInstaller
         $this->_logMessage("Creating WordPress installation...");
         $this->_run("cd {$this->_baseDir} && wp core install --url=http://{$this->_domain} --title='WordPress Site' --admin_user=admin --admin_password='$adminPassword' --admin_email=admin@{$this->_domain} --skip-email");
 
+        // Set up proper permissions for WordPress directories
+        $this->_logMessage("Setting up WordPress permissions...");
+        $this->_run("sudo chown -R www-data:www-data {$this->_baseDir}/wp-content");
+        $this->_run("sudo chmod -R 755 {$this->_baseDir}/wp-content");
+        $this->_run("sudo mkdir -p {$this->_baseDir}/wp-content/upgrade");
+        $this->_run("sudo chown -R www-data:www-data {$this->_baseDir}/wp-content/upgrade");
+        $this->_run("sudo chmod -R 755 {$this->_baseDir}/wp-content/upgrade");
+
+        // Install and activate required plugins
+        $this->_logMessage("Installing required plugins...");
+
+        // Install and activate ACF
+        $this->_logMessage("Installing Advanced Custom Fields...");
+        $this->_run("cd {$this->_baseDir} && wp plugin install advanced-custom-fields --activate");
+
+        // Install and activate WooCommerce
+        $this->_logMessage("Installing WooCommerce...");
+        $this->_run("cd {$this->_baseDir} && wp plugin install woocommerce --activate");
+
+        // Run WooCommerce setup wizard
+        $this->_logMessage("Running WooCommerce setup...");
+        $this->_run("cd {$this->_baseDir} && wp wc setup --no-interaction");
+
         // Store the password in a JSON file for reference
         $dataDir = "{$this->_currentDir}/_hypership_data_{$this->_serverName}";
         $passwordFile = "$dataDir/credentials.json";
@@ -258,12 +281,22 @@ class HyperShipXSecondaryInstaller
         $routes = array('serious-stuff', 'fun-stuff');
         foreach ($routes as $route) {
             $this->_logMessage("Creating route: $route");
-            $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-route --post_title='$route' --post_status=publish --post_parent=$appId");
+            $output = $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-route --post_title='$route' --post_status=publish --format=ids");
+            // Extract just the number from "Success: Created post X."
+            preg_match('/\d+/', $output[0], $matches);
+            $routeId = $matches[0];
+            // Set app_parent meta field
+            $this->_run("cd {$this->_baseDir} && wp post meta update $routeId app_parent $appId");
         }
 
         // Create the frontend app
         $this->_logMessage("Creating frontend app...");
-        $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-frapp --post_title='My First Hyper App' --post_status=publish");
+        $output = $this->_run("cd {$this->_baseDir} && wp post create --post_type=hypership-frapp --post_title='My First Hyper App' --post_status=publish --format=ids");
+        // Extract just the number from "Success: Created post X."
+        preg_match('/\d+/', $output[0], $matches);
+        $frappId = $matches[0];
+        // Set app_parent meta field
+        $this->_run("cd {$this->_baseDir} && wp post meta update $frappId app_parent $appId");
 
         $this->_logMessage("✅ Sample posts created successfully");
     }
@@ -400,7 +433,7 @@ class HyperShipXSecondaryInstaller
             exit(1);
         }
 
-        die("here");
+        // die("here");
 
         // Check if newsite.php is executable
         if (!is_executable($newsitePath)) {
