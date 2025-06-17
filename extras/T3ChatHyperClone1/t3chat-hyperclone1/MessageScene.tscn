@@ -1,0 +1,39 @@
+[gd_scene load_steps=3 format=3 uid="uid://2253my753v3i"]
+
+[ext_resource type="Texture2D" uid="uid://b6xcst7cek5o8" path="res://icon.svg" id="1_7y86a"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_17kg3"]
+bg_color = Color(0.186851, 0.167654, 0.123468, 1)
+
+[node name="MessageScene" type="Node2D"]
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 2.0
+offset_right = 345.0
+offset_bottom = 260.0
+
+[node name="Panel2" type="Panel" parent="Panel"]
+offset_left = 122.0
+offset_top = 16.0
+offset_right = 307.0
+offset_bottom = 96.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_17kg3")
+
+[node name="Label2" type="Label" parent="Panel/Panel2"]
+offset_left = 11.0
+offset_top = 15.0
+offset_right = 176.0
+offset_bottom = 68.0
+text = "cool meta info"
+
+[node name="MessageLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = 32.0
+offset_top = 131.0
+offset_right = 326.0
+offset_bottom = 238.0
+
+[node name="Icon" type="Sprite2D" parent="."]
+position = Vector2(62, 67)
+scale = Vector2(0.585938, 0.710938)
+texture = ExtResource("1_7y86a")

@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=3 uid="uid://cw73lfw1mk7bk"]
+
+[ext_resource type="Script" path="res://camera_2d.gd" id="1_grlcy"]
+[ext_resource type="Texture2D" uid="uid://b6xcst7cek5o8" path="res://icon.svg" id="1_j72dg"]
+[ext_resource type="Script" path="res://ConversationsController.gd" id="3_pq2l4"]
+[ext_resource type="PackedScene" uid="uid://dsmnnsla01sxp" path="res://ConversationScene.tscn" id="4_s3kab"]
+[ext_resource type="PackedScene" uid="uid://2253my753v3i" path="res://MessageScene.tscn" id="5_1l1w2"]
+
+[node name="MainScene" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+script = ExtResource("1_grlcy")
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Icon" type="Sprite2D" parent="World"]
+visible = false
+position = Vector2(108, 113)
+texture = ExtResource("1_j72dg")
+
+[node name="Icon2" type="Sprite2D" parent="World"]
+visible = false
+position = Vector2(193, 480)
+texture = ExtResource("1_j72dg")
+
+[node name="Icon3" type="Sprite2D" parent="World"]
+visible = false
+position = Vector2(717, 174)
+texture = ExtResource("1_j72dg")
+
+[node name="Icon4" type="Sprite2D" parent="World"]
+visible = false
+position = Vector2(943, 492)
+texture = ExtResource("1_j72dg")
+
+[node name="ConversationsController" type="Node2D" parent="World"]
+unique_name_in_owner = true
+script = ExtResource("3_pq2l4")
+
+[node name="ConversationScene" parent="World/ConversationsController" instance=ExtResource("4_s3kab")]
+message_scene = ExtResource("5_1l1w2")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ZoomInButton" type="Button" parent="CanvasLayer"]
+offset_left = 31.0
+offset_top = 22.0
+offset_right = 102.0
+offset_bottom = 93.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "+"
+
+[node name="ZoomOutButton" type="Button" parent="CanvasLayer"]
+offset_left = 33.0
+offset_top = 127.0
+offset_right = 104.0
+offset_bottom = 193.0
+text = "-"
+
+[node name="TextEdit" type="TextEdit" parent="CanvasLayer"]
+offset_left = 36.0
+offset_top = 218.0
+offset_right = 356.0
+offset_bottom = 421.0
+
+[node name="SendChatButton" type="Button" parent="CanvasLayer"]
+offset_left = 38.0
+offset_top = 437.0
+offset_right = 235.0
+offset_bottom = 495.0
+text = "Send"
+
+[connection signal="button_down" from="CanvasLayer/ZoomInButton" to="Camera2D" method="_on_zoom_in_button_button_down"]
+[connection signal="button_down" from="CanvasLayer/ZoomOutButton" to="Camera2D" method="_on_zoom_out_button_button_down"]
+[connection signal="button_down" from="CanvasLayer/SendChatButton" to="Camera2D" method="_on_zoom_out_button_button_down"]
