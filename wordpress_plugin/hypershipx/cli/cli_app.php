@@ -21,6 +21,7 @@ class WooCommerceCliApp {
     private $running = true;
     private $categories = [];
     private $selectedIndex = 0;
+    private $homeData = [];
 
     public function __construct() {
         // Fetch WooCommerce product categories
@@ -32,17 +33,17 @@ class WooCommerceCliApp {
         system('stty -icanon -echo');
 
         while ($this->running) {
-            $this->showIntroScreen();
+            $this->showHomeScreen();
         }
 
         // Restore terminal settings
         system('stty icanon echo');
     }
 
-    private function showIntroScreen() {
+    private function showHomeScreen() {
         $this->clearScreen();
         echo "=== WooCommerce Category Selector ===\n\n";
-        echo "Use arrow keys to navigate, Enter to select, ESC to quit\n\n";
+        echo "Use arrow keys to navigate, Enter to select, q to quit\n\n";
 
         foreach ($this->categories as $index => $category) {
             $prefix = ($index === $this->selectedIndex) ? "> " : "  ";
