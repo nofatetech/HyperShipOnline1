@@ -11,11 +11,18 @@ function display_home_screen() {
     $store_name = get_bloginfo('name');
     $store_description = get_bloginfo('description');
 
-    echo "=== {$store_name} ===\n";
+    // Flashy header with colors and borders
+    echo "\033[1;36m"; // Bright cyan
+    echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
+    echo "║                                                                              ║\n";
+    echo "║                    🛍️  WELCOME TO {$store_name} 🛍️                    ║\n";
+    echo "║                                                                              ║\n";
     if (!empty($store_description)) {
-        echo "{$store_description}\n";
+        echo "║                        {$store_description}                        ║\n";
+        echo "║                                                                              ║\n";
     }
-    echo "================================\n\n";
+    echo "╚══════════════════════════════════════════════════════════════════════════════╝\n";
+    echo "\033[0m"; // Reset colors
 
     // Get products on sale
     $products_on_sale = wc_get_products([
@@ -26,16 +33,31 @@ function display_home_screen() {
         'order' => 'ASC'
     ]);
 
-    echo "🔥 Products on Sale:\n";
+    echo "\n";
+    echo "\033[1;33m"; // Bright yellow
+    echo "🔥🔥🔥  HOT DEALS - PRODUCTS ON SALE! 🔥🔥🔥\n";
+    echo "\033[0m";
+
     if (empty($products_on_sale)) {
-        echo "No products currently on sale.\n\n";
+        echo "\033[1;31m"; // Bright red
+        echo "❌ No products currently on sale.\n";
+        echo "\033[0m";
     } else {
+        echo "\033[1;32m"; // Bright green
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        echo "\033[0m";
+
         foreach ($products_on_sale as $index => $product) {
-            $prefix = ($index === 0) ? "> " : "  ";
+            $prefix = ($index === 0) ? "\033[1;33m▶ " : "\033[0m  ";
             $regular_price = $product->get_regular_price();
             $sale_price = $product->get_sale_price();
             $discount = $regular_price && $sale_price ? round((($regular_price - $sale_price) / $regular_price) * 100) : 0;
-            echo "$prefix{$product->get_name()} - \${$sale_price} (was \${$regular_price}) - {$discount}% off\n";
+
+            echo $prefix;
+            echo "\033[1;37m{$product->get_name()}\033[0m\n";
+            echo "   💰 \033[1;32m\${$sale_price}\033[0m (was \033[1;31m\${$regular_price}\033[0m) ";
+            echo "\033[1;33m🎉 {$discount}% OFF! 🎉\033[0m\n";
+            echo "\n";
         }
     }
 
@@ -47,21 +69,41 @@ function display_home_screen() {
         'order' => 'DESC'
     ]);
 
-    echo "\n📝 Latest Blog Posts:\n";
+    echo "\033[1;35m"; // Bright magenta
+    echo "📝📝📝  LATEST BLOG POSTS & NEWS 📝📝📝\n";
+    echo "\033[0m";
+
     if (empty($latest_posts)) {
-        echo "No blog posts found.\n\n";
+        echo "\033[1;31m"; // Bright red
+        echo "❌ No blog posts found.\n";
+        echo "\033[0m";
     } else {
+        echo "\033[1;32m"; // Bright green
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        echo "\033[0m";
+
         foreach ($latest_posts as $index => $post) {
-            $prefix = ($index === 0) ? "> " : "  ";
+            $prefix = ($index === 0) ? "\033[1;35m▶ " : "\033[0m  ";
             $date = get_the_date('M j, Y', $post->ID);
-            echo "$prefix{$post->post_title} - {$date}\n";
+
+            echo $prefix;
+            echo "\033[1;37m{$post->post_title}\033[0m\n";
+            echo "   📅 \033[1;36m{$date}\033[0m\n";
+            echo "\n";
         }
     }
 
-    echo "\n📂 Browse Categories\n";
-    echo "  View all product categories\n\n";
+    echo "\033[1;34m"; // Bright blue
+    echo "📂📂📂  BROWSE PRODUCT CATEGORIES 📂📂📂\n";
+    echo "\033[0m";
+    echo "\033[1;32m"; // Bright green
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    echo "\033[0m";
+    echo "  🛒 View all product categories and discover amazing products!\n\n";
 
-    echo "Navigation: Use arrow keys to navigate, Enter to select, ESC to quit\n";
+    echo "\033[1;33m"; // Bright yellow
+    echo "🎮 NAVIGATION: Use ↑↓ arrow keys to navigate, Enter to select, ESC to quit 🎮\n";
+    echo "\033[0m";
 
     return [
         'products_on_sale' => $products_on_sale,
@@ -80,47 +122,91 @@ function display_home_screen_with_selection($data, $selectedIndex = 0) {
     $store_name = get_bloginfo('name');
     $store_description = get_bloginfo('description');
 
-    echo "=== {$store_name} ===\n";
+    // Flashy header with colors and borders
+    echo "\033[1;36m"; // Bright cyan
+    echo "╔══════════════════════════════════════════════════════════════════════════════╗\n";
+    echo "║                                                                              ║\n";
+    echo "║                    🛍️  WELCOME TO {$store_name} 🛍️                    ║\n";
+    echo "║                                                                              ║\n";
     if (!empty($store_description)) {
-        echo "{$store_description}\n";
+        echo "║                        {$store_description}                        ║\n";
+        echo "║                                                                              ║\n";
     }
-    echo "================================\n\n";
+    echo "╚══════════════════════════════════════════════════════════════════════════════╝\n";
+    echo "\033[0m"; // Reset colors
 
     $products_on_sale = $data['products_on_sale'];
     $latest_posts = $data['latest_posts'];
 
     $total_items = count($products_on_sale) + count($latest_posts) + 1; // +1 for categories option
 
-    echo "🔥 Products on Sale:\n";
+    echo "\n";
+    echo "\033[1;33m"; // Bright yellow
+    echo "🔥🔥🔥  HOT DEALS - PRODUCTS ON SALE! 🔥🔥🔥\n";
+    echo "\033[0m";
+
     if (empty($products_on_sale)) {
-        echo "No products currently on sale.\n\n";
+        echo "\033[1;31m"; // Bright red
+        echo "❌ No products currently on sale.\n";
+        echo "\033[0m";
     } else {
+        echo "\033[1;32m"; // Bright green
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        echo "\033[0m";
+
         foreach ($products_on_sale as $index => $product) {
-            $prefix = ($index === $selectedIndex) ? "> " : "  ";
+            $prefix = ($index === $selectedIndex) ? "\033[1;33m▶ " : "\033[0m  ";
             $regular_price = $product->get_regular_price();
             $sale_price = $product->get_sale_price();
             $discount = $regular_price && $sale_price ? round((($regular_price - $sale_price) / $regular_price) * 100) : 0;
-            echo "$prefix{$product->get_name()} - \${$sale_price} (was \${$regular_price}) - {$discount}% off\n";
+
+            echo $prefix;
+            echo "\033[1;37m{$product->get_name()}\033[0m\n";
+            echo "   💰 \033[1;32m\${$sale_price}\033[0m (was \033[1;31m\${$regular_price}\033[0m) ";
+            echo "\033[1;33m🎉 {$discount}% OFF! 🎉\033[0m\n";
+            echo "\n";
         }
     }
 
-    echo "\n📝 Latest Blog Posts:\n";
+    echo "\033[1;35m"; // Bright magenta
+    echo "📝📝📝  LATEST BLOG POSTS & NEWS 📝📝📝\n";
+    echo "\033[0m";
+
     if (empty($latest_posts)) {
-        echo "No blog posts found.\n\n";
+        echo "\033[1;31m"; // Bright red
+        echo "❌ No blog posts found.\n";
+        echo "\033[0m";
     } else {
+        echo "\033[1;32m"; // Bright green
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        echo "\033[0m";
+
         foreach ($latest_posts as $index => $post) {
-            $prefix = ($index + count($products_on_sale) === $selectedIndex) ? "> " : "  ";
+            $prefix = ($index + count($products_on_sale) === $selectedIndex) ? "\033[1;35m▶ " : "\033[0m  ";
             $date = get_the_date('M j, Y', $post->ID);
-            echo "$prefix{$post->post_title} - {$date}\n";
+
+            echo $prefix;
+            echo "\033[1;37m{$post->post_title}\033[0m\n";
+            echo "   📅 \033[1;36m{$date}\033[0m\n";
+            echo "\n";
         }
     }
 
-    echo "\n📂 Browse Categories\n";
-    $categories_index = count($products_on_sale) + count($latest_posts);
-    $prefix = ($categories_index === $selectedIndex) ? "> " : "  ";
-    echo "$prefix View all product categories\n\n";
+    echo "\033[1;34m"; // Bright blue
+    echo "📂📂📂  BROWSE PRODUCT CATEGORIES 📂📂📂\n";
+    echo "\033[0m";
+    echo "\033[1;32m"; // Bright green
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    echo "\033[0m";
 
-    echo "Navigation: Use arrow keys to navigate, Enter to select, ESC to quit\n";
+    $categories_index = count($products_on_sale) + count($latest_posts);
+    $prefix = ($categories_index === $selectedIndex) ? "\033[1;34m▶ " : "\033[0m  ";
+    echo $prefix;
+    echo "🛒 View all product categories and discover amazing products!\n\n";
+
+    echo "\033[1;33m"; // Bright yellow
+    echo "🎮 NAVIGATION: Use ↑↓ arrow keys to navigate, Enter to select, ESC to quit 🎮\n";
+    echo "\033[0m";
 
     return $selectedIndex;
 }
