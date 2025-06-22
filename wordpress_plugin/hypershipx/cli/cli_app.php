@@ -43,7 +43,7 @@ class WooCommerceCliApp {
     private function showHomeScreen() {
         $this->clearScreen();
         echo "=== WooCommerce Category Selector ===\n\n";
-        echo "Use arrow keys to navigate, Enter to select, q to quit\n\n";
+        echo "Use arrow keys to navigate, Enter to select, ESC to quit\n\n";
 
         foreach ($this->categories as $index => $category) {
             $prefix = ($index === $this->selectedIndex) ? "> " : "  ";
