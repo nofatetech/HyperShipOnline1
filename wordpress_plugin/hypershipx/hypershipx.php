@@ -52,6 +52,28 @@ define('HYPERSHIPX_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('HYPERSHIPX_PLUGIN_URL', plugin_dir_url(__FILE__));
 
 
+
+
+// Check if running in CLI mode
+if (defined('WP_CLI') && WP_CLI) {
+    // Load the CLI app
+    // require_once plugin_dir_path(__FILE__) . 'cli/cli_app.php';
+}
+
+
+if (defined('WP_CLI') && WP_CLI) {
+    class WooCommerceCliCommand extends WP_CLI_Command {
+        public function run() {
+            require_once plugin_dir_path(__FILE__) . 'cli/cli_app.php';
+            $app = new WooCommerceCliApp();
+            $app->run();
+        }
+    }
+    WP_CLI::add_command('woo-cli', 'WooCommerceCliCommand');
+}
+
+
+
 require_once HYPERSHIPX_PLUGIN_DIR . 'app/core/init-core.php';
 
 require_once HYPERSHIPX_PLUGIN_DIR . 'app/admin/init-admin.php';
