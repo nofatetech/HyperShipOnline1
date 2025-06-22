@@ -42,7 +42,7 @@ class WooCommerceCliApp {
     private function showIntroScreen() {
         $this->clearScreen();
         echo "=== WooCommerce Category Selector ===\n\n";
-        echo "Use arrow keys to navigate, Enter to select, q to quit\n\n";
+        echo "Use arrow keys to navigate, Enter to select, ESC to quit\n\n";
 
         foreach ($this->categories as $index => $category) {
             $prefix = ($index === $this->selectedIndex) ? "> " : "  ";
@@ -61,8 +61,7 @@ class WooCommerceCliApp {
             case "\n": // Enter
                 $this->showCategoryDetails($this->categories[$this->selectedIndex]);
                 break;
-            case 'q':
-            case 'Q':
+            case "\033": // ESC key
                 $this->running = false;
                 $this->clearScreen();
                 echo "Thank you for using WooCommerce Category Selector!\n";
@@ -72,14 +71,69 @@ class WooCommerceCliApp {
 
     private function showCategoryDetails($category) {
         $this->clearScreen();
-        echo "=== {$category->name} ===\n\n";
-        echo "Details for Category ID: {$category->term_id}\n";
-        echo "Name: {$category->name}\n";
-        echo "Slug: {$category->slug}\n";
-        echo "Description: {$category->description}\n";
-        echo "Product Count: {$category->count}\n\n";
-        echo "Press any key to return to main menu...\n";
-        $this->getKeyPress();
+
+        // Include the view file
+        require_once dirname(__FILE__) . '/views/category-details.php';
+
+        // Get products and display category info
+        $products = display_category_details($category);
+
+        if (empty($products)) {
+            $this->getKeyPress();
+            return;
+        }
+
+        // Handle product selection
+        $this->showProductList($products);
+    }
+
+    private function showProductList($products) {
+        $selectedProductIndex = 0;
+
+        while (true) {
+            $this->clearScreen();
+
+            // Include the view file
+            require_once dirname(__FILE__) . '/views/category-details.php';
+
+            // Display product list
+            display_product_list($products, $selectedProductIndex);
+
+            $key = $this->getKeyPress();
+
+            switch ($key) {
+                case "\033[A": // Up arrow
+                    $selectedProductIndex = max(0, $selectedProductIndex - 1);
+                    break;
+                case "\033[B": // Down arrow
+                    $selectedProductIndex = min(count($products) - 1, $selectedProductIndex + 1);
+                    break;
+                case "\n": // Enter
+                    $this->showProductDetails($products[$selectedProductIndex]);
+                    break;
+                case "\033": // ESC key
+                    return; // Go back to category list
+                    break;
+            }
+        }
+    }
+
+    private function showProductDetails($product) {
+        $this->clearScreen();
+
+        // Include the product details view file
+        require_once dirname(__FILE__) . '/views/product-details.php';
+
+        // Display product details
+        display_product_details($product);
+
+        // Wait for ESC key to go back
+        while (true) {
+            $key = $this->getKeyPress();
+            if ($key === "\033") { // ESC key
+                break;
+            }
+        }
     }
 
     private function getWooCommerceCategories() {
