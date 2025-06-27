@@ -116,9 +116,10 @@ function display_home_screen() {
  *
  * @param array $data Array containing products on sale and blog posts
  * @param int $selectedIndex Currently selected item index
+ * @param array $cart Current cart contents
  * @return int Selected item index
  */
-function display_home_screen_with_selection($data, $selectedIndex = 0) {
+function display_home_screen_with_selection($data, $selectedIndex = 0, $cart = []) {
     $store_name = get_bloginfo('name');
     $store_description = get_bloginfo('description');
 
@@ -160,8 +161,23 @@ function display_home_screen_with_selection($data, $selectedIndex = 0) {
             $sale_price = $product->get_sale_price();
             $discount = $regular_price && $sale_price ? round((($regular_price - $sale_price) / $regular_price) * 100) : 0;
 
+            // Get cart quantity for this product
+            $product_id = $product->get_id();
+            $cart_qty = isset($cart[$product_id]) ? $cart[$product_id] : 0;
+
+            // Cart indicators
+            $cart_indicator = "";
+            if ($cart_qty > 0) {
+                $cart_indicator = "\033[1;32m [+{$cart_qty}]\033[0m";
+            }
+
+            // Add/remove indicators for selected product
+            if ($index === $selectedIndex) {
+                $cart_indicator .= " \033[1;33m[← -] [→ +]\033[0m";
+            }
+
             echo $prefix;
-            echo "\033[1;37m{$product->get_name()}\033[0m\n";
+            echo "\033[1;37m{$product->get_name()}\033[0m{$cart_indicator}\n";
             echo "   💰 \033[1;32m\${$sale_price}\033[0m (was \033[1;31m\${$regular_price}\033[0m) ";
             echo "\033[1;33m🎉 {$discount}% OFF! 🎉\033[0m\n";
             echo "\n";
@@ -204,8 +220,16 @@ function display_home_screen_with_selection($data, $selectedIndex = 0) {
     echo $prefix;
     echo "🛒 View all product categories and discover amazing products!\n\n";
 
+    // Show cart summary
+    $total_items_in_cart = array_sum($cart);
+    if ($total_items_in_cart > 0) {
+        echo "\033[1;32m"; // Bright green
+        echo "🛒 CART SUMMARY: {$total_items_in_cart} items in cart\033[0m\n";
+        echo "\n";
+    }
+
     echo "\033[1;33m"; // Bright yellow
-    echo "🎮 NAVIGATION: Use ↑↓ arrow keys to navigate, Enter to select, ESC to quit 🎮\n";
+    echo "🎮 NAVIGATION: ↑↓ navigate, ←→ add/remove from cart, Enter select, ESC quit 🎮\n";
     echo "\033[0m";
 
     return $selectedIndex;
