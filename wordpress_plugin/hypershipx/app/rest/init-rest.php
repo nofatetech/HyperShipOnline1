@@ -14,6 +14,11 @@ add_action('rest_api_init', 'hypershipx__action__register_rest_routes');
 function hypershipx__action__register_rest_routes()
 {
 
+
+
+
+
+
   // Custom Routes
 
   // get hypership app route posts
@@ -40,10 +45,12 @@ function hypershipx__action__register_rest_routes()
   $tcustom_routes = get_posts($args);
   foreach ($tcustom_routes as $route) {
     $app_parent = get_post_meta($route->ID, 'app_parent', true);
-    if (!$app_parent) continue;
+    if (!$app_parent)
+      continue;
 
     $app = get_post($app_parent);
-    if (!$app) continue;
+    if (!$app)
+      continue;
 
     $customCodeGet = get_post_meta($route->ID, 'customCodeGet', true);
     $customCodePost = get_post_meta($route->ID, 'customCodePost', true);
@@ -57,10 +64,10 @@ function hypershipx__action__register_rest_routes()
     if (!empty($customCodeGet)) {
       register_rest_route('hypershipx/v1', '/' . $app->post_name . '/' . $route->post_name, [
         'methods' => 'GET',
-        'callback' => function($request) use ($route, $customCodeGet) {
+        'callback' => function ($request) use ($route, $customCodeGet) {
           try {
-            $temp_function = function($request) use ($customCodeGet) {
-                return eval($customCodeGet);
+            $temp_function = function ($request) use ($customCodeGet) {
+              return eval ($customCodeGet);
             };
             $result = $temp_function($request);
             return $result;
@@ -76,10 +83,10 @@ function hypershipx__action__register_rest_routes()
     if (!empty($customCodePost)) {
       register_rest_route('hypershipx/v1', '/' . $app->post_name . '/' . $route->post_name, [
         'methods' => 'POST',
-        'callback' => function($request) use ($route, $customCodePost) {
+        'callback' => function ($request) use ($route, $customCodePost) {
           try {
-            $temp_function = function($request) use ($customCodePost) {
-                return eval($customCodePost);
+            $temp_function = function ($request) use ($customCodePost) {
+              return eval ($customCodePost);
             };
             $result = $temp_function($request);
             return $result;
@@ -101,6 +108,68 @@ function hypershipx__action__register_rest_routes()
 
 
   // Pre-Made Routes
+
+  register_rest_route('hypershipx/v1', '/status_text', [
+    'methods' => 'GET',
+    'callback' => function ($request) {
+      // Get uptime
+      $uptime = "33 min"; // TODO: Calculate actual uptime
+
+      // Get all HyperShip apps
+      $apps = get_posts([
+        'post_type' => 'hypership-app',
+        'posts_per_page' => -1,
+        'post_status' => 'publish'
+      ]);
+
+      $status_text = "## Info:\n\n";
+      $status_text .= "Uptime: " . $uptime . "\n\n";
+      $status_text .= "## AppBackends:\n\n";
+
+      foreach($apps as $index => $app) {
+        // Get routes for this app
+        $routes = get_posts([
+          'post_type' => 'hypership-route',
+          'posts_per_page' => -1,
+          'meta_key' => 'app_parent',
+          'meta_value' => $app->ID
+        ]);
+
+        // Get registered users count
+        $registrations = get_posts([
+          'post_type' => 'hyp-app-registration',
+          'meta_key' => 'app_parent',
+          'meta_value' => $app->ID,
+          'posts_per_page' => -1
+        ]);
+
+        $status_text .= ($index + 1) . ". " . $app->post_title . "\n";
+        $status_text .= "- Users: " . count($registrations) . "\n";
+
+        // List endpoints
+        $status_text .= "- Endpoints:\n";
+        foreach($routes as $route) {
+          $status_text .= "/" . $route->post_name . "\n";
+        }
+
+        // Add ecommerce info if available
+        $status_text .= "- Ecomm:\n";
+        $status_text .= "Sales this week: $0\n\n"; // TODO: Add actual sales data
+      }
+
+      return new WP_REST_Response([
+        "status_text" => $status_text
+      ], 200);
+    },
+    'permission_callback' => '__return_true',
+    'args' => []
+  ]);
+
+
+
+
+
+
 
   register_rest_route('hypershipx/v1', '/(?P<appslug>[a-zA-Z0-9-]+)/auth/register', [
     // register_rest_route('hypershipx/v1', '/auth/register', [

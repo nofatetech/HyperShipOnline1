@@ -75,6 +75,9 @@ $troute = get_post($route_id);
 
 
 
+$parent_app_id = get_post_meta($troute->ID, 'app_parent', true);
+$parent_app = get_post($parent_app_id);
+// echo esc_html($parent_app->post_title);
 
 
 
@@ -252,75 +255,20 @@ Y1Y1Y1Y1,
 
 <div class="wrap">
 
-  <!-- <?php var_dump($troute); ?> -->
-  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e9ecef;">
-    <div style="display: flex; align-items: center; gap: 15px;">
-      <div style="flex: 1;">
-        <h2 style="margin: 0; font-size: 24px; color: #1d2327;">
-          <?php echo esc_html($troute->post_title); ?>
-        </h2>
-        <div style="color: #646970; margin-top: 5px;">
-          <code style="background: #fff; padding: 2px 6px; border-radius: 4px; border: 1px solid #dcdcde;">
-            /<?php echo esc_html($troute->post_name); ?>
-          </code>
-        </div>
-      </div>
-      <div style="text-align: right;">
-        <div style="color: #646970; font-size: 14px;">Part of App</div>
-        <div style="font-weight: 500;">
-          <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>"
-            class="xxxbutton">
-            <?php
-            $parent_app_id = get_post_meta($troute->ID, 'app_parent', true);
-            $parent_app = get_post($parent_app_id);
-            echo esc_html($parent_app->post_title);
-            ?>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+
+<h2 style="margin: 0; font-size: 24px; color: #1d2327;">
+<?php echo esc_html($parent_app->post_title); ?> > <?php echo esc_html($troute->post_title); ?>
+</h2>
+
+<div>
+  <a href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . get_post_meta($troute->ID, 'app_parent', true)); ?>"
+    class="button">
+    <span class="dashicons dashicons-arrow-left-alt"></span>
+    Back to App Dashboard
+  </a>
+</div>
 
 
-
-  <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e9ecef;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <!-- User -->
-      <div
-        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
-        <div style="font-size: 24px; margin-bottom: 5px;">👤</div>
-        <div style="font-weight: 500;">User</div>
-      </div>
-
-      <!-- Arrow -->
-      <div style="font-size: 24px;">➡️</div>
-
-      <!-- App -->
-      <div
-        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
-        <div style="font-size: 24px; margin-bottom: 5px;">📱</div>
-        <div style="font-weight: 500;">
-          <a
-            href="<?php echo admin_url('admin.php?page=hypershipx_adminpage_appdashboard&app_id=' . $parent_app_id); ?>">
-            <?php echo esc_html($parent_app->post_title); ?>
-          </a>
-        </div>
-      </div>
-
-      <!-- Arrow -->
-      <div style="font-size: 24px;">➡️</div>
-
-      <!-- Route/Controller -->
-      <div
-        style="text-align: center; padding: 15px; background: #fff; border-radius: 8px; border: 1px solid #dcdcde; width: 120px;">
-        <div style="font-size: 24px; margin-bottom: 5px;">⚡</div>
-        <div style="font-weight: 500;"><?php echo esc_html($troute->post_title); ?></div>
-        <div style="font-size: 12px; color: #646970; margin-top: 5px;">
-          /<?php echo esc_html($troute->post_name); ?>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 
