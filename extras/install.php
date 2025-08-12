@@ -393,14 +393,14 @@ class HyperShipXSecondaryInstaller
         $this->_logMessage("🔍 Verifying MySQL permissions...");
 
         // Try to connect with the new user
-        $testCmd = "mysql -u {$this->_serverName} -p'gK9b%qA1O&!0rv-M' -e 'USE {$this->_serverName};' 2>&1";
+        $testCmd = "docker exec -it mysql8 mysql -u {$this->_serverName} -p'gK9b%qA1O&!0rv-M' -e 'USE {$this->_serverName};' 2>&1";
         exec($testCmd, $output, $returnCode);
 
         if ($returnCode !== 0) {
             $this->_logMessage("⚠️ MySQL permissions need fixing...");
 
             // Fix permissions using root
-            $fixCmd = "mysql -u root -p'Abc123123123!' -e \"GRANT ALL PRIVILEGES ON {$this->_serverName}.* TO '{$this->_serverName}'@'localhost'; FLUSH PRIVILEGES;\" 2>&1";
+            $fixCmd = "docker exec -it mysql8 mysql -u root -p'' -e \"GRANT ALL PRIVILEGES ON {$this->_serverName}.* TO '{$this->_serverName}'@'localhost'; FLUSH PRIVILEGES;\" 2>&1";
             $this->_run($fixCmd);
 
             // Verify again
@@ -427,6 +427,8 @@ class HyperShipXSecondaryInstaller
     {
         // Check if newsite.php exists
         $newsitePath = "{$this->_currentDir}/newsite.php";
+        // var_dump($this->_currentDir);
+        // die('here');
         if (!file_exists($newsitePath)) {
             $this->_yell("newsite.php not found at: $newsitePath");
             $this->_yell("Please ensure newsite.php is in the same directory as install.php");

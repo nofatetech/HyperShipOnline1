@@ -18,6 +18,8 @@
  *
  * @return void
  */
+// die('newsite.php');
+
 function logMessage($msg)
 {
     echo "💬 $msg\n";
@@ -374,10 +376,10 @@ echo "   Select [1/2]: ";
 $appTypeChoice = trim(fgets(STDIN));
 $appType = ($appTypeChoice == "2") ? "wordpress" : "laravel";
 
-echo "🔐 MySQL root password [Abc123123123!]: ";
+echo "🔐 MySQL root password []: ";
 $mysqlRoot = trim(fgets(STDIN));
 if (empty($mysqlRoot)) {
-    $mysqlRoot = "Abc123123123!";
+    // $mysqlRoot = "Abc123123123!";
 }
 
 // Generate secure passwords
